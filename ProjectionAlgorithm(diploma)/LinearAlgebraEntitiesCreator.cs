@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Complex;
+using MonteKarloMatrixVectorProduct;
 
 namespace ProjectionAlgorithm_diploma_
 {
@@ -18,6 +19,7 @@ namespace ProjectionAlgorithm_diploma_
     {
         public Matrix<double> A { get; set; }
         public Vector<double> BVector { get; set; }
+
         public LinearAlgebraEntitiesCreator()
         {
         }
@@ -26,6 +28,7 @@ namespace ProjectionAlgorithm_diploma_
         {
             this.A = CreateSquareMatrix(n);
             this.BVector = CreateBVector(this.A);
+
         }
 
         private Matrix<double> CreateSquareMatrix(int size)

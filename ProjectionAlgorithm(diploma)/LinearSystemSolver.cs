@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MonteKarloMatrixVectorProduct;
 
 namespace ProjectionAlgorithm_diploma_
 {
@@ -11,11 +12,13 @@ namespace ProjectionAlgorithm_diploma_
     {
         public Matrix<double> A { get; set; }
         public Vector<double> BVector { get; set; }
+        public Walker Walker { get; set; }
 
         public LinearSystemSolver(Matrix<double> a, Vector<double> bVector)
         {
             A = a;
             BVector = bVector;
+            Walker = new Walker(GetDistributionOfMatrixRows(A));
         }
 
 
@@ -45,7 +48,8 @@ namespace ProjectionAlgorithm_diploma_
 
             for (int i = 0; i < matrixRows.Count; i++)
             {
-                probabilities.Add(matrixRows[i].Select(x => x * x).Sum() / matrix.FrobeniusNorm() );
+                var norm = matrix.FrobeniusNorm();
+                probabilities.Add((Math.Sqrt(matrixRows[i].Select(x => x * x).Sum())) / norm );
             }
 
             return probabilities;
