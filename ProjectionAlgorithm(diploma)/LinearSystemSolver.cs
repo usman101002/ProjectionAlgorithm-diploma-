@@ -31,7 +31,16 @@ namespace ProjectionAlgorithm_diploma_
         /// <exception cref="NotImplementedException"></exception>
         public Vector<double> Solve()
         {
-            throw new NotImplementedException();
+            var xPrev = BVector;
+            for (int i = 0; i < A.RowCount; i++)
+            {
+                int index = this.Walker.GetSelection();
+                var numberator = this.BVector[index] - (xPrev * A.Row(index));
+                var denominator = this.A.Row(index).Norm(2) * this.A.Row(index).Norm(2);
+                var xCur = xPrev + ((numberator) / (denominator)) * A.Row(index);
+                xPrev = xCur;
+            }
+            return xPrev;
         }
 
         private List<double> GetDistributionOfMatrixRows(Matrix<double> matrix)
