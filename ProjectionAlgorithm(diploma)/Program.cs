@@ -10,7 +10,8 @@ namespace ProjectionAlgorithm_diploma_
     {
         static void Main(string[] args)
         {
-            LinearAlgebraEntitiesCreator creator = new LinearAlgebraEntitiesCreator(100);
+            LinearAlgebraEntitiesCreator creator = new LinearAlgebraEntitiesCreator(2000);
+
             var solver = new LinearSystemSolver(creator.A, creator.BVector);
             var res = solver.Solve();
         }

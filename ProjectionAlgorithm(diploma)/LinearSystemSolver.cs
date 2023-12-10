@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MathNet.Numerics.LinearAlgebra.Double;
 using MonteKarloMatrixVectorProduct;
 
 namespace ProjectionAlgorithm_diploma_
@@ -31,13 +32,13 @@ namespace ProjectionAlgorithm_diploma_
         /// <exception cref="NotImplementedException"></exception>
         public Vector<double> Solve()
         {
-            var xPrev = BVector;
-            for (int i = 0; i < A.RowCount; i++)
+            var xPrev = Vector<double>.Build.Dense(this.BVector.Count);
+            for (int i = 1; i < A.RowCount; i++)
             {
                 int index = this.Walker.GetSelection();
-                var numberator = this.BVector[index] - (xPrev * A.Row(index));
+                var numerator = this.BVector[index] - (xPrev * A.Row(index));
                 var denominator = this.A.Row(index).Norm(2) * this.A.Row(index).Norm(2);
-                var xCur = xPrev + ((numberator) / (denominator)) * A.Row(index);
+                var xCur = xPrev + ((numerator) / (denominator)) * A.Row(index);
                 xPrev = xCur;
             }
             return xPrev;
@@ -55,10 +56,11 @@ namespace ProjectionAlgorithm_diploma_
                 matrixRows.Add(matrixRow);
             }
 
+            var norm = matrix.FrobeniusNorm();
             for (int i = 0; i < matrixRows.Count; i++)
             {
-                var norm = matrix.FrobeniusNorm();
                 probabilities.Add((Math.Sqrt(matrixRows[i].Select(x => x * x).Sum())) / norm );
+
             }
 
             return probabilities;

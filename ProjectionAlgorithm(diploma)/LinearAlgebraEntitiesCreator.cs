@@ -38,10 +38,18 @@ namespace ProjectionAlgorithm_diploma_
             {
                 for (int j = 0; j < size; j++)
                 {
-                    aArr[i, j] = i * size + (j + 1);
+                    if (i == j)
+                    {
+                        if (!((i == 0) || (i == size - 1)))
+                        {
+                            aArr[i, j] = i * size + (j + 1);
+                            aArr[i, j - 1] = 1;
+                            aArr[i, j + 1] = 1;
+                        }
+                        else aArr[i, j] = i * size + (j + 1);
+                    }
                 }
             }
-
             var builder = Matrix<double>.Build;
             var result = builder.DenseOfArray(aArr);
             return result;
@@ -52,9 +60,19 @@ namespace ProjectionAlgorithm_diploma_
             var b = new double[mtx.ColumnCount];
             for (int i = 0; i < b.Length; i++)
             {
-                b[i] = mtx.Row(i).Sum();
+                if (i == 0)
+                {
+                    b[i] = 1;
+                }
+                else if (i == mtx.RowCount - 1)
+                {
+                    b[i] = mtx[i, i];
+                }
+                else
+                {
+                    b[i] = mtx[i, i] + 1 + 1;
+                }
             }
-
             var builder = Vector<double>.Build;
             var result = builder.DenseOfArray(b);
             return result;
