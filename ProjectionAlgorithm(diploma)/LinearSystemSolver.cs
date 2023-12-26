@@ -33,13 +33,17 @@ namespace ProjectionAlgorithm_diploma_
         public Vector<double> Solve()
         {
             var xPrev = Vector<double>.Build.Dense(this.BVector.Count);
-            for (int i = 1; i < 10000; i++)
+            //var xPrev = BVector;
+            for (int i = 1; i < 1000000; i++)
             {
                 int index = this.Walker.GetSelection();
                 var numerator = this.BVector[index] - (xPrev * A.Row(index));
-                var denominator = this.A.Row(index).Norm(2) * this.A.Row(index).Norm(2);
-                var xCur = xPrev + ((numerator) / (denominator)) * A.Row(index);
+                var denominator = this.A.Row(index).Select(x => x * x).Sum();
+                var xCur = xPrev + ((numerator * A.Row(index)) / (denominator));
                 xPrev = xCur;
+                if (i % 10000 == 0)
+                    Console.WriteLine(i);
+                
             }
             return xPrev;
         }
@@ -56,16 +60,23 @@ namespace ProjectionAlgorithm_diploma_
                 matrixRows.Add(matrixRow);
             }
 
-            var norm = matrix.FrobeniusNorm();
+            double normSquared = 0;
             for (int i = 0; i < matrixRows.Count; i++)
             {
-                probabilities.Add(matrixRows[i].Select(x => x * x).Sum() / norm);
+                for (int j = 0; j < matrixRows.Count; j++)
+                {
+                    normSquared += matrixRows[i][j] * matrixRows[i][j];
+                }
             }
+
+            for (int i = 0; i < matrixRows.Count; i++)
+            {
+                probabilities.Add(matrixRows[i].Select(x => x * x).Sum() / normSquared);
+            }
+
+            var sum = probabilities.Sum();
 
             return probabilities;
         }
-
-
-
     }
 }
