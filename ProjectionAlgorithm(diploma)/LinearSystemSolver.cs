@@ -33,7 +33,7 @@ namespace ProjectionAlgorithm_diploma_
         public Vector<double> Solve()
         {
             var xPrev = Vector<double>.Build.Dense(this.BVector.Count);
-            for (int i = 1; i < A.RowCount; i++)
+            for (int i = 1; i < 10000; i++)
             {
                 int index = this.Walker.GetSelection();
                 var numerator = this.BVector[index] - (xPrev * A.Row(index));
@@ -59,14 +59,13 @@ namespace ProjectionAlgorithm_diploma_
             var norm = matrix.FrobeniusNorm();
             for (int i = 0; i < matrixRows.Count; i++)
             {
-                probabilities.Add((Math.Sqrt(matrixRows[i].Select(x => x * x).Sum())) / norm );
-
+                probabilities.Add(matrixRows[i].Select(x => x * x).Sum() / norm);
             }
 
             return probabilities;
         }
 
-        
+
 
     }
 }
