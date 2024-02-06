@@ -42,7 +42,12 @@ namespace ProjectionAlgorithm_diploma_
                 var xCur = xPrev + ((numerator * A.Row(index)) / (denominator));
                 xPrev = xCur;
                 if (i % 10000 == 0)
+                {
                     Console.WriteLine(i);
+                    Console.WriteLine(xPrev[0]);
+                }
+                    
+                
                 
             }
             return xPrev;

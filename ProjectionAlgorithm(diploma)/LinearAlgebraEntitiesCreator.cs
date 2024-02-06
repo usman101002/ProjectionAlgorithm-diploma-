@@ -24,6 +24,10 @@ namespace ProjectionAlgorithm_diploma_
         {
         }
 
+        /// <summary>
+        /// Лучше делать стохастическую матрицу по строкам, используя нормировку. 
+        /// </summary>
+        /// <param name="n"></param>
         public LinearAlgebraEntitiesCreator(int n)
         {
             this.A = CreateSquareMatrix(n);
@@ -31,6 +35,7 @@ namespace ProjectionAlgorithm_diploma_
 
         }
 
+        // этот метод обязательно надо переписать (чтобы стохастической по строкам была матрица) 
         private Matrix<double> CreateSquareMatrix(int size)
         {
             var aArr = new double[size, size];
@@ -50,6 +55,8 @@ namespace ProjectionAlgorithm_diploma_
                     }
                 }
             }
+
+            
             var builder = Matrix<double>.Build;
             var result = builder.DenseOfArray(aArr);
             return result;
