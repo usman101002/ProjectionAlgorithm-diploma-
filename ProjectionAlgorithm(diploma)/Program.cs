@@ -12,12 +12,12 @@ namespace ProjectionAlgorithm_diploma_
     {
         static void Main(string[] args)
         {
-            int n = 100;
-            LinearAlgebraEntitiesCreator creator = new LinearAlgebraEntitiesCreator(n);
+            int n = 3;
+            AlgebraEntitiesCreator creator = new AlgebraEntitiesCreator(n);
             
             var solver = new LinearSystemSolver(creator.A, creator.BVector);
             var res = solver.Solve();
-
+            var s = creator.BVector.Sum();
             Console.WriteLine();
 
             //Теперь посчитаем погрешность 

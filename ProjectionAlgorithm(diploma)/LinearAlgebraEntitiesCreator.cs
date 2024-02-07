@@ -79,6 +79,12 @@ namespace ProjectionAlgorithm_diploma_
                 b[i] = rnd.NextDouble();
             }
 
+            double s = b.Sum();
+            for (int i = 0; i < n; i++)
+            {
+                b[i] /= s;
+            }
+
             var builder = Vector<double>.Build;
             var result = builder.DenseOfArray(b);
             return result;
