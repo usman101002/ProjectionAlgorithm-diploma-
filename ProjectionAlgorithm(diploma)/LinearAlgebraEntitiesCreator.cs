@@ -15,12 +15,15 @@ namespace ProjectionAlgorithm_diploma_
     /// уже заполняться вектор b. А потом уже эта сущность будет передаваться в класс-решателя СЛАУ
     /// проекционным методом. 
     /// </summary>
-    internal class LinearAlgebraEntitiesCreator
+    internal class AlgebraEntitiesCreator
     {
+        
         public Matrix<double> A { get; set; }
         public Vector<double> BVector { get; set; }
 
-        public LinearAlgebraEntitiesCreator()
+        private Random rnd = new Random();
+
+        public AlgebraEntitiesCreator()
         {
         }
 
@@ -28,58 +31,54 @@ namespace ProjectionAlgorithm_diploma_
         /// Лучше делать стохастическую матрицу по строкам, используя нормировку. 
         /// </summary>
         /// <param name="n"></param>
-        public LinearAlgebraEntitiesCreator(int n)
+        public AlgebraEntitiesCreator(int n)
         {
-            this.A = CreateSquareMatrix(n);
-            this.BVector = CreateBVector(this.A);
-
+            this.A = CreateStochasticMatrix(n);
+            this.BVector = CreateStochasticBVector(n);
         }
 
         // этот метод обязательно надо переписать (чтобы стохастической по строкам была матрица) 
-        private Matrix<double> CreateSquareMatrix(int size)
+        private Matrix<double> CreateStochasticMatrix(int n)
         {
-            var aArr = new double[size, size];
-            for (int i = 0; i < size; i++)
+            var aArr = new double[n, n];
+            
+
+            for (int i = 0; i < n; i++)
             {
-                for (int j = 0; j < size; j++)
+                for (int j = 0; j < n; j++)
                 {
-                    if (i == j)
-                    {
-                        if (!((i == 0) || (i == size - 1)))
-                        {
-                            aArr[i, j] = i * size + (j + 1);
-                            aArr[i, j - 1] = 1;
-                            aArr[i, j + 1] = 1;
-                        }
-                        else aArr[i, j] = i * size + (j + 1);
-                    }
+                    aArr[i, j] = rnd.NextDouble();
                 }
             }
 
-            
+            for (int i = 0; i < n; i++)
+            {
+                double s = 0;
+                for (int j = 0; j < n; j++)
+                {
+                    s += aArr[i, j];
+                }
+
+                for (int j = 0; j < n; j++)
+                {
+                    aArr[i, j] /= s;
+                }
+            }
+
             var builder = Matrix<double>.Build;
             var result = builder.DenseOfArray(aArr);
             return result;
         }
 
-        private Vector<double> CreateBVector(Matrix<double> mtx)
+        private Vector<double> CreateStochasticBVector(int n)
         {
-            var b = new double[mtx.ColumnCount];
-            for (int i = 0; i < b.Length; i++)
+            var b = new double[n];
+
+            for (int i = 0; i < n; i++)
             {
-                if (i == 0)
-                {
-                    b[i] = 1;
-                }
-                else if (i == mtx.RowCount - 1)
-                {
-                    b[i] = mtx[i, i];
-                }
-                else
-                {
-                    b[i] = mtx[i, i] + 1 + 1;
-                }
+                b[i] = rnd.NextDouble();
             }
+
             var builder = Vector<double>.Build;
             var result = builder.DenseOfArray(b);
             return result;
