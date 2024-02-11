@@ -10,22 +10,27 @@ namespace ProjectionAlgorithm_diploma_
 {
     internal class Program
     {
+        // В методе Main будет происходить финальное тестирование приближённого и метода и библиотечного точного 
+        // метода (иначе не знаю как нормально протестировать). 
         static void Main(string[] args)
         {
-            int n = 3;
+            int n = 1000;
             AlgebraEntitiesCreator creator = new AlgebraEntitiesCreator(n);
-            
+
+           
+
             var solver = new LinearSystemSolver(creator.A, creator.BVector);
             var res = solver.Solve();
-            var s = creator.BVector.Sum();
+            var s = solver.BVector.Sum();
             Console.WriteLine();
 
-            //Теперь посчитаем погрешность 
-            Vector<double> trueX = Vector<double>.Build.Dense(n); ; // верное решение 
-            for (int i = 0; i < n; i++)
-            {
-                trueX[i] = 1;
-            }
+            // посчитаем точное решение СЛАУ с помощью библиотеки Math.Net.Numerics
+            var trueX = GetTrueSolution(solver.A, solver.BVector);
+            var dif = trueX - res;
+
+            Console.WriteLine();
+
+
 
             var numerator = (trueX - res).Norm(2);
             var denominator = trueX.Norm(2);
@@ -36,6 +41,18 @@ namespace ProjectionAlgorithm_diploma_
             Console.WriteLine("2-норма разности:");
             Console.WriteLine(numerator);
 
+        }
+
+        /// <summary>
+        /// Для решения используется метод Solve библиотеки Math.Net Numerics. Он решает СЛАУ с помощью QR-разложения.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        static Vector<double> GetTrueSolution(Matrix<double> a, Vector<double> b)
+        {
+            var res = a.Solve(b);
+            return res;
         }
     }
 }

@@ -34,21 +34,16 @@ namespace ProjectionAlgorithm_diploma_
         {
             var xPrev = Vector<double>.Build.Dense(this.BVector.Count);
             //var xPrev = BVector;
-            for (int i = 1; i < 2000000; i++)
+            for (int i = 1; i < 1000000; i++)
             {
                 int index = this.Walker.GetSelection();
-                var numerator = this.BVector[index] - (xPrev * A.Row(index));
-                var denominator = this.A.Row(index).Select(x => x * x).Sum();
-                var xCur = xPrev + ((numerator * A.Row(index)) / (denominator));
+                var aRow = this.A.Row(index);
+                var numerator = this.BVector[index] - (xPrev * aRow);
+                var denominator = aRow.Select(x => x * x).Sum();
+                var xCur = xPrev + ((numerator * aRow) / (denominator));
                 xPrev = xCur;
                 if (i % 10000 == 0)
-                {
                     Console.WriteLine(i);
-                    Console.WriteLine(xPrev[0]);
-                }
-                    
-                
-                
             }
             return xPrev;
         }

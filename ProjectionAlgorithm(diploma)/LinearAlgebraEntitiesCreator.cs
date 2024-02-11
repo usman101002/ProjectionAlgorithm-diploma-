@@ -21,7 +21,7 @@ namespace ProjectionAlgorithm_diploma_
         public Matrix<double> A { get; set; }
         public Vector<double> BVector { get; set; }
 
-        private Random rnd = new Random();
+        private Random rnd = new Random(2024);
 
         public AlgebraEntitiesCreator()
         {
