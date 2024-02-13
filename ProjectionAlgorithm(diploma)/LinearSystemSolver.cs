@@ -42,10 +42,35 @@ namespace ProjectionAlgorithm_diploma_
                 var denominator = aRow.Select(x => x * x).Sum();
                 var xCur = xPrev + ((numerator * aRow) / (denominator));
                 xPrev = xCur;
-                if (i % 10000 == 0)
-                    Console.WriteLine(i);
+                //if (i % 10000 == 0)
+                //    Console.WriteLine(i);
             }
             return xPrev;
+        }
+
+        /// <summary>
+        /// Решение с помощью итерационного уточнения
+        /// </summary>
+        /// <param name="numOfIterations">1 итерация это просто решение без уточнения, 2 итерации -- это уже одно уточнение,...</param>
+        /// <returns></returns>
+        public Vector<double> SolveWithIterativeRefinement(int numOfIterations)
+        {
+            if (numOfIterations <= 0)
+                throw new Exception("numOfIterations должен быть не меньше 1");
+
+            var res = this.Solve();
+            if (numOfIterations == 1)
+                return res;
+
+            for (int i = 0; i < numOfIterations - 1; i++)
+            {
+                var pseudoB = this.A * res;
+                var d = this.BVector - pseudoB;
+                var solver = new LinearSystemSolver(this.A, d);
+                var refinement = solver.Solve();
+                res += refinement;
+            }
+            return res;
         }
 
         private List<double> GetDistributionOfMatrixRows(Matrix<double> matrix)
