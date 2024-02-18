@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,23 +15,29 @@ namespace ProjectionAlgorithm_diploma_
         // метода (иначе не знаю как нормально протестировать). 
         static void Main(string[] args)
         {
-            int n = 100;
+            int n = 10000;
             AlgebraEntitiesCreator creator = new AlgebraEntitiesCreator(n);
-            var solver = new LinearSystemSolver(creator.A, creator.BVector);
-
-            //var A = Matrix<double>.Build.DenseOfArray(new double[,] {
-            //    { 3, 2, -1 },
-            //    { 2, -2, 4 },
-            //    { -1, 0.5, -1 }
-            //});
-            //var b = Vector<double>.Build.Dense(new double[] { 1, -2, 0 });
+            //var solver = new LinearSystemSolver(creator.A, creator.BVector);
             var trueX = GetTrueSolution(creator.A, creator.BVector);
+            //var simpleSol = solver.Solve();
+            //var refinementSolve = solver.SolveWithIterativeRefinement(8);
 
-            //// теперь мой решатель 
-            //var solver = new LinearSystemSolver(A, b);
-            var numIterations = 12;
-            var refinementSol = solver.SolveWithIterativeRefinement(numIterations);
-            var simpleSol = solver.Solve();
+            string path = "TrueSol10000.txt";
+            using (StreamWriter sw = new StreamWriter(path, false))
+            {
+                sw.WriteLine("QR-factorization, n = 10000");
+                for (int i = 0; i < n; i++)
+                {
+                    sw.WriteLine(trueX[i].ToString());
+                }
+            }
+
+
+
+
+            //var numIterations = 4;
+            //var refinementSol = solver.SolveWithIterativeRefinement(numIterations);
+            //var simpleSol = solver.Solve();
 
             Console.WriteLine();
 
@@ -42,25 +49,25 @@ namespace ProjectionAlgorithm_diploma_
 
 
 
-            var numeratorRef = (trueX - refinementSol).Norm(2);
-            var denominator = trueX.Norm(2);
+            //var numeratorRef = (trueX - refinementSol).Norm(2);
+            //var denominator = trueX.Norm(2);
 
             // С итерационным уточнением
-            Console.WriteLine($"Относительная погрешность в случае итерационного уточнения ({numIterations} итераций):" );
-            Console.WriteLine(numeratorRef / denominator);
+            //Console.WriteLine($"Относительная погрешность в случае итерационного уточнения ({numIterations} итераций):" );
+            //Console.WriteLine(numeratorRef / denominator);
 
-            Console.WriteLine("2-норма разности в случае итерационного уточнения:");
-            Console.WriteLine(numeratorRef);
+            //Console.WriteLine("2-норма разности в случае итерационного уточнения:");
+            //Console.WriteLine(numeratorRef);
 
-            Console.WriteLine();
+            //Console.WriteLine();
 
             // Без итерационного уточнения
-            var numeratorSimple = (trueX - simpleSol).Norm(2);
-            Console.WriteLine("Относительная погрешность без итерационного уточнения:");
-            Console.WriteLine(numeratorSimple / denominator);
+            //var numeratorSimple = (trueX - simpleSol).Norm(2);
+            //Console.WriteLine("Относительная погрешность без итерационного уточнения:");
+            //Console.WriteLine(numeratorSimple / denominator);
 
-            Console.WriteLine("2-норма разности без итерационного уточнения:");
-            Console.WriteLine(numeratorSimple);
+            //Console.WriteLine("2-норма разности без итерационного уточнения:");
+            //Console.WriteLine(numeratorSimple);
 
 
         }
