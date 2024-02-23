@@ -74,6 +74,17 @@ namespace ProjectionAlgorithm_diploma_
             return res;
         }
 
+        /// <summary>
+        /// Данный метод решает СЛАУ Ax=b путём умножения всей СЛАУ на диагональную матрицу В (т.е. DAx=Db), где D такая,
+        /// что матрица DA имеет равномерное распределение по строкам. Дальше используется обычный проекционный алгоритм, но плюс в том,
+        /// что не надо использовать метод Уолкера для генерации случайной величины.
+        /// </summary>
+        /// <returns></returns>
+        public Vector<double> SolveUniformly()
+        {
+            return null;
+        }
+
         private List<double> GetDistributionOfMatrixRows(Matrix<double> matrix)
         {
             var probabilities = new List<double>();
@@ -86,18 +97,18 @@ namespace ProjectionAlgorithm_diploma_
                 matrixRows.Add(matrixRow);
             }
 
-            double normSquared = 0;
+            double frobeniusNormSquared = 0;
             for (int i = 0; i < matrixRows.Count; i++)
             {
                 for (int j = 0; j < matrixRows.Count; j++)
                 {
-                    normSquared += matrixRows[i][j] * matrixRows[i][j];
+                    frobeniusNormSquared += matrixRows[i][j] * matrixRows[i][j];
                 }
             }
 
             for (int i = 0; i < matrixRows.Count; i++)
             {
-                probabilities.Add(matrixRows[i].Select(x => x * x).Sum() / normSquared);
+                probabilities.Add(matrixRows[i].Select(x => x * x).Sum() / frobeniusNormSquared);
             }
 
             var sum = probabilities.Sum();

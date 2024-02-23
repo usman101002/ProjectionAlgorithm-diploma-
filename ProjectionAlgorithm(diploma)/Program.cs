@@ -15,20 +15,29 @@ namespace ProjectionAlgorithm_diploma_
         // метода (иначе не знаю как нормально протестировать). 
         static void Main(string[] args)
         {
-            int n = 10000;
-            AlgebraEntitiesCreator creator = new AlgebraEntitiesCreator(n);
-            //var solver = new LinearSystemSolver(creator.A, creator.BVector);
-            var trueX = GetTrueSolution(creator.A, creator.BVector);
-            //var simpleSol = solver.Solve();
-            //var refinementSolve = solver.SolveWithIterativeRefinement(8);
+            //int n = 10000;
+            //AlgebraEntitiesCreator creator = new AlgebraEntitiesCreator(n);
 
-            string path = "TrueSol10000.txt";
+            // Сейчас будет тестирование в случае простой матрицы 3х3, чтобы было видно, что на ней всё ок 
+            var A = Matrix<double>.Build.DenseOfArray(new double[,] {
+                { 3, 2, -1 },
+                { 2, -2, 4 },
+                { -1, 0.5, -1 }
+            });
+            var b = Vector<double>.Build.Dense(new double[] { 1, -2, 0 });
+
+            var solver = new LinearSystemSolver(A, b);
+            //var solver = new LinearSystemSolver(creator.A, creator.BVector);
+            //var trueX = GetTrueSolution(A, b);
+            //var simpleSol = solver.Solve();
+            var refinementSolve = solver.SolveWithIterativeRefinement(2);
+
+            string path = "IterativeRef2Iterations.txt";
             using (StreamWriter sw = new StreamWriter(path, false))
             {
-                sw.WriteLine("QR-factorization, n = 10000");
-                for (int i = 0; i < n; i++)
+                for (int i = 0; i < refinementSolve.Count; i++)
                 {
-                    sw.WriteLine(trueX[i].ToString());
+                    sw.WriteLine(refinementSolve[i].ToString());
                 }
             }
 
