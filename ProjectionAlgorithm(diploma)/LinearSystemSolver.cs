@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using MathNet.Numerics.LinearAlgebra.Double;
@@ -49,6 +50,11 @@ namespace ProjectionAlgorithm_diploma_
             return xPrev;
         }
 
+        private Vector<double> SolveWithoutWalker()
+        {
+
+        }
+
         /// <summary>
         /// Решение с помощью итерационного уточнения
         /// </summary>
@@ -82,7 +88,35 @@ namespace ProjectionAlgorithm_diploma_
         /// <returns></returns>
         public Vector<double> SolveUniformly()
         {
-            return null;
+            Matrix<double> diagMatrix = GetDiagProbMatrix(this.A);
+            Matrix<double> aNew = diagMatrix * this.A;
+            Vector<double> bNew = diagMatrix * BVector;
+            var newSolver = new LinearSystemSolver(aNew, bNew);
+            var result = newSolver.Solve();
+            return result;
+        }
+
+        private Matrix<double> GetDiagProbMatrix(Matrix<double> matrix)
+        {
+            int rowCount = matrix.RowCount;
+            int colCount = matrix.ColumnCount;
+            double[,] matrixArr = new double[rowCount, colCount];
+            for (int i = 0; i < rowCount; i++)
+            {
+                var row = matrix.Row(i);
+                var norm = GetRowNorm(row);
+                matrixArr[i, i] = 1 / norm;
+            }
+
+            var result = DenseMatrix.OfArray(matrixArr);
+            return result;
+        }
+
+        private double GetRowNorm(IEnumerable<double> row)
+        {
+            var result = row.Select(x => x * x).Sum();
+            result = Math.Sqrt(result);
+            return result;
         }
 
         private List<double> GetDistributionOfMatrixRows(Matrix<double> matrix)
@@ -110,6 +144,8 @@ namespace ProjectionAlgorithm_diploma_
             {
                 probabilities.Add(matrixRows[i].Select(x => x * x).Sum() / frobeniusNormSquared);
             }
+
+
 
             var sum = probabilities.Sum();
 
