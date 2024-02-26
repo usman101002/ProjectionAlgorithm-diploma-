@@ -14,7 +14,7 @@ namespace ProjectionAlgorithm_diploma_
     {
         Matrix<double> A { get; set; }
         Vector<double> BVector { get; set; }
-        Vector<double> Solve();
+        Vector<double> SolveByWalker();
 
     }
 }

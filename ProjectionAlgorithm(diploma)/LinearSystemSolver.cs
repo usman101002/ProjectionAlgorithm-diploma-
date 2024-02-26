@@ -31,7 +31,7 @@ namespace ProjectionAlgorithm_diploma_
         /// </summary>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public Vector<double> Solve()
+        public Vector<double> SolveByWalker()
         {
             var xPrev = Vector<double>.Build.Dense(this.BVector.Count);
             //var xPrev = BVector;
@@ -50,9 +50,27 @@ namespace ProjectionAlgorithm_diploma_
             return xPrev;
         }
 
+        /// <summary>
+        /// Стандартый проекционный алгритм, но индекс выбирает без Волкера, а с помощью обычного rand, но предполагается, что
+        /// распределение строк матрицы будет равномерным.
+        /// </summary>
+        /// <returns></returns>
         private Vector<double> SolveWithoutWalker()
         {
+            // делаем сто тысяч итераций...
+            var xPrev = Vector<double>.Build.Dense(this.BVector.Count);
+            for (int i = 0; i < 1000000; i++)
+            {
+                Random rnd = new Random();
+                int index = rnd.Next(0, this.A.RowCount);
+                var aRow = this.A.Row(index);
+                var numerator = this.BVector[index] - (xPrev * aRow);
+                var denominator = aRow.Select(x => x * x).Sum();
+                var xCur = xPrev + ((numerator * aRow) / (denominator));
+                xPrev = xCur;
+            }
 
+            return xPrev;
         }
 
         /// <summary>
@@ -65,7 +83,7 @@ namespace ProjectionAlgorithm_diploma_
             if (numOfIterations <= 0)
                 throw new Exception("numOfIterations должен быть не меньше 1");
 
-            var res = this.Solve();
+            var res = this.SolveByWalker();
             if (numOfIterations == 1)
                 return res;
 
@@ -74,7 +92,7 @@ namespace ProjectionAlgorithm_diploma_
                 var pseudoB = this.A * res;
                 var d = this.BVector - pseudoB;
                 var solver = new LinearSystemSolver(this.A, d);
-                var refinement = solver.Solve();
+                var refinement = solver.SolveByWalker();
                 res += refinement;
             }
             return res;
@@ -92,7 +110,7 @@ namespace ProjectionAlgorithm_diploma_
             Matrix<double> aNew = diagMatrix * this.A;
             Vector<double> bNew = diagMatrix * BVector;
             var newSolver = new LinearSystemSolver(aNew, bNew);
-            var result = newSolver.Solve();
+            var result = newSolver.SolveWithoutWalker();
             return result;
         }
 

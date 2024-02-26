@@ -29,7 +29,7 @@ namespace ProjectionAlgorithm_diploma_
             var solver = new LinearSystemSolver(A, b);
             //var solver = new LinearSystemSolver(creator.A, creator.BVector);
             //var trueX = GetTrueSolution(A, b);
-            //var simpleSol = solver.Solve();
+            //var simpleSol = solver.SolveByWalker();
             var refinementSolve = solver.SolveWithIterativeRefinement(2);
 
             string path = "IterativeRef2Iterations.txt";
@@ -46,7 +46,7 @@ namespace ProjectionAlgorithm_diploma_
 
             //var numIterations = 4;
             //var refinementSol = solver.SolveWithIterativeRefinement(numIterations);
-            //var simpleSol = solver.Solve();
+            //var simpleSol = solver.SolveByWalker();
 
             Console.WriteLine();
 
@@ -82,7 +82,7 @@ namespace ProjectionAlgorithm_diploma_
         }
 
         /// <summary>
-        /// Для решения используется метод Solve библиотеки Math.Net Numerics. Он решает СЛАУ с помощью QR-разложения.
+        /// Для решения используется метод SolveByWalker библиотеки Math.Net Numerics. Он решает СЛАУ с помощью QR-разложения.
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
