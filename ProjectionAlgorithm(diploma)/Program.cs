@@ -15,29 +15,30 @@ namespace ProjectionAlgorithm_diploma_
         // метода (иначе не знаю как нормально протестировать). 
         static void Main(string[] args)
         {
-            //int n = 10000;
-            //AlgebraEntitiesCreator creator = new AlgebraEntitiesCreator(n);
+            int n = 5;
+            AlgebraEntitiesCreator creator = new AlgebraEntitiesCreator(n);
 
             // Сейчас будет тестирование в случае простой матрицы 3х3, чтобы было видно, что на ней всё ок 
-            var A = Matrix<double>.Build.DenseOfArray(new double[,] {
-                { 3, 2, -1 },
-                { 2, -2, 4 },
-                { -1, 0.5, -1 }
-            });
-            var b = Vector<double>.Build.Dense(new double[] { 1, -2, 0 });
+            //var AMatrix = Matrix<double>.Build.DenseOfArray(new double[,] {
+            //    { 3, 2, -1 },
+            //    { 2, -2, 4 },
+            //    { -1, 0.5, -1 }
+            //});
+            //var b = Vector<double>.Build.Dense(new double[] { 1, -2, 0 });
 
-            var solver = new LinearSystemSolver(A, b);
-            //var solver = new LinearSystemSolver(creator.A, creator.BVector);
-            //var trueX = GetTrueSolution(A, b);
+            //var solver = new LinearSystemSolver(AMatrix, b);
+            var solver = new LinearSystemSolver(creator.AMatrix, creator.BVector);
+            var trueX = GetTrueSolution(creator.AMatrix, creator.BVector);
             //var simpleSol = solver.SolveByWalker();
-            var refinementSolve = solver.SolveWithIterativeRefinement(2);
+            var noWalkerSolution = solver.SolveUniformly();
+            //var refinementSolve = solver.SolveWithIterativeRefinement(2);
 
-            string path = "IterativeRef2Iterations.txt";
+            string path = "uniformSolving";
             using (StreamWriter sw = new StreamWriter(path, false))
             {
-                for (int i = 0; i < refinementSolve.Count; i++)
+                for (int i = 0; i < noWalkerSolution.Count; i++)
                 {
-                    sw.WriteLine(refinementSolve[i].ToString());
+                    sw.WriteLine(noWalkerSolution[i].ToString());
                 }
             }
 
@@ -51,7 +52,7 @@ namespace ProjectionAlgorithm_diploma_
             Console.WriteLine();
 
             // посчитаем точное решение СЛАУ с помощью библиотеки Math.Net.Numerics
-            //var trueX = GetTrueSolution(solver.A, solver.BVector);
+            //var trueX = GetTrueSolution(solver.AMatrix, solver.BVector);
             
 
             Console.WriteLine();

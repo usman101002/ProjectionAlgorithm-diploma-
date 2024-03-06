@@ -22,9 +22,7 @@ namespace ProjectionAlgorithm_diploma_
             BVector = bVector;
             Walker = new Walker(GetDistributionOfMatrixRows(A));
         }
-
-
-
+        
         /// <summary>
         /// Метод позволяет решать СЛАУ Ax = BVector, где BVector -- вектор правой части с
         /// помощью проекционного метода.
@@ -108,6 +106,12 @@ namespace ProjectionAlgorithm_diploma_
         {
             Matrix<double> diagMatrix = GetDiagProbMatrix(this.A);
             Matrix<double> aNew = diagMatrix * this.A;
+            var norms = new List<double>();
+            for (int i = 0; i < aNew.RowCount; i++)
+            {
+                norms.Add(this.GetRowNorm(aNew.Row(i)));
+            }
+
             Vector<double> bNew = diagMatrix * BVector;
             var newSolver = new LinearSystemSolver(aNew, bNew);
             var result = newSolver.SolveWithoutWalker();
@@ -163,10 +167,7 @@ namespace ProjectionAlgorithm_diploma_
                 probabilities.Add(matrixRows[i].Select(x => x * x).Sum() / frobeniusNormSquared);
             }
 
-
-
             var sum = probabilities.Sum();
-
             return probabilities;
         }
     }

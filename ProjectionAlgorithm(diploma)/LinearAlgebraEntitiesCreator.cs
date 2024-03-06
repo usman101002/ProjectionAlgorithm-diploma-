@@ -11,83 +11,127 @@ namespace ProjectionAlgorithm_diploma_
 {
     /// <summary>
     /// В качестве тестового примера вектором x должен быть вектор, состоящий из единиц.
-    /// В качестве матрицы A будет матрица c элементами вида i * size + (j + 1). В соответствии с матрицей будет
+    /// В качестве матрицы AMatrix будет матрица c элементами вида i * size + (j + 1). В соответствии с матрицей будет
     /// уже заполняться вектор b. А потом уже эта сущность будет передаваться в класс-решателя СЛАУ
     /// проекционным методом. 
     /// </summary>
     internal class AlgebraEntitiesCreator
     {
-        
-        public Matrix<double> A { get; set; }
-        public Vector<double> BVector { get; set; }
+        public Matrix<double> AMatrix { get; set; } = null;
+        public Vector<double> BVector { get; set; } = null;
 
-        private Random rnd = new Random(2024);
-
-        public AlgebraEntitiesCreator()
+        public AlgebraEntitiesCreator(Matrix<double> aMatrix, Vector<double> bVector)
         {
+            this.AMatrix = aMatrix;
+            this.BVector = bVector;
         }
 
         /// <summary>
-        /// Лучше делать стохастическую матрицу по строкам, используя нормировку. 
+        /// Левая и правая часть СЛАУ составляются таким образом, чтобы решением был вектор (1,...1).
         /// </summary>
         /// <param name="n"></param>
         public AlgebraEntitiesCreator(int n)
         {
-            this.A = CreateStochasticMatrix(n);
-            this.BVector = CreateStochasticBVector(n);
+            this.AMatrix = this.CreateMatrix(n);
+            this.BVector = this.CreateVector(n);
         }
 
-        // этот метод обязательно надо переписать (чтобы стохастической по строкам была матрица) 
-        private Matrix<double> CreateStochasticMatrix(int n)
+        /// <summary>
+        /// Создание матрицы A, где A[i,j] это n * i + j + 1, где i,j = 0,..., n - 1
+        /// </summary>
+        /// <param name="n">Размерность матрицы</param>
+        /// <returns></returns>
+        private Matrix<double> CreateMatrix(int n)
         {
             var aArr = new double[n, n];
-            
-
             for (int i = 0; i < n; i++)
             {
                 for (int j = 0; j < n; j++)
                 {
-                    aArr[i, j] = rnd.NextDouble();
+                    aArr[i, j] = n * i + j + 1;
                 }
             }
 
-            for (int i = 0; i < n; i++)
-            {
-                double s = 0;
-                for (int j = 0; j < n; j++)
-                {
-                    s += aArr[i, j];
-                }
-
-                for (int j = 0; j < n; j++)
-                {
-                    aArr[i, j] /= s;
-                }
-            }
-
-            var builder = Matrix<double>.Build;
-            var result = builder.DenseOfArray(aArr);
+            var matrixBuilder = Matrix<double>.Build;
+            var result = matrixBuilder.DenseOfArray(aArr);
             return result;
         }
 
-        private Vector<double> CreateStochasticBVector(int n)
+        /// <summary>
+        /// Предполагается, что 
+        /// </summary>
+        /// <param name="n">Размерность вектора</param>
+        /// <returns></returns>
+        private Vector<double> CreateVector(int n)
         {
-            var b = new double[n];
-
-            for (int i = 0; i < n; i++)
+            if (this.AMatrix == null)
             {
-                b[i] = rnd.NextDouble();
+                throw new Exception("Матрица A должна уже быть заполнена");
             }
 
-            double s = b.Sum();
+            var bArr = new double[n];
             for (int i = 0; i < n; i++)
             {
-                b[i] /= s;
+                bArr[i] = this.AMatrix.Row(i).Sum();
             }
 
-            var builder = Vector<double>.Build;
-            var result = builder.DenseOfArray(b);
+            var vectorBuilder = Vector<double>.Build;
+            var result = vectorBuilder.DenseOfArray(bArr);
             return result;
         }
+
+        #region MyRegion
+        //private Matrix<double> CreateStochasticMatrix(int n)
+        //{
+        //    var aArr = new double[n, n];
+        //    for (int i = 0; i < n; i++)
+        //    {
+        //        for (int j = 0; j < n; j++)
+        //        {
+        //            aArr[i, j] = rnd.NextDouble();
+        //        }
+        //    }
+
+        //    for (int i = 0; i < n; i++)
+        //    {
+        //        double s = 0;
+        //        for (int j = 0; j < n; j++)
+        //        {
+        //            s += aArr[i, j];
+        //        }
+
+        //        for (int j = 0; j < n; j++)
+        //        {
+        //            aArr[i, j] /= s;
+        //        }
+        //    }
+
+        //    var builder = Matrix<double>.Build;
+        //    var result = builder.DenseOfArray(aArr);
+        //    return result;
+        //}
+
+        //private Vector<double> CreateStochasticBVector(int n)
+        //{
+        //    var b = new double[n];
+
+        //    for (int i = 0; i < n; i++)
+        //    {
+        //        b[i] = rnd.NextDouble();
+        //    }
+
+        //    double s = b.Sum();
+        //    for (int i = 0; i < n; i++)
+        //    {
+        //        b[i] /= s;
+        //    }
+
+        //    var builder = Vector<double>.Build;
+        //    var result = builder.DenseOfArray(b);
+        //    return result;
+        //}
+
+        #endregion
+
     }
 }

@@ -10,11 +10,9 @@ using MathNet.Numerics.LinearAlgebra.Complex;
 
 namespace ProjectionAlgorithm_diploma_
 {
-    internal interface ILinearSystemSolver
+    public interface IProjectionSolver
     {
-        Matrix<double> A { get; set; }
-        Vector<double> BVector { get; set; }
-        Vector<double> SolveByWalker();
+        Vector<double> Solve(Matrix<double> aMatrix, Vector<double> bVector);
 
     }
 }
