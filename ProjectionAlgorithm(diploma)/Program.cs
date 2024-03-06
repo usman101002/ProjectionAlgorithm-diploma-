@@ -15,7 +15,7 @@ namespace ProjectionAlgorithm_diploma_
         // метода (иначе не знаю как нормально протестировать). 
         static void Main(string[] args)
         {
-            int n = 5;
+            int n = 4;
             AlgebraEntitiesCreator creator = new AlgebraEntitiesCreator(n);
 
             // Сейчас будет тестирование в случае простой матрицы 3х3, чтобы было видно, что на ней всё ок 

@@ -47,9 +47,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extension.cs" />
-    <Compile Include="ILinearSystemSolver.cs" />
+    <Compile Include="IProjectionSolver.cs" />
     <Compile Include="LinearAlgebraEntitiesCreator.cs" />
     <Compile Include="LinearSystemSolver.cs" />
+    <Compile Include="NoWalkerSolver.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Walker.cs" />

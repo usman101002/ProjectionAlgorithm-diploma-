@@ -10,7 +10,7 @@ using MonteKarloMatrixVectorProduct;
 
 namespace ProjectionAlgorithm_diploma_
 {
-    internal class LinearSystemSolver : ILinearSystemSolver
+    internal class LinearSystemSolver
     {
         public Matrix<double> A { get; set; }
         public Vector<double> BVector { get; set; }
