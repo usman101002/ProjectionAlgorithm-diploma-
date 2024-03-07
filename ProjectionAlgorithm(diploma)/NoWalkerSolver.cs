@@ -31,7 +31,7 @@ namespace ProjectionAlgorithm_diploma_
 
             int rowCount = uniformMatrix.RowCount;
             var xPrev = newB;
-            int numberOfIterations = 100 * 1000;
+            int numberOfIterations = 1000 * 1000;
             for (int i = 0; i < numberOfIterations; i++)
             {
                 int index = this.GetRandomIndex(rowCount);
