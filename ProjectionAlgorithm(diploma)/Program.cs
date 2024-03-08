@@ -32,7 +32,7 @@ namespace ProjectionAlgorithm_diploma_
             var noWalkerSolver = new NoWalkerSolver();
             var solution = noWalkerSolver.Solve(creator.AMatrix, creator.BVector);
 
-            string path = "uniformSolving1000.txt";
+            string path = "uniformSolving1000AfterNormirovka.txt";
             using (StreamWriter sw = new StreamWriter(path, false))
             {
                 for (int i = 0; i < n; i++)

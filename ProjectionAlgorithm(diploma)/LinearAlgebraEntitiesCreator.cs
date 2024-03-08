@@ -37,7 +37,8 @@ namespace ProjectionAlgorithm_diploma_
         }
 
         /// <summary>
-        /// Создание матрицы A, где A[i,j] это n * i + j + 1, где i,j = 0,..., n - 1
+        /// Создание матрицы A, где A[i,j] это (n * i + j + 1) / n, где i,j = 0,..., n - 1, на n делим, чтобы уменьшить
+        /// разброс элементов матрицы.
         /// </summary>
         /// <param name="n">Размерность матрицы</param>
         /// <returns></returns>
@@ -48,7 +49,7 @@ namespace ProjectionAlgorithm_diploma_
             {
                 for (int j = 0; j < n; j++)
                 {
-                    aArr[i, j] = n * i + j + 1;
+                    aArr[i, j] = (double)(n * i + j + 1) / (n * n);
                 }
             }
 
