@@ -15,7 +15,7 @@ namespace ProjectionAlgorithm_diploma_
         // метода (иначе не знаю как нормально протестировать). 
         static void Main(string[] args)
         {
-            int n = 1000;
+            int n = 3;
             AlgebraEntitiesCreator creator = new AlgebraEntitiesCreator(n);
 
             #region Получение точного решения
@@ -39,7 +39,7 @@ namespace ProjectionAlgorithm_diploma_
                 {
                     sw.WriteLine(solution[i].ToString());
                 }
-            }
+            } 
 
             Console.WriteLine();
 
