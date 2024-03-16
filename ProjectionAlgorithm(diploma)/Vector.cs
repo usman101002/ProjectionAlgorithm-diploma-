@@ -9,6 +9,7 @@ namespace ProjectionAlgorithm_diploma_
     public class Vector
     {
         private double[] data;
+        public const int GetColCount = 1;
 
         public Vector(IList<double> data)
         {
@@ -84,6 +85,12 @@ namespace ProjectionAlgorithm_diploma_
         {
             get => this.data[index];
             set => this.data[index] = value;
+        }
+
+        public int GetRowCount()
+        {
+            int res = this.data.Length;
+            return res;
         }
     }
 }
