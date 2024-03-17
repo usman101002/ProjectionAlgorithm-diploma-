@@ -106,5 +106,21 @@ namespace ProjectionAlgorithm_diploma_
             var result = new Vector(resData);
             return result;
         }
+
+        public static Matrix operator *(Matrix matrix1, Matrix matrix2)
+        {
+            if (matrix1.colCount != matrix2.rowCount)
+            {
+                throw new Exception("Число столбцов первой матрицы должно быть равно числу строк второй матрицы!");
+            }
+
+            double[,] resData = new double[matrix1.rowCount, matrix2.colCount];
+            int m1RowCount = matrix1.rowCount;
+            int m2ColCount = matrix2.colCount;
+            int m2RowCount = matrix2.rowCount;
+            
+
+            return null;
+        }
     }
 }
