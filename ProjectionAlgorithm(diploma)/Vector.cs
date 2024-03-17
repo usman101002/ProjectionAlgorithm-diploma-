@@ -12,9 +12,9 @@ namespace ProjectionAlgorithm_diploma_
         public const int GetColCount = 1;
         private int dimension;
 
-        public Vector(IList<double> data)
+        public Vector(IEnumerable<double> data)
         {
-            this.data = this.data.ToArray();
+            this.data = data.ToArray();
             this.dimension = this.data.Length;
         }
 
@@ -57,6 +57,10 @@ namespace ProjectionAlgorithm_diploma_
         /// <returns></returns>
         public static double operator *(Vector v1, Vector v2)
         {
+            if (v1.data.Length != v2.data.Length)
+            {
+                throw new Exception("Вектора должны иметь одинаковые размерности!");
+            }
             double[] data1 = v1.data;
             double[] data2 = v2.data;
             int n = data1.Length;
@@ -83,6 +87,20 @@ namespace ProjectionAlgorithm_diploma_
             return res;
         }
 
+        public static Vector operator *(double factor, Vector v1)
+        {
+            double[] data = v1.data;
+            int n = data.Length;
+
+            double[] resData = new double[n];
+            for (int i = 0; i < n; i++)
+            {
+                resData[i] = factor * data[i];
+            }
+            Vector res = new Vector(resData);
+            return res;
+        }
+
         public double this[int index]
         {
             get => this.data[index];
@@ -92,6 +110,17 @@ namespace ProjectionAlgorithm_diploma_
         public int GetDimension()
         {
             return this.dimension;
+        }
+
+        public double GetEuclideanNorm()
+        {
+            double squaredNorm = 0;
+            for (int i = 0; i < this.dimension; i++)
+            {
+                squaredNorm += this.data[i] * this.data[i];
+            }
+
+            return Math.Sqrt(squaredNorm);
         }
     }
 }
