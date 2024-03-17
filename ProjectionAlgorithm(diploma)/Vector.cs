@@ -10,10 +10,12 @@ namespace ProjectionAlgorithm_diploma_
     {
         private double[] data;
         public const int GetColCount = 1;
+        private int dimension;
 
         public Vector(IList<double> data)
         {
             this.data = this.data.ToArray();
+            this.dimension = this.data.Length;
         }
 
         public static Vector operator +(Vector v1, Vector v2)
@@ -87,10 +89,9 @@ namespace ProjectionAlgorithm_diploma_
             set => this.data[index] = value;
         }
 
-        public int GetRowCount()
+        public int GetDimension()
         {
-            int res = this.data.Length;
-            return res;
+            return this.dimension;
         }
     }
 }

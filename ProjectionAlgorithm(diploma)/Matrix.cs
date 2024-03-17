@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,10 +10,14 @@ namespace ProjectionAlgorithm_diploma_
     public class Matrix
     {
         private double[,] data;
+        private int rowCount;
+        private int colCount; 
 
         public Matrix(double[,] data)
         {
             this.data = data;
+            rowCount = data.GetLength(0);
+            colCount = data.GetLength(1);
         }
 
         public double this[int i, int j]
@@ -23,21 +28,83 @@ namespace ProjectionAlgorithm_diploma_
 
         public int GetRowCount()
         {
-            int res = this.data.GetLength(0);
-            return res;
+            return this.rowCount;
         }
 
         public int GetColCount()
         {
-            int res = this.data.GetLength(1);
-            return res;
+            return this.colCount;
+        }
+
+        public Vector GetRowByIndex(int index)
+        {
+            var resData = new double[this.colCount];
+            for (int j = 0; j < this.colCount; j++)
+            {
+                resData[j] = this.data[index, j];
+            }
+
+            var result = new Vector(resData);
+            return result;
+        }
+
+        public Vector GetColByIndex(int index)
+        {
+            var resData = new double[this.rowCount];
+            for (int i = 0; i < this.rowCount; i++)
+            {
+                resData[i] = this.data[i, index];
+            }
+
+            var result = new Vector(resData);
+            return result;
         }
 
         public static Vector operator *(Matrix matrix, Vector vector)
         {
-            //int n = 
-            //double[] resData = new double[]
-            return null;
+            if (matrix.colCount != vector.GetDimension())
+            {
+                throw new Exception("Число столбцов в матрице должно быть равно размерности вектора!");
+            }
+
+            int rowCount = matrix.rowCount;
+            int colCount = matrix.colCount;
+            int resDimension = rowCount;
+            double[] resData = new double[resDimension];
+
+            for (int i = 0; i < resDimension; i++)
+            {
+                for (int j = 0; j < colCount; j++)
+                {
+                    resData[i] += matrix[i, j] * vector[j];
+                }
+            }
+
+            var result = new Vector(resData);
+            return result;
+        }
+
+        public static Vector operator *(Vector vector, Matrix matrix)
+        {
+            if (vector.GetDimension() != matrix.rowCount)
+            {
+                throw new Exception("Число стобцов в векторе должно быть равно числу строк в матрице");
+            }
+            int rowCount = matrix.rowCount;
+            int colCount = matrix.colCount;
+            int resDimension = colCount;
+            double[] resData = new double[resDimension];
+
+            for (int i = 0; i < resDimension; i++)
+            {
+                for (int j = 0; j < colCount; j++)
+                {
+                    resData[i] += vector[j] * matrix[j, i];
+                }
+            }
+
+            var result = new Vector(resData);
+            return result;
         }
     }
 }
