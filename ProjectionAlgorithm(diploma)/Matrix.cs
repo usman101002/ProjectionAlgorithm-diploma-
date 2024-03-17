@@ -118,9 +118,20 @@ namespace ProjectionAlgorithm_diploma_
             int m1RowCount = matrix1.rowCount;
             int m2ColCount = matrix2.colCount;
             int m2RowCount = matrix2.rowCount;
-            
 
-            return null;
+            for (int i = 0; i < m1RowCount; i++)
+            {
+                for (int j = 0; j < m2ColCount; j++)
+                {
+                    for (int k = 0; k < m2RowCount; k++)
+                    {
+                        resData[i, j] += matrix1[i, k] * matrix2[k, j];
+                    }
+                }
+            }
+
+            Matrix res = new Matrix(resData);
+            return res;
         }
     }
 }
