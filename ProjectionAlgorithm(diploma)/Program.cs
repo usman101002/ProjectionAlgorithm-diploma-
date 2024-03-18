@@ -11,19 +11,19 @@ namespace ProjectionAlgorithm_diploma_
 {
     internal class Program
     {
-        
+
         static void Main(string[] args)
         {
             // Тестирование моей библиотеки для работы с матрицами и векторами.
 
             // 1) Скалярное произведение двух векторов
             double[] v1Data = new double[] { 1, 2, 3 };
-            double[] v2Data = new double[] { 4, 5, 6};
+            double[] v2Data = new double[] { 4, 5, 6 };
             var v1 = new Vector(v1Data);
             var v2 = new Vector(v2Data);
             double res = v1 * v2;
             // Скалярное произведение работает верно
-            
+
             // 2) Умножение вектора на скаляр
             var newVector = 3 * v1;
             // Умножение вектора на число работает верно.
@@ -36,6 +36,43 @@ namespace ProjectionAlgorithm_diploma_
             var sumOfVectors = v1 + v2;
             var subtractOfVectors = v1 - v2;
             // сумма и разность работают верно
+
+            // 5) Умножение матрицы на вектор и вектора на матрицу
+            double[,] m1Data = new double[v1Data.Length, v1Data.Length];
+            m1Data[0, 0] = 1; m1Data[0, 1] = 2; m1Data[0, 2] = 3;
+            m1Data[1, 0] = 4; m1Data[1, 1] = 5; m1Data[1, 2] = 6;
+            m1Data[2, 0] = 7; m1Data[2, 1] = 8; m1Data[2, 2] = 9;
+            var m1 = new Matrix(m1Data);
+
+            var v = m1 * v1;
+            var vStr = v1 * m1;
+            // Умножение матрицы на вектор и вектора на матрицу работают корректно. 
+
+            // 6) Умножение матриц (одинаковой размерности и разной размерности)
+            var m1Squared = m1 * m1;
+
+            var mtx1Data = new double[2, 3];
+            mtx1Data[0, 0] = 1;
+            mtx1Data[0, 1] = 2;
+            mtx1Data[0, 2] = 3;
+            mtx1Data[1, 0] = 4;
+            mtx1Data[1, 1] = 5;
+            mtx1Data[1, 2] = 6;
+
+            var mtx2Data = new double[3, 2];
+            mtx2Data[0, 0] = 1;
+            mtx2Data[0, 1] = 1;
+            mtx2Data[1, 0] = 2;
+            mtx2Data[1, 1] = 2;
+            mtx2Data[2, 0] = 3;
+            mtx2Data[2, 1] = 3;
+            
+            var mtx1= new Matrix(mtx1Data);
+            var mtx2= new Matrix(mtx2Data);
+
+            var prod = mtx1 * mtx2;
+            // Перемножение матриц (в том числе в разных размерностях) работает корректно. 
+
 
             #region Старьё, потом вернусь к нему
 
