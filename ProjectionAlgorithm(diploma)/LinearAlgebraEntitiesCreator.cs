@@ -47,7 +47,7 @@ namespace ProjectionAlgorithm_diploma_
             {
                 for (int j = 0; j < n; j++)
                 {
-                    aArr[i, j] = (double)(n * i + j + 1) / n * n;
+                    aArr[i, j] = (double)(n * i + j + 1) / n * n * n;
                 }
             }
 

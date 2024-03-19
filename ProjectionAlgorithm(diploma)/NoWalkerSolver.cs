@@ -21,7 +21,7 @@ namespace ProjectionAlgorithm_diploma_
             this.rnd = new Random();
         }
 
-        public Vector<double> Solve(Matrix<double> aMatrix, Vector<double> bVector)
+        public Vector Solve(Matrix aMatrix, Vector bVector)
         {
             // Переход к равномерно распределённой матрице путём домножения специальной диагональной матрицы на исходную.
             // Вектор правой части соответственно тоже домножается на эту диагональную матрицу. 
@@ -29,47 +29,46 @@ namespace ProjectionAlgorithm_diploma_
             var uniformMatrix = diagProbMatrix * aMatrix;
             var newB = diagProbMatrix * bVector;
 
-            int rowCount = uniformMatrix.RowCount;
+            int rowCount = uniformMatrix.GetRowCount();
             var xPrev = newB;
             int numberOfIterations = 100 * 1000;
             for (int i = 0; i < numberOfIterations; i++)
             {
                 int index = this.GetRandomIndex(rowCount);
-                var uniformMatrixRow = uniformMatrix.Row(index);
+                var uniformMatrixRow = uniformMatrix.GetRowByIndex(index);
                 var numerator = newB[index] - (xPrev * uniformMatrixRow);
                 var denominator = this.GetRowNorm(uniformMatrixRow) * this.GetRowNorm(uniformMatrixRow);
-                var xCur = xPrev + (numerator * uniformMatrixRow) / denominator;
+                var xCur = xPrev + (numerator / denominator) * uniformMatrixRow;
                 xPrev = xCur;
             }
 
             return xPrev;
         }
 
-        
-        private Matrix<double> GetDiagProbMatrix(Matrix<double> matrix)
+        private Matrix GetDiagProbMatrix(Matrix matrix)
         {
-            int rowCount = matrix.RowCount;
-            int colCount = matrix.ColumnCount;
+            int rowCount = matrix.GetRowCount();
+            int colCount = matrix.GetColCount();
             double[,] matrixArr = new double[rowCount, colCount];
             for (int i = 0; i < rowCount; i++)
             {
-                var row = matrix.Row(i);
+                var row = matrix.GetRowByIndex(i);
                 var norm = GetRowNorm(row);
                 matrixArr[i, i] = 1 / norm;
             }
 
-            var result = DenseMatrix.OfArray(matrixArr);
+            var result = new Matrix(matrixArr);
             return result;
         }
 
-        private List<double> GetDistributionOfMatrixRows(Matrix<double> matrix)
+        private List<double> GetDistributionOfMatrixRows(Matrix matrix)
         {
             var probabilities = new List<double>();
             var matrixRows = new List<List<double>>();
 
-            for (int i = 0; i < matrix.RowCount; i++)
+            for (int i = 0; i < matrix.GetRowCount(); i++)
             {
-                var matrixRow = matrix.Row(i).ToList();
+                var matrixRow = matrix.GetRowByIndex(i).ToList();
                 matrixRows.Add(matrixRow);
             }
 
