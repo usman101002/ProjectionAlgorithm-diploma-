@@ -11,7 +11,7 @@ namespace ProjectionAlgorithm_diploma_
     {
         private double[,] data;
         private int rowCount;
-        private int colCount; 
+        private int colCount;
 
         public Matrix(double[,] data)
         {
@@ -130,6 +130,84 @@ namespace ProjectionAlgorithm_diploma_
                 }
             }
 
+            Matrix res = new Matrix(resData);
+            return res;
+        }
+
+        public static Matrix operator +(Matrix matrix1, Matrix matrix2)
+        {
+            if (matrix1.rowCount != matrix2.rowCount || matrix1.colCount != matrix2.colCount)
+            {
+                throw new Exception("Матрицы должны иметь одинаковые размерности!");
+            }
+
+            int m1RowCount = matrix1.rowCount;
+            int m1ColCount = matrix1.colCount;
+            double[,] resData = new double[m1RowCount, m1ColCount];
+
+            for (int i = 0; i < m1RowCount; i++)
+            {
+                for (int j = 0; j < m1ColCount; j++)
+                {
+                    resData[i, j] = matrix1[i, j] + matrix2[i, j];
+                }
+            }
+            Matrix res = new Matrix(resData);
+            return res;
+        }
+
+        public static Matrix operator -(Matrix matrix1, Matrix matrix2)
+        {
+            if (matrix1.rowCount != matrix2.rowCount || matrix1.colCount != matrix2.colCount)
+            {
+                throw new Exception("Матрицы должны иметь одинаковые размерности!");
+            }
+
+            int m1RowCount = matrix1.rowCount;
+            int m1ColCount = matrix1.colCount;
+            double[,] resData = new double[m1RowCount, m1ColCount];
+
+            for (int i = 0; i < m1RowCount; i++)
+            {
+                for (int j = 0; j < m1ColCount; j++)
+                {
+                    resData[i, j] = matrix1[i, j] - matrix2[i, j];
+                }
+            }
+            Matrix res = new Matrix(resData);
+            return res;
+        }
+
+        public static Matrix operator *(Matrix matrix1, double scalar)
+        {
+            int m1RowCount = matrix1.rowCount;
+            int m1ColCount = matrix1.colCount;
+            double[,] resData = new double[m1RowCount, m1ColCount];
+
+            for (int i = 0; i < m1RowCount; i++)
+            {
+                for (int j = 0; j < m1ColCount; j++)
+                {
+                    resData[i, j] = matrix1[i, j] * scalar;
+                }
+            }
+            Matrix res = new Matrix(resData);
+            return res;
+        }
+
+        public static Matrix operator *(double scalar, Matrix matrix1)
+        {
+            int m1RowCount = matrix1.rowCount;
+            int m1ColCount = matrix1.colCount;
+            double[,] resData = new double[m1RowCount, m1ColCount];
+
+            for (int i = 0; i < m1RowCount; i++)
+            {
+                for (int j = 0; j < m1ColCount; j++)
+                {
+                    resData[i, j] = matrix1[i, j] * scalar;
+                }
+            }
             Matrix res = new Matrix(resData);
             return res;
         }
