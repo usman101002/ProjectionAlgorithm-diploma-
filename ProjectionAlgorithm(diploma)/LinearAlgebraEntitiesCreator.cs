@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Complex;
 using MonteKarloMatrixVectorProduct;
 
 namespace ProjectionAlgorithm_diploma_
@@ -17,10 +15,10 @@ namespace ProjectionAlgorithm_diploma_
     /// </summary>
     internal class AlgebraEntitiesCreator
     {
-        public Matrix<double> AMatrix { get; set; } = null;
-        public Vector<double> BVector { get; set; } = null;
+        public Matrix AMatrix { get; set; } = null;
+        public Vector BVector { get; set; } = null;
 
-        public AlgebraEntitiesCreator(Matrix<double> aMatrix, Vector<double> bVector)
+        public AlgebraEntitiesCreator(Matrix aMatrix, Vector bVector)
         {
             this.AMatrix = aMatrix;
             this.BVector = bVector;
@@ -42,7 +40,7 @@ namespace ProjectionAlgorithm_diploma_
         /// </summary>
         /// <param name="n">Размерность матрицы</param>
         /// <returns></returns>
-        private Matrix<double> CreateMatrix(int n)
+        private Matrix CreateMatrix(int n)
         {
             var aArr = new double[n, n];
             for (int i = 0; i < n; i++)
@@ -53,8 +51,7 @@ namespace ProjectionAlgorithm_diploma_
                 }
             }
 
-            var matrixBuilder = Matrix<double>.Build;
-            var result = matrixBuilder.DenseOfArray(aArr);
+            var result = new Matrix(aArr);
             return result;
         }
 
@@ -63,7 +60,7 @@ namespace ProjectionAlgorithm_diploma_
         /// </summary>
         /// <param name="n">Размерность вектора</param>
         /// <returns></returns>
-        private Vector<double> CreateVector(int n)
+        private Vector CreateVector(int n)
         {
             if (this.AMatrix == null)
             {
@@ -73,11 +70,10 @@ namespace ProjectionAlgorithm_diploma_
             var bArr = new double[n];
             for (int i = 0; i < n; i++)
             {
-                bArr[i] = this.AMatrix.Row(i).Sum();
+                bArr[i] = this.AMatrix.GetRowByIndex(i).Sum();
             }
 
-            var vectorBuilder = Vector<double>.Build;
-            var result = vectorBuilder.DenseOfArray(bArr);
+            var result = new Vector(bArr);
             return result;
         }
 

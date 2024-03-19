@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ProjectionAlgorithm_diploma_
 {
-    public class Vector
+    public class Vector : IEnumerable<double>
     {
         private double[] data;
         public const int GetColCount = 1;
@@ -121,6 +122,17 @@ namespace ProjectionAlgorithm_diploma_
             }
 
             return Math.Sqrt(squaredNorm);
+        }
+
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.data.GetEnumerator();
+        }
+
+        public IEnumerator<double> GetEnumerator()
+        {
+            return ((IEnumerable<double>)data).GetEnumerator();
         }
     }
 }
