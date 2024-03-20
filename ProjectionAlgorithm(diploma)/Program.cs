@@ -14,7 +14,7 @@ namespace ProjectionAlgorithm_diploma_
 
         static void Main(string[] args)
         {
-            var creator = new AlgebraEntitiesCreator(500);
+            var creator = new AlgebraEntitiesCreator(5);
             NoWalkerSolver solver = new NoWalkerSolver();
             var solution = solver.Solve(creator.AMatrix, creator.BVector);
 

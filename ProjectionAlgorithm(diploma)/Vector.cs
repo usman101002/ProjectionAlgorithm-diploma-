@@ -19,6 +19,16 @@ namespace ProjectionAlgorithm_diploma_
             this.dimension = this.data.Length;
         }
 
+        /// <summary>
+        /// Создание нулевого вектора заданной размерности
+        /// </summary>
+        /// <param name="n"></param>
+        public Vector(int n)
+        {
+            this.data = new double[n];
+            this.dimension = n;
+        }
+
         public static Vector operator +(Vector v1, Vector v2)
         {
             double[] data1 = v1.data;
@@ -123,6 +133,8 @@ namespace ProjectionAlgorithm_diploma_
 
             return Math.Sqrt(squaredNorm);
         }
+
+        
 
 
         IEnumerator IEnumerable.GetEnumerator()
