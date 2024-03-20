@@ -14,10 +14,17 @@ namespace ProjectionAlgorithm_diploma_
 
         static void Main(string[] args)
         {
-            var creator = new AlgebraEntitiesCreator(5);
+            var creator = new AlgebraEntitiesCreator(1000);
             NoWalkerSolver solver = new NoWalkerSolver();
             var solution = solver.Solve(creator.AMatrix, creator.BVector);
-
+            string path = "uniformSolving1000Dim1000IterationsAfterNormirovka.txt";
+            using (StreamWriter sw = new StreamWriter(path, false))
+            {
+                for (int i = 0; i < solution.Count(); i++)
+                {
+                    sw.WriteLine(solution[i].ToString());
+                }
+            }
 
 
             #region Старьё, потом вернусь к нему

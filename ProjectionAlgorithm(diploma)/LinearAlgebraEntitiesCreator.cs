@@ -34,20 +34,22 @@ namespace ProjectionAlgorithm_diploma_
             this.BVector = this.CreateVector(n);
         }
 
-        /// <summary>
-        /// Создание матрицы A, где A[i,j] это (n * i + j + 1) / n, где i,j = 0,..., n - 1, на n делим, чтобы уменьшить
-        /// разброс элементов матрицы.
-        /// </summary>
-        /// <param name="n">Размерность матрицы</param>
-        /// <returns></returns>
+        
         private Matrix CreateMatrix(int n)
         {
             var aArr = new double[n, n];
+            //for (int i = 0; i < n; i++)
+            //{
+            //    for (int j = 0; j < n; j++)
+            //    {
+            //        aArr[i, j] = (double)(n * i + j + 1) / n * n * n;
+            //    }
+            //}
             for (int i = 0; i < n; i++)
             {
                 for (int j = 0; j < n; j++)
                 {
-                    aArr[i, j] = (double)(n * i + j + 1) / n * n * n;
+                    aArr[i, j] = (i + 1);
                 }
             }
 

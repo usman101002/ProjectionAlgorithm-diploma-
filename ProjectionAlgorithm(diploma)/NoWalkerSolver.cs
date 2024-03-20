@@ -31,21 +31,14 @@ namespace ProjectionAlgorithm_diploma_
 
             int rowCount = uniformMatrix.GetRowCount();
             var xPrev = newB;
-            int numberOfIterations = 100 * 100;
+            int numberOfIterations = 1000 ;
             for (int i = 0; i < numberOfIterations; i++)
             {
-                //int index = this.GetRandomIndex(rowCount);
-                //var uniformMatrixRow = uniformMatrix.GetRowByIndex(index);
-                //var numerator = newB[index] - (xPrev * uniformMatrixRow);
-                //var denominator = this.GetRowNorm(uniformMatrixRow) * this.GetRowNorm(uniformMatrixRow);
-                //var xCur = xPrev + (numerator / denominator) * uniformMatrixRow;
-                //xPrev = xCur;
-                int index = i;
+                int index = this.GetRandomIndex(rowCount);
                 var uniformMatrixRow = uniformMatrix.GetRowByIndex(index);
                 var numerator = newB[index] - (xPrev * uniformMatrixRow);
                 var denominator = this.GetRowNorm(uniformMatrixRow) * this.GetRowNorm(uniformMatrixRow);
-                var factor = (double)numerator / denominator;
-                var xCur = xPrev + factor * uniformMatrixRow;
+                var xCur = xPrev + (numerator / denominator) * uniformMatrixRow;
                 xPrev = xCur;
             }
 
