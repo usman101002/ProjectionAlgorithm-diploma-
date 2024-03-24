@@ -46,9 +46,25 @@ namespace ProjectionAlgorithm_diploma_
                     }
                 }
             }
-            if (boundaryPoints.Count == numSideNodes * 4 - 4)
-                Console.WriteLine("Количество такое, как надо");
             return boundaryPoints;
+        }
+
+        public List<double> GetBoundUValues(int numSideNodes)
+        {
+            var boundaryPoints = this.GetPointFromBoundary(numSideNodes);
+            var result = this.GetFunctionValues(boundaryPoints, this.TrueUFunc);
+            return result;
+        }
+
+        private List<double> GetFunctionValues(IEnumerable<(double, double)> points, Func<double, double, double> function)
+        {
+            var res = new List<double>();
+            foreach (var point in points)
+            {
+                var functionValue = function(point.Item1, point.Item2);
+                res.Add(functionValue);
+            }
+            return res;
         }
 
 

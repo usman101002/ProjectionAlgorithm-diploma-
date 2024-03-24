@@ -15,8 +15,7 @@ namespace ProjectionAlgorithm_diploma_
         static void Main(string[] args)
         {
             LaplasEquationSolver solver = new LaplasEquationSolver();
-            var points = solver.GetPointFromBoundary(5);
-
+            var uValues = solver.GetBoundUValues(3);
 
 
             //var creator = new AlgebraEntitiesCreator(1000);
