@@ -12,6 +12,8 @@ namespace ProjectionAlgorithm_diploma_
     /// </summary>
     public class LaplasEquationSolver
     {
+        private Random rnd;
+        private List<double> boundUValues;
         public double TrueUFunc(double x, double y)
         {
             var res = x * x - y * y;
@@ -23,7 +25,7 @@ namespace ProjectionAlgorithm_diploma_
         /// </summary>
         /// <param name="numSideNodes">Число нод на одной стороне квадрата</param>
         /// <returns></returns>
-        public List<(double, double)> GetPointFromBoundary(int numSideNodes)
+        private List<(double, double)> GetPointFromBoundary(int numSideNodes)
         {
             var boundaryPoints = new List<(double, double)>();
             double step = (double)1 / (numSideNodes - 1);
@@ -53,6 +55,7 @@ namespace ProjectionAlgorithm_diploma_
         {
             var boundaryPoints = this.GetPointFromBoundary(numSideNodes);
             var result = this.GetFunctionValues(boundaryPoints, this.TrueUFunc);
+            this.boundUValues = result;
             return result;
         }
 
