@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Extension.cs" />
     <Compile Include="IProjectionSolver.cs" />
+    <Compile Include="LaplasEquationSolver.cs" />
     <Compile Include="LinearAlgebraEntitiesCreator.cs" />
     <Compile Include="LinearSystemSolver.cs" />
     <Compile Include="Matrix.cs" />
