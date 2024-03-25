@@ -25,9 +25,26 @@ namespace ProjectionAlgorithm_diploma_
             return res;
         }
 
+        public double GetDistBtwPoints((double, double) point1, (double, double) point2)
+        {
+            double result = Math.Pow(point1.Item1 - point2.Item1, 2) + Math.Pow(point1.Item2 - point2.Item2, 2);
+            return Math.Sqrt(result);
+        }
+
+        public (double, double) GetRandomPointInArea(double h1, double h2)
+        {
+            double xCoord = this.GetRandomCoordInArea(h1, h2);
+            double yCoord = this.GetRandomCoordInArea(h1, h2);
+            var resultPoint = (xCoord, yCoord);
+            return resultPoint;
+        }
         private double GetRandomCoordInArea(double h1, double h2)
         {
-            return 0;
+            double valueFromLeftSpace = this.GetUniformDistribution(0 - h1 - h2, 0 - h1);
+            double valueFromRightSpace = this.GetUniformDistribution(1 + h1, 1 + h1 + h2);
+            int choice = this.ChooseFromTwoRndVars();
+            double result = choice == 0 ? valueFromLeftSpace : valueFromRightSpace;
+            return result;
         }
 
         private double GetUniformDistribution(double a, double b)
