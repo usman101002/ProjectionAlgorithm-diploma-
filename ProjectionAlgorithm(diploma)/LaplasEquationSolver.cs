@@ -14,9 +14,32 @@ namespace ProjectionAlgorithm_diploma_
     {
         private Random rnd;
         private List<double> boundUValues;
+
+        public LaplasEquationSolver()
+        {
+            this.rnd = new Random();
+        }
         public double TrueUFunc(double x, double y)
         {
             var res = x * x - y * y;
+            return res;
+        }
+
+        private double GetRandomCoordInArea(double h1, double h2)
+        {
+            return 0;
+        }
+
+        private double GetUniformDistribution(double a, double b)
+        {
+            double rand = rnd.NextDouble();
+            double res = a + (b - a) * rand;
+            return res;
+        }
+
+        private int ChooseFromTwoRndVars()
+        {
+            int res = this.rnd.Next(0, 2);
             return res;
         }
 
