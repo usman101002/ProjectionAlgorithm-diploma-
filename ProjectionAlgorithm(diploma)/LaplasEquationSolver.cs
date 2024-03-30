@@ -8,7 +8,8 @@ namespace ProjectionAlgorithm_diploma_
 {
     /// <summary>
     /// Уравнение: Laplas(u) = 0, u на границе равно функции.
-    /// Граница есть прямоугольник, у которого левый нижний угол находится в точке (0, 0)
+    /// Граница есть прямоугольник шириной width и высотой,
+    /// у которого левый нижний угол находится в точке (0, 0)
     /// </summary>
     public class LaplasEquationSolver
     {
@@ -16,30 +17,30 @@ namespace ProjectionAlgorithm_diploma_
         private List<double> boundUValues;
         private double width;
         private double height;
-        
+        private int numWidthNodes;
+        private int numHeightNodes;
+
         public LaplasEquationSolver()
         {
             this.rnd = new Random();
             this.width = 1;
             this.height = 1;
+            this.numWidthNodes = 3;
+            this.numHeightNodes = 3;
         }
 
-        public LaplasEquationSolver(double width, double height)
+        public LaplasEquationSolver(double width, double height, int numWidthNodes, int numHeightNodes)
         {
+            this.rnd = new Random();
             this.width = width;
             this.height = height;
-            this.rnd = new Random();
+            this.numWidthNodes = numWidthNodes;
+            this.numHeightNodes = numHeightNodes;
         }
         public double TrueUFunc(double x, double y)
         {
             var res = x * x - y * y;
             return res;
-        }
-
-        public double GetDistBtwPoints((double, double) point1, (double, double) point2)
-        {
-            double result = Math.Pow(point1.Item1 - point2.Item1, 2) + Math.Pow(point1.Item2 - point2.Item2, 2);
-            return Math.Sqrt(result);
         }
 
         public (double, double) GetRandomPointInArea(double h1, double h2)
@@ -52,33 +53,20 @@ namespace ProjectionAlgorithm_diploma_
 
         private double GetRandomXInArea(double h1, double h2)
         {
-            double valueFromLeftSpace = this.GetUniformDistribution(0 - h1 - h2, 0 - h1);
-            double valueFromRightSpace = this.GetUniformDistribution(this.width + h1, this.width + h1 + h2);
-            int choice = this.ChooseFromTwoRndVars();
+            double valueFromLeftSpace = MathUtils.GetUniformDistribution(0 - h1 - h2, 0 - h1);
+            double valueFromRightSpace = MathUtils.GetUniformDistribution(this.width + h1, this.width + h1 + h2);
+            int choice = MathUtils.ChooseBtwTwoRndVars();
             double result = choice == 0 ? valueFromLeftSpace : valueFromRightSpace;
             return result;
         }
 
         private double GetRandomYInArea(double h1, double h2)
         {
-            double valueFromTopSpace = this.GetUniformDistribution(this.height + h1, this.height + h1 + h2);
-            double valueFromBotSpace = this.GetUniformDistribution(0 - h1, 0 - h1 - h2);
-            int choice = this.ChooseFromTwoRndVars();
+            double valueFromTopSpace = MathUtils.GetUniformDistribution(this.height + h1, this.height + h1 + h2);
+            double valueFromBotSpace = MathUtils.GetUniformDistribution(0 - h1, 0 - h1 - h2);
+            int choice = MathUtils.ChooseBtwTwoRndVars();
             double result = choice == 0 ? valueFromTopSpace : valueFromBotSpace;
             return result;
-        }
-        
-        private double GetUniformDistribution(double a, double b)
-        {
-            double rand = rnd.NextDouble();
-            double res = a + (b - a) * rand;
-            return res;
-        }
-
-        private int ChooseFromTwoRndVars()
-        {
-            int res = this.rnd.Next(0, 2);
-            return res;
         }
 
         /// <summary>
@@ -103,7 +91,6 @@ namespace ProjectionAlgorithm_diploma_
                     boundaryPoints.Add((xCoord, yCoord));
                 }
             }
-            
             return boundaryPoints;
         }
 
@@ -124,7 +111,5 @@ namespace ProjectionAlgorithm_diploma_
             }
             return res;
         }
-
-
     }
 }

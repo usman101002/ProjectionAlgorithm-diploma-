@@ -51,6 +51,7 @@
     <Compile Include="LaplasEquationSolver.cs" />
     <Compile Include="LinearAlgebraEntitiesCreator.cs" />
     <Compile Include="LinearSystemSolver.cs" />
+    <Compile Include="MathUtils.cs" />
     <Compile Include="Matrix.cs" />
     <Compile Include="NoWalkerSolver.cs" />
     <Compile Include="Program.cs" />
