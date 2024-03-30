@@ -8,15 +8,26 @@ namespace ProjectionAlgorithm_diploma_
 {
     /// <summary>
     /// Уравнение: Laplas(u) = 0, u на границе равно функции.
-    /// Граница есть квадрат: x принадлежит [0, 1], y принадлежит [0, 1].
+    /// Граница есть прямоугольник, у которого левый нижний угол находится в точке (0, 0)
     /// </summary>
     public class LaplasEquationSolver
     {
         private Random rnd;
         private List<double> boundUValues;
+        private double width;
+        private double height;
 
         public LaplasEquationSolver()
         {
+            this.rnd = new Random();
+            this.width = 1;
+            this.height = 1;
+        }
+
+        public LaplasEquationSolver(double width, double height)
+        {
+            this.width = width;
+            this.height = height;
             this.rnd = new Random();
         }
         public double TrueUFunc(double x, double y)
@@ -61,27 +72,31 @@ namespace ProjectionAlgorithm_diploma_
         }
 
         /// <summary>
-        /// Квадрат будет разбит равномерно как по горизонтали, так и по вертикали
+        /// Прямоугольнк будет разбит равномерно как по горизонтали, так и по вертикали, но число разбиений может быть разным
+        /// по горизонтали и по вертикали.
         /// </summary>
-        /// <param name="numSideNodes">Число нод на одной стороне квадрата</param>
         /// <returns></returns>
-        private List<(double, double)> GetPointFromBoundary(int numSideNodes)
+        private List<(double, double)> GetPointsFromRectangleBoundary(int numWidthNodes, int numHeightNodes)
         {
+            width = this.width;
+            height = this.height;
             var boundaryPoints = new List<(double, double)>();
-            double step = (double)1 / (numSideNodes - 1);
-            for (int i = 0; i < numSideNodes; i++)
+            double widthStep = width / (numWidthNodes - 1);
+            double heightStep = height / (numHeightNodes - 1);
+
+            for (int i = 0; i < widthStep; i++)
             {
-                for (int j = 0; j < numSideNodes; j++)
+                for (int j = 0; j < heightStep; j++)
                 {
-                    var xCoord = j * step;
-                    var yCoord = i * step;
-                    if (i == 0 || i == numSideNodes - 1)
+                    var xCoord = j * widthStep;
+                    var yCoord = i * heightStep;
+                    if (i == 0 || i == numHeightNodes - 1)
                     {
                         boundaryPoints.Add((xCoord, yCoord));
                     }
                     else
                     {
-                        if (j == 0 || j == numSideNodes - 1)
+                        if (j == 0 || j == numWidthNodes - 1)
                         {
                             boundaryPoints.Add((xCoord, yCoord));
                         }
@@ -91,9 +106,8 @@ namespace ProjectionAlgorithm_diploma_
             return boundaryPoints;
         }
 
-        public List<double> GetBoundUValues(int numSideNodes)
+        public List<double> GetBoundUValues(List<(double, double)> boundaryPoints)
         {
-            var boundaryPoints = this.GetPointFromBoundary(numSideNodes);
             var result = this.GetFunctionValues(boundaryPoints, this.TrueUFunc);
             this.boundUValues = result;
             return result;

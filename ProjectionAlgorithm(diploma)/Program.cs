@@ -14,33 +14,32 @@ namespace ProjectionAlgorithm_diploma_
 
         static void Main(string[] args)
         {
-            LaplasEquationSolver solver = new LaplasEquationSolver();
-            var uValues = solver.GetBoundUValues(3);
-            var pointsAtArea = new List<(double, double)>();
-            for (int i = 0; i < 10; i++)
+            //LaplasEquationSolver solver = new LaplasEquationSolver();
+            //var uValues = solver.GetBoundUValues(3);
+            //var pointsAtArea = new List<(double, double)>();
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    var pointAtArea = solver.GetRandomPointInArea(0.3, 0.2);
+            //    pointsAtArea.Add(pointAtArea);
+            //}
+
+
+
+
+
+            var creator = new AlgebraEntitiesCreator(10);
+            NoWalkerSolver solver = new NoWalkerSolver();
+            var solution = solver.Solve(creator.AMatrix, creator.BVector);
+            string path = "uniformSolving1000Dim1000IterationsAfterNormirovka.txt";
+            using (StreamWriter sw = new StreamWriter(path, false))
             {
-                var pointAtArea = solver.GetRandomPointInArea(0.3, 0.2);
-                pointsAtArea.Add(pointAtArea);
+                for (int i = 0; i < solution.Count(); i++)
+                {
+                    sw.WriteLine(solution[i].ToString());
+                }
             }
 
-            var p1 = (2.0, 0.0);
-            var p2 = (-1.0, 0.0);
-            var res = solver.GetDistBtwPoints(p1, p2);
             int x = 1;
-
-
-
-            //var creator = new AlgebraEntitiesCreator(1000);
-            //NoWalkerSolver solver = new NoWalkerSolver();
-            //var solution = solver.Solve(creator.AMatrix, creator.BVector);
-            //string path = "uniformSolving1000Dim1000IterationsAfterNormirovka.txt";
-            //using (StreamWriter sw = new StreamWriter(path, false))
-            //{
-            //    for (int i = 0; i < solution.Count(); i++)
-            //    {
-            //        sw.WriteLine(solution[i].ToString());
-            //    }
-            //}
 
 
             #region Старьё, потом вернусь к нему
