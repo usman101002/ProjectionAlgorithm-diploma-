@@ -14,8 +14,10 @@ namespace ProjectionAlgorithm_diploma_
 
         static void Main(string[] args)
         {
-            //LaplasEquationSolver solver = new LaplasEquationSolver();
-            //var uValues = solver.GetBoundUValues(3);
+            LaplasEquationSolver solver = new LaplasEquationSolver(2, 1);
+            var points = solver.GetPointsFromRectangleBoundary(5, 3);
+            var uValues = solver.GetBoundUValues(points);
+            int x = 1;
             //var pointsAtArea = new List<(double, double)>();
             //for (int i = 0; i < 10; i++)
             //{
@@ -27,19 +29,19 @@ namespace ProjectionAlgorithm_diploma_
 
 
 
-            var creator = new AlgebraEntitiesCreator(10);
-            NoWalkerSolver solver = new NoWalkerSolver();
-            var solution = solver.Solve(creator.AMatrix, creator.BVector);
-            string path = "uniformSolving1000Dim1000IterationsAfterNormirovka.txt";
-            using (StreamWriter sw = new StreamWriter(path, false))
-            {
-                for (int i = 0; i < solution.Count(); i++)
-                {
-                    sw.WriteLine(solution[i].ToString());
-                }
-            }
+            //var creator = new AlgebraEntitiesCreator(10);
+            //NoWalkerSolver solver = new NoWalkerSolver();
+            //var solution = solver.Solve(creator.AMatrix, creator.BVector);
+            //string path = "uniformSolving1000Dim1000IterationsAfterNormirovka.txt";
+            //using (StreamWriter sw = new StreamWriter(path, false))
+            //{
+            //    for (int i = 0; i < solution.Count(); i++)
+            //    {
+            //        sw.WriteLine(solution[i].ToString());
+            //    }
+            //}
 
-            int x = 1;
+            //int x = 1;
 
 
             #region Старьё, потом вернусь к нему

@@ -16,7 +16,7 @@ namespace ProjectionAlgorithm_diploma_
         private List<double> boundUValues;
         private double width;
         private double height;
-
+        
         public LaplasEquationSolver()
         {
             this.rnd = new Random();
@@ -76,7 +76,7 @@ namespace ProjectionAlgorithm_diploma_
         /// по горизонтали и по вертикали.
         /// </summary>
         /// <returns></returns>
-        private List<(double, double)> GetPointsFromRectangleBoundary(int numWidthNodes, int numHeightNodes)
+        public List<(double, double)> GetPointsFromRectangleBoundary(int numWidthNodes, int numHeightNodes)
         {
             width = this.width;
             height = this.height;
@@ -84,29 +84,20 @@ namespace ProjectionAlgorithm_diploma_
             double widthStep = width / (numWidthNodes - 1);
             double heightStep = height / (numHeightNodes - 1);
 
-            for (int i = 0; i < widthStep; i++)
+            for (int i = 0; i < numHeightNodes; i++)
             {
-                for (int j = 0; j < heightStep; j++)
+                for (int j = 0; j < numWidthNodes; j++)
                 {
                     var xCoord = j * widthStep;
                     var yCoord = i * heightStep;
-                    if (i == 0 || i == numHeightNodes - 1)
-                    {
-                        boundaryPoints.Add((xCoord, yCoord));
-                    }
-                    else
-                    {
-                        if (j == 0 || j == numWidthNodes - 1)
-                        {
-                            boundaryPoints.Add((xCoord, yCoord));
-                        }
-                    }
+                    boundaryPoints.Add((xCoord, yCoord));
                 }
             }
+            
             return boundaryPoints;
         }
 
-        public List<double> GetBoundUValues(List<(double, double)> boundaryPoints)
+        public List<double> GetBoundUValues(IEnumerable<(double, double)> boundaryPoints)
         {
             var result = this.GetFunctionValues(boundaryPoints, this.TrueUFunc);
             this.boundUValues = result;
