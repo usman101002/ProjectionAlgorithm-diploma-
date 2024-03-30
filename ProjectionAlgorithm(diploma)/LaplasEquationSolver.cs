@@ -44,20 +44,30 @@ namespace ProjectionAlgorithm_diploma_
 
         public (double, double) GetRandomPointInArea(double h1, double h2)
         {
-            double xCoord = this.GetRandomCoordInArea(h1, h2);
-            double yCoord = this.GetRandomCoordInArea(h1, h2);
+            double xCoord = this.GetRandomXInArea(h1, h2);
+            double yCoord = this.GetRandomYInArea(h1, h2);
             var resultPoint = (xCoord, yCoord);
             return resultPoint;
         }
-        private double GetRandomCoordInArea(double h1, double h2)
+
+        private double GetRandomXInArea(double h1, double h2)
         {
             double valueFromLeftSpace = this.GetUniformDistribution(0 - h1 - h2, 0 - h1);
-            double valueFromRightSpace = this.GetUniformDistribution(1 + h1, 1 + h1 + h2);
+            double valueFromRightSpace = this.GetUniformDistribution(this.width + h1, this.width + h1 + h2);
             int choice = this.ChooseFromTwoRndVars();
             double result = choice == 0 ? valueFromLeftSpace : valueFromRightSpace;
             return result;
         }
 
+        private double GetRandomYInArea(double h1, double h2)
+        {
+            double valueFromTopSpace = this.GetUniformDistribution(this.height + h1, this.height + h1 + h2);
+            double valueFromBotSpace = this.GetUniformDistribution(0 - h1, 0 - h1 - h2);
+            int choice = this.ChooseFromTwoRndVars();
+            double result = choice == 0 ? valueFromTopSpace : valueFromBotSpace;
+            return result;
+        }
+        
         private double GetUniformDistribution(double a, double b)
         {
             double rand = rnd.NextDouble();

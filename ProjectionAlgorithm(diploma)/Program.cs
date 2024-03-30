@@ -17,6 +17,13 @@ namespace ProjectionAlgorithm_diploma_
             LaplasEquationSolver solver = new LaplasEquationSolver(2, 1);
             var points = solver.GetPointsFromRectangleBoundary(5, 3);
             var uValues = solver.GetBoundUValues(points);
+            var pointsFromArea = new List<(double, double)>();
+            for (int i = 0; i < 10; i++)
+            {
+                var pt = solver.GetRandomPointInArea(0.2, 0.3);
+                pointsFromArea.Add(pt);
+            }
+
             int x = 1;
             //var pointsAtArea = new List<(double, double)>();
             //for (int i = 0; i < 10; i++)
