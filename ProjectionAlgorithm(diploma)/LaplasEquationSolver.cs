@@ -15,6 +15,7 @@ namespace ProjectionAlgorithm_diploma_
     {
         private Random rnd;
         private List<double> boundUValues;
+        private List<(double, double)> boundPoints;
         private double width;
         private double height;
         private int numWidthNodes;
@@ -74,7 +75,7 @@ namespace ProjectionAlgorithm_diploma_
         /// по горизонтали и по вертикали.
         /// </summary>
         /// <returns></returns>
-        public List<(double, double)> GetPointsFromRectangleBoundary(int numWidthNodes, int numHeightNodes)
+        public List<(double, double)> GetPointsFromRectangleBoundary()
         {
             width = this.width;
             height = this.height;
@@ -84,12 +85,25 @@ namespace ProjectionAlgorithm_diploma_
 
             for (int i = 0; i < numHeightNodes; i++)
             {
-                for (int j = 0; j < numWidthNodes; j++)
+                if (i == 0 || i == numHeightNodes - 1)
                 {
-                    var xCoord = j * widthStep;
+                    for (int j = 0; j < numWidthNodes; j++)
+                    {
+                        var xCoord = j * widthStep;
+                        var yCoord = i * heightStep;
+                        boundaryPoints.Add((xCoord, yCoord));
+                    }
+                }
+                else
+                {
+                    var xCoord = 0 * widthStep; // точки с левой стороны прямоугольника
                     var yCoord = i * heightStep;
                     boundaryPoints.Add((xCoord, yCoord));
+                    xCoord = (numWidthNodes - 1) * widthStep;
+                    yCoord = i * heightStep;
+                    boundaryPoints.Add((xCoord, yCoord));
                 }
+
             }
             return boundaryPoints;
         }
