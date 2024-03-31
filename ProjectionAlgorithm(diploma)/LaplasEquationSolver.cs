@@ -103,8 +103,9 @@ namespace ProjectionAlgorithm_diploma_
                     yCoord = i * heightStep;
                     boundaryPoints.Add((xCoord, yCoord));
                 }
-
             }
+
+            this.boundPoints = boundaryPoints;
             return boundaryPoints;
         }
 
