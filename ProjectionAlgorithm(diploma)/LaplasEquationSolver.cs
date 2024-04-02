@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ProjectionAlgorithm_diploma_
 {
     /// <summary>
-    /// Уравнение: Laplas(u) = 0, u на границе равно функции.
+    /// Задача на двумерной плоскости. Уравнение: Laplas(u) = 0, u на границе равно функции.
     /// Граница есть прямоугольник шириной width и высотой,
     /// у которого левый нижний угол находится в точке (0, 0)
     /// </summary>
@@ -24,6 +24,7 @@ namespace ProjectionAlgorithm_diploma_
         public int numHeightNodes;
         public Matrix AMatrix;
         public Vector PhiVector;
+        public Vector SLAESolution;
 
         private double h1 = 0.3;
         private double h2 = 0.2;
@@ -154,7 +155,7 @@ namespace ProjectionAlgorithm_diploma_
 
         public Matrix GetAMatrix()
         {
-            int n = this.PhiVector.GetDimension();
+            int n = this.boundPoints.Count;
             double[,] matrixAArr = new double[n, n];
             for (int i = 0; i < n; i++)
             {
@@ -174,14 +175,22 @@ namespace ProjectionAlgorithm_diploma_
             return phiVector;
         }
 
-        // Решение СЛАУ A*c=phi
-        public Vector Solve()
+        public double GetApproximateU((double, double) point)
         {
-            // важно сначала создать вектор, чтобы по его длины задать параметры матрицы
-            Vector phiVector = this.GetPhiVector();
-            Matrix aMatrix = this.GetAMatrix();
-
-            return null;
+            double result = 0;
+            for (int i = 0; i < this.boundPoints.Count; i++)
+            {
+                result += this.SLAESolution[i] * MathUtils.E(point, this.randomPointsFromArea[i]);
+            }
+            return result;
+        }
+        // Решение СЛАУ A*c=phi
+        public Vector SolveSLAE()
+        {
+            NoWalkerSolver solver = new NoWalkerSolver();
+            var solution = solver.Solve(this.AMatrix, this.PhiVector);
+            this.SLAESolution = solution;
+            return solution;
         }
 
     }
