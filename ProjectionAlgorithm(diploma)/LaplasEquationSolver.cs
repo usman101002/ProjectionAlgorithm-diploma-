@@ -26,8 +26,8 @@ namespace ProjectionAlgorithm_diploma_
         public Vector PhiVector;
         public Vector SLAESolution;
 
-        private double h1 = 0.3;
-        private double h2 = 0.2;
+        private double h1 = 0.1;
+        private double h2 = 0.1;
 
         public LaplasEquationSolver()
         {
@@ -177,6 +177,7 @@ namespace ProjectionAlgorithm_diploma_
 
         public double GetApproximateU((double, double) point)
         {
+            this.SLAESolution = this.SolveSLAE();
             double result = 0;
             for (int i = 0; i < this.boundPoints.Count; i++)
             {
@@ -189,7 +190,6 @@ namespace ProjectionAlgorithm_diploma_
         {
             NoWalkerSolver solver = new NoWalkerSolver();
             var solution = solver.Solve(this.AMatrix, this.PhiVector);
-            this.SLAESolution = solution;
             return solution;
         }
 
