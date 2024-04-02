@@ -47,5 +47,16 @@ namespace ProjectionAlgorithm_diploma_
             return Math.Sqrt(result);
         }
 
+        /// <summary>
+        /// Фундаментальное решение (в теории обозначается за Eps).
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        public static double E((double, double) p1, (double, double) p2)
+        {
+            double result = ((double)1 / (Math.PI)) * Ln((double)1 / GetDistBtwPoints(p1, p2));
+            return result;
+        }
+
     }
 }

@@ -21,6 +21,8 @@ namespace ProjectionAlgorithm_diploma_
         private double height;
         private int numWidthNodes;
         private int numHeightNodes;
+        private double h1 = 0.3;
+        private double h2 = 0.2;
 
         public Vector PhiVector;
 
@@ -130,6 +132,19 @@ namespace ProjectionAlgorithm_diploma_
             return res;
         }
 
+        public List<(double, double)> GetPointsFromArea(int pointsNumber)
+        {
+            var result = new List<(double, double)>();
+            for (int i = 0; i < pointsNumber; i++)
+            {
+                var randomPoint = this.GetRandomPointInArea(this.h1, this.h2);
+                result.Add(randomPoint);
+            }
+
+            this.randomPointsFromArea = result;
+            return result;
+        }
+
         public Matrix GetAMatrix()
         {
             // сначала вызываем метод для генерации точек на границе прямоугольника
@@ -139,6 +154,7 @@ namespace ProjectionAlgorithm_diploma_
             // Затем уже составляем матрицу и вектор правой части для решения слау
 
             int n = this.PhiVector.GetDimension();
+
 
 
             return null;
