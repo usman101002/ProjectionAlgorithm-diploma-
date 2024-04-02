@@ -13,19 +13,20 @@ namespace ProjectionAlgorithm_diploma_
     /// </summary>
     public class LaplasEquationSolver
     {
+        // A*c=phi --- SLAE
         private Random rnd;
-        private List<double> boundUValues;
-        private List<(double, double)> boundPoints;
-        private List<(double, double)> randomPointsFromArea;
-        private double width;
-        private double height;
-        private int numWidthNodes;
-        private int numHeightNodes;
+        public List<double> boundUValues;
+        public List<(double, double)> boundPoints;
+        public List<(double, double)> randomPointsFromArea;
+        public double width;
+        public double height;
+        public int numWidthNodes;
+        public int numHeightNodes;
+        public Matrix AMatrix;
+        public Vector PhiVector;
 
         private double h1 = 0.3;
         private double h2 = 0.2;
-
-        public Vector PhiVector;
 
         public LaplasEquationSolver()
         {
@@ -37,6 +38,8 @@ namespace ProjectionAlgorithm_diploma_
             this.boundPoints = this.GetPointsFromRectangleBoundary();
             this.boundUValues = this.GetBoundUValues(this.boundPoints);
             this.randomPointsFromArea = this.GetRandomPointsFromArea(this.boundUValues.Count);
+            this.AMatrix = this.GetAMatrix();
+            this.PhiVector = this.GetPhiVector();
         }
 
         public LaplasEquationSolver(double width, double height, int numWidthNodes, int numHeightNodes)
@@ -49,7 +52,8 @@ namespace ProjectionAlgorithm_diploma_
             this.boundPoints = this.GetPointsFromRectangleBoundary();
             this.boundUValues = this.GetBoundUValues(this.boundPoints);
             this.randomPointsFromArea = this.GetRandomPointsFromArea(this.boundUValues.Count);
-
+            this.AMatrix = this.GetAMatrix();
+            this.PhiVector = this.GetPhiVector();
         }
         public double TrueUFunc(double x, double y)
         {
@@ -150,20 +154,27 @@ namespace ProjectionAlgorithm_diploma_
 
         public Matrix GetAMatrix()
         {
-            // сначала вызываем метод для генерации точек на границе прямоугольника
-            // получаем сколько-то точек (в зависимости от того, сколько мы хотим узлов на границе)
-            // дальше генерируем точки в ограничивающей области в том же количестве, что и
-            // точек на границе.
-            // Затем уже составляем матрицу и вектор правой части для решения слау
-
             int n = this.PhiVector.GetDimension();
-
-
-
-            return null;
-
+            double[,] matrixAArr = new double[n, n];
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    matrixAArr[i, j] = MathUtils.E(this.boundPoints[i], this.randomPointsFromArea[j]);
+                }
+            }
+            var aMatrix = new Matrix(matrixAArr);
+            return aMatrix;
         }
 
+        public Vector GetPhiVector()
+        {
+            var phiVector = new Vector(this.boundUValues);
+            this.PhiVector = phiVector;
+            return phiVector;
+        }
+
+        // Решение СЛАУ A*c=phi
         public Vector Solve()
         {
             // важно сначала создать вектор, чтобы по его длины задать параметры матрицы
@@ -173,13 +184,5 @@ namespace ProjectionAlgorithm_diploma_
             return null;
         }
 
-        public Vector GetPhiVector()
-        {
-            var boundPoints = this.GetPointsFromRectangleBoundary();
-            var boundUValues = this.GetBoundUValues(boundPoints);
-            var phiVector = new Vector(boundUValues);
-            this.PhiVector = phiVector;
-            return phiVector;
-        }
     }
 }
