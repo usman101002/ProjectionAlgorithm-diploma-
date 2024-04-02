@@ -16,6 +16,7 @@ namespace ProjectionAlgorithm_diploma_
         private Random rnd;
         private List<double> boundUValues;
         private List<(double, double)> boundPoints;
+        private List<(double, double)> randomPointsFromArea;
         private double width;
         private double height;
         private int numWidthNodes;
@@ -125,6 +126,23 @@ namespace ProjectionAlgorithm_diploma_
                 res.Add(functionValue);
             }
             return res;
+        }
+
+        public Matrix CreateAMatrix()
+        {
+            // сначала вызываем метод для генерации точек на границе прямоугольника
+            // получаем сколько-то точек (в зависимости от того, сколько мы хотим узлов на границе)
+            // дальше генерируем точки в ограничивающей области в том же количестве, что и
+            // точек на границе.
+            // Затем уже составляем матрицу и вектор правой части для решения слау
+
+            return null;
+
+        }
+
+        public Vector CreatePhiVector()
+        {
+
         }
     }
 }
