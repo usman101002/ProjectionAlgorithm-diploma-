@@ -22,6 +22,8 @@ namespace ProjectionAlgorithm_diploma_
         private int numWidthNodes;
         private int numHeightNodes;
 
+        public Vector PhiVector;
+
         public LaplasEquationSolver()
         {
             this.rnd = new Random();
@@ -45,7 +47,7 @@ namespace ProjectionAlgorithm_diploma_
             return res;
         }
 
-        public (double, double) GetRandomPointInArea(double h1, double h2)
+        public (double, double) GetRandomPointInArea(double h1 = 0.3, double h2 = 0.2)
         {
             double xCoord = this.GetRandomXInArea(h1, h2);
             double yCoord = this.GetRandomYInArea(h1, h2);
@@ -128,7 +130,7 @@ namespace ProjectionAlgorithm_diploma_
             return res;
         }
 
-        public Matrix CreateAMatrix()
+        public Matrix GetAMatrix()
         {
             // сначала вызываем метод для генерации точек на границе прямоугольника
             // получаем сколько-то точек (в зависимости от того, сколько мы хотим узлов на границе)
@@ -136,13 +138,29 @@ namespace ProjectionAlgorithm_diploma_
             // точек на границе.
             // Затем уже составляем матрицу и вектор правой части для решения слау
 
+            int n = this.PhiVector.GetDimension();
+
+
             return null;
 
         }
 
-        public Vector CreatePhiVector()
+        public Vector Solve()
         {
+            // важно сначала создать вектор, чтобы по его длины задать параметры матрицы
+            Vector phiVector = this.GetPhiVector();
+            Matrix aMatrix = this.GetAMatrix();
 
+            return null;
+        }
+
+        public Vector GetPhiVector()
+        {
+            var boundPoints = this.GetPointsFromRectangleBoundary();
+            var boundUValues = this.GetBoundUValues(boundPoints);
+            var phiVector = new Vector(boundUValues);
+            this.PhiVector = phiVector;
+            return phiVector;
         }
     }
 }

@@ -46,5 +46,6 @@ namespace ProjectionAlgorithm_diploma_
             double result = Math.Pow(point1.Item1 - point2.Item1, 2) + Math.Pow(point1.Item2 - point2.Item2, 2);
             return Math.Sqrt(result);
         }
+
     }
 }

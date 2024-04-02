@@ -11,10 +11,14 @@ namespace ProjectionAlgorithm_diploma_
 {
     internal class Program
     {
-
+        static double U(double x, double y)
+        {
+            double result = x * x - y * y;
+            return result;
+        }
         static void Main(string[] args)
         {
-            LaplasEquationSolver solver = new LaplasEquationSolver(2, 1, 5, 3);
+            LaplasEquationSolver solver = new LaplasEquationSolver(2, 1, 10, 10);
             var points = solver.GetPointsFromRectangleBoundary();
             var uValues = solver.GetBoundUValues(points);
             var pointsFromArea = new List<(double, double)>();
@@ -23,6 +27,9 @@ namespace ProjectionAlgorithm_diploma_
                 var pt = solver.GetRandomPointInArea(0.2, 0.3);
                 pointsFromArea.Add(pt);
             }
+
+            var phiVector = solver.GetPhiVector();
+
 
             int x = 1;
             //var pointsAtArea = new List<(double, double)>();
