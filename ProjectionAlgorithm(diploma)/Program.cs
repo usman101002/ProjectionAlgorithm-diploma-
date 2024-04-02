@@ -23,7 +23,7 @@ namespace ProjectionAlgorithm_diploma_
             var uValues = solver.GetBoundUValues(points);
             
             var phiVector = solver.GetPhiVector();
-            var pointsFromArea = solver.GetPointsFromArea(10);
+            var pointsFromArea = solver.GetRandomPointsFromArea(10);
 
 
             int x = 1;

@@ -21,6 +21,7 @@ namespace ProjectionAlgorithm_diploma_
         private double height;
         private int numWidthNodes;
         private int numHeightNodes;
+
         private double h1 = 0.3;
         private double h2 = 0.2;
 
@@ -33,6 +34,9 @@ namespace ProjectionAlgorithm_diploma_
             this.height = 1;
             this.numWidthNodes = 3;
             this.numHeightNodes = 3;
+            this.boundPoints = this.GetPointsFromRectangleBoundary();
+            this.boundUValues = this.GetBoundUValues(this.boundPoints);
+            this.randomPointsFromArea = this.GetRandomPointsFromArea(this.boundUValues.Count);
         }
 
         public LaplasEquationSolver(double width, double height, int numWidthNodes, int numHeightNodes)
@@ -42,6 +46,10 @@ namespace ProjectionAlgorithm_diploma_
             this.height = height;
             this.numWidthNodes = numWidthNodes;
             this.numHeightNodes = numHeightNodes;
+            this.boundPoints = this.GetPointsFromRectangleBoundary();
+            this.boundUValues = this.GetBoundUValues(this.boundPoints);
+            this.randomPointsFromArea = this.GetRandomPointsFromArea(this.boundUValues.Count);
+
         }
         public double TrueUFunc(double x, double y)
         {
@@ -49,7 +57,7 @@ namespace ProjectionAlgorithm_diploma_
             return res;
         }
 
-        public (double, double) GetRandomPointInArea(double h1 = 0.3, double h2 = 0.2)
+        private (double, double) GetRandomPointInArea(double h1 = 0.3, double h2 = 0.2)
         {
             double xCoord = this.GetRandomXInArea(h1, h2);
             double yCoord = this.GetRandomYInArea(h1, h2);
@@ -109,15 +117,12 @@ namespace ProjectionAlgorithm_diploma_
                     boundaryPoints.Add((xCoord, yCoord));
                 }
             }
-
-            this.boundPoints = boundaryPoints;
             return boundaryPoints;
         }
 
         public List<double> GetBoundUValues(IEnumerable<(double, double)> boundaryPoints)
         {
             var result = this.GetFunctionValues(boundaryPoints, this.TrueUFunc);
-            this.boundUValues = result;
             return result;
         }
 
@@ -132,7 +137,7 @@ namespace ProjectionAlgorithm_diploma_
             return res;
         }
 
-        public List<(double, double)> GetPointsFromArea(int pointsNumber)
+        public List<(double, double)> GetRandomPointsFromArea(int pointsNumber)
         {
             var result = new List<(double, double)>();
             for (int i = 0; i < pointsNumber; i++)
@@ -140,8 +145,6 @@ namespace ProjectionAlgorithm_diploma_
                 var randomPoint = this.GetRandomPointInArea(this.h1, this.h2);
                 result.Add(randomPoint);
             }
-
-            this.randomPointsFromArea = result;
             return result;
         }
 
