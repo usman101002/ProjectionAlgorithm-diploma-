@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -190,6 +191,17 @@ namespace ProjectionAlgorithm_diploma_
         {
             NoWalkerSolver solver = new NoWalkerSolver();
             var solution = solver.Solve(this.AMatrix, this.PhiVector);
+            // отладочные действия
+            var residual = this.AMatrix * solution - this.PhiVector;
+            string path = "residual100kIterations.txt";
+            using (StreamWriter sw = new StreamWriter(path, false))
+            {
+                for (int i = 0; i < residual.Count(); i++)
+                {
+                    sw.WriteLine(residual[i].ToString());
+                }
+            }
+            
             return solution;
         }
 
