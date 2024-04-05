@@ -58,6 +58,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Vector.cs" />
     <Compile Include="Walker.cs" />
+    <Compile Include="WalkerSolver.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

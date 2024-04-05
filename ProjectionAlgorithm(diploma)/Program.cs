@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Complex;
+using MonteKarloMatrixVectorProduct;
 
 namespace ProjectionAlgorithm_diploma_
 {
@@ -20,9 +21,18 @@ namespace ProjectionAlgorithm_diploma_
         {
             LaplasEquationSolver solver = new LaplasEquationSolver(2, 1, 100, 100);
             (double, double) point = (1, 0.5);
-            var trueU = U(point.Item1, point.Item2);
-            var approximateU = solver.GetApproximateU(point);
+            //var trueU = U(point.Item1, point.Item2);
+            //var approximateU = solver.GetApproximateU(point);
 
+            var probabilites = new List<double>() { 0.3, 0.3, 0.9 };
+            var ksies = new List<int>();
+            var walker = new Walker(probabilites);
+            for (int i = 0; i < 10; i++)
+            {
+                var ksi = walker.GetSelection();
+                ksies.Add(ksi);
+            }
+            
             int x = 1;
             //var pointsAtArea = new List<(double, double)>();
             //for (int i = 0; i < 10; i++)
@@ -30,9 +40,6 @@ namespace ProjectionAlgorithm_diploma_
             //    var pointAtArea = solver.GetRandomPointInArea(0.3, 0.2);
             //    pointsAtArea.Add(pointAtArea);
             //}
-
-
-
 
 
             //var creator = new AlgebraEntitiesCreator(10);
