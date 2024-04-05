@@ -27,8 +27,8 @@ namespace ProjectionAlgorithm_diploma_
         public Vector PhiVector;
         public Vector SLAESolution;
 
-        private double h1 = 0.1;
-        private double h2 = 0.1;
+        private double h1 = 0.5;
+        private double h2 = 0.2;
 
         public LaplasEquationSolver()
         {
@@ -189,8 +189,11 @@ namespace ProjectionAlgorithm_diploma_
         // Решение СЛАУ A*c=phi
         public Vector SolveSLAE()
         {
-            NoWalkerSolver solver = new NoWalkerSolver();
+            //NoWalkerSolver solver = new NoWalkerSolver();
+            //var solution = solver.Solve(this.AMatrix, this.PhiVector);
+            WalkerSolver solver = new WalkerSolver();
             var solution = solver.Solve(this.AMatrix, this.PhiVector);
+
             // отладочные действия
             var residual = this.AMatrix * solution - this.PhiVector;
             string path = "residual100kIterations.txt";

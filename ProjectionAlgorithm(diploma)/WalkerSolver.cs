@@ -32,10 +32,14 @@ namespace ProjectionAlgorithm_diploma_
             {
                 int index = this.GetRandomIndex();
                 Vector row = aMatrix.GetRowByIndex(index);
-
+                double numerator = bVector[index] - (row * xPrev);
+                double denominator = this.GetRowNorm(row) * this.GetRowNorm(row);
+                double factor = numerator / denominator;
+                Vector xCur = xPrev + factor * row;
+                xPrev = xCur;
             }
 
-            return null;
+            return xPrev;
         }
 
         private List<double> GetDistributionOfMatrixRows(Matrix matrix)
@@ -62,7 +66,7 @@ namespace ProjectionAlgorithm_diploma_
             for (int i = 0; i < matrixRows.Count; i++)
             {
                 var rowNorm = GetRowNorm(matrixRows[i]);
-                probabilities.Add(rowNorm * rowNorm / frobeniusNormSquared);
+                probabilities.Add((rowNorm * rowNorm) / frobeniusNormSquared);
             }
             return probabilities;
         }
@@ -78,7 +82,6 @@ namespace ProjectionAlgorithm_diploma_
         {
             return this.walker.GetSelection();
         }
-
 
     }
 }
