@@ -20,12 +20,51 @@ namespace ProjectionAlgorithm_diploma_
 
         public Vector Solve(Matrix aMatrix, Vector bVector)
         {
+            // получение распределения строк матрицы и создания Волкера.
+            var distribution = this.GetDistributionOfMatrixRows(aMatrix);
+            this.walker = new Walker(distribution);
+
+            int rowCount = aMatrix.GetRowCount();
+            Vector xPrev = bVector;
+            int numberOfIterations = 100 * 1000;
+
+            for (int i = 0; i < numberOfIterations; i++)
+            {
+                int index = this.GetRandomIndex();
+                Vector row = aMatrix.GetRowByIndex(index);
+
+            }
+
             return null;
         }
 
         private List<double> GetDistributionOfMatrixRows(Matrix matrix)
         {
-            return null;
+            var probabilities = new List<double>();
+            var matrixRows = new List<List<double>>();
+
+            for (int i = 0; i < matrix.GetRowCount(); i++)
+            {
+                var matrixRow = matrix.GetRowByIndex(i).ToList();
+                matrixRows.Add(matrixRow);
+            }
+
+            double frobeniusNormSquared = 0;
+
+            for (int i = 0; i < matrixRows.Count; i++)
+            {
+                for (int j = 0; j < matrixRows.Count; j++)
+                {
+                    frobeniusNormSquared += matrixRows[i][j] * matrixRows[i][j];
+                }
+            }
+
+            for (int i = 0; i < matrixRows.Count; i++)
+            {
+                var rowNorm = GetRowNorm(matrixRows[i]);
+                probabilities.Add(rowNorm * rowNorm / frobeniusNormSquared);
+            }
+            return probabilities;
         }
 
         private double GetRowNorm(IEnumerable<double> row)
@@ -35,9 +74,9 @@ namespace ProjectionAlgorithm_diploma_
             return result;
         }
 
-        private int GetRandomIndex(int n)
+        private int GetRandomIndex()
         {
-            return int.MaxValue;
+            return this.walker.GetSelection();
         }
 
 
