@@ -22,8 +22,8 @@ namespace ProjectionAlgorithm_diploma_
         {
             LaplasEquationSolver solver = new LaplasEquationSolver(1, 1, 100, 100);
             (double, double) point = (1, 0.5);
-            //var trueU = U(point.Item1, point.Item2);
-            //var approximateU = solver.GetApproximateU(point);
+            var trueU = U(point.Item1, point.Item2);
+            var approximateU = solver.GetApproximateU(point);
 
             // Проверка работоспособности моего Волкера (что распределение генерится верно)
             List<double> probabilities = new List<double>() { 0.5, 0.1, 0.1, 0.1, 0.1, 0.1};
@@ -45,8 +45,6 @@ namespace ProjectionAlgorithm_diploma_
             }
 
             // Конец проверки
-
-
 
             int x = 1;
             //var pointsAtArea = new List<(double, double)>();
