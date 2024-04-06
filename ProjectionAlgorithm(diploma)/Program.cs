@@ -20,10 +20,16 @@ namespace ProjectionAlgorithm_diploma_
         }
         static void Main(string[] args)
         {
-            LaplasEquationSolver solver = new LaplasEquationSolver(1, 1, 100, 100);
+            LaplasEquationSolver solver = new LaplasEquationSolver(1, 1, 10, 10);
             (double, double) point = (1, 0.5);
             var trueU = U(point.Item1, point.Item2);
-            var approximateU = solver.GetApproximateU(point);
+            var uResults = new List<double>();
+            for (int i = 0; i < 5; i++)
+            {
+                var approximateU = solver.GetApproximateU(point);
+                uResults.Add(approximateU);
+            }
+            
 
             // Проверка работоспособности моего Волкера (что распределение генерится верно)
             List<double> probabilities = new List<double>() { 0.5, 0.1, 0.1, 0.1, 0.1, 0.1};

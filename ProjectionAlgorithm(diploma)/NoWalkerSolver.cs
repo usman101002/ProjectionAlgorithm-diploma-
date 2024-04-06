@@ -45,6 +45,27 @@ namespace ProjectionAlgorithm_diploma_
             return xPrev;
         }
 
+        public Vector SolveByIterativeRefinement(Matrix aMatrix, Vector bVector, int numOfIterations = 1)
+        {
+            if (numOfIterations <= 0)
+                throw new Exception("numOfIterations должен быть не меньше 1");
+
+            Vector res = this.Solve(aMatrix, bVector);
+            if (numOfIterations == 1)
+                return res;
+
+            for (int i = 0; i < numOfIterations - 1; i++)
+            {
+                var pseudoB = aMatrix * res;
+                var d = bVector - pseudoB;
+                NoWalkerSolver solver = new NoWalkerSolver();
+                var refinement = solver.Solve(aMatrix, d);
+                res += refinement;
+            }
+
+            return res;
+        }
+
         private Matrix GetDiagProbMatrix(Matrix matrix)
         {
             int rowCount = matrix.GetRowCount();

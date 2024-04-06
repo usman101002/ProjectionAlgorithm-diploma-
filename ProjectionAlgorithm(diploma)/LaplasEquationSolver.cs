@@ -196,7 +196,7 @@ namespace ProjectionAlgorithm_diploma_
             //var solution = solver.Solve(this.AMatrix, this.PhiVector);
 
             WalkerSolver solver = new WalkerSolver();
-            var solution = solver.SolveByIterativeRefinement(this.AMatrix, this.PhiVector, 5);
+            var solution = solver.SolveByIterativeRefinement(this.AMatrix, this.PhiVector, 15);
 
             // отладочные действия
             var residual = this.AMatrix * solution - this.PhiVector;

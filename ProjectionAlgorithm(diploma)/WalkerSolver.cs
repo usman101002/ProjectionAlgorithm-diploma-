@@ -26,7 +26,7 @@ namespace ProjectionAlgorithm_diploma_
 
             int rowCount = aMatrix.GetRowCount();
             Vector xPrev = bVector;
-            int numberOfIterations = 100 * 1000;
+            int numberOfIterations = 100000 ;
 
             for (int i = 0; i < numberOfIterations; i++)
             {
