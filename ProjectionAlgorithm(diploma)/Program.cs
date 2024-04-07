@@ -20,14 +20,15 @@ namespace ProjectionAlgorithm_diploma_
         }
         static void Main(string[] args)
         {
-            LaplasEquationSolver solver = new LaplasEquationSolver(1, 1, 10, 10);
-            (double, double) point = (1, 0.5);
+            LaplasEquationSolver solver = new LaplasEquationSolver(1, 1, 50, 50);
+            (double, double) point = (1, 1);
             var trueU = U(point.Item1, point.Item2);
             var uResults = new List<double>();
             for (int i = 0; i < 5; i++)
             {
                 var approximateU = solver.GetApproximateU(point);
                 uResults.Add(approximateU);
+                Console.WriteLine(i);
             }
             
 
