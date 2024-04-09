@@ -196,13 +196,16 @@ namespace ProjectionAlgorithm_diploma_
             //var solution = solver.Solve(this.AMatrix, this.PhiVector);
 
             WalkerSolver solver = new WalkerSolver();
-            var solution = solver.SolveByIterativeRefinement(this.AMatrix, this.PhiVector, 1);
+            var solution = solver.SolveByIterativeRefinement(this.AMatrix, this.PhiVector, 10);
 
             //NoWalkerSolver solver = new NoWalkerSolver();
             //var solution = solver.SolveByIterativeRefinement(this.AMatrix, this.PhiVector, 1);
 
             // отладочные действия
+            
             //var residual = this.AMatrix * solution - this.PhiVector;
+            //var residualNorm = residual.GetEuclideanNorm();
+            
             //string path = "residual100kIterations.txt";
             //using (StreamWriter sw = new StreamWriter(path, false))
             //{

@@ -20,7 +20,7 @@ namespace ProjectionAlgorithm_diploma_
         }
         static void Main(string[] args)
         {
-            LaplasEquationSolver solver = new LaplasEquationSolver(1, 1, 50, 50);
+            LaplasEquationSolver solver = new LaplasEquationSolver(1, 1, 150, 100);
             (double, double) point = (1, 1);
             var trueU = U(point.Item1, point.Item2);
             var uResults = new List<double>();
