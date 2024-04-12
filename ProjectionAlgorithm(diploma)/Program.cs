@@ -35,21 +35,23 @@ namespace ProjectionAlgorithm_diploma_
             var result = noWalkerSolver.Solve(a, b);
 
 
-            LaplasEquationSolver solver = new LaplasEquationSolver(1, 1, 150, 100);
-            (double, double) point = (0, 0.5);
+            LaplasEquationSolver solver = new LaplasEquationSolver(1, 1, 300, 300);
+            (double, double) point = (0.5, 0.5);
             var trueU = U(point.Item1, point.Item2);
-            var uResults = new List<double>();
-            for (int i = 0; i < 5; i++)
-            {
-                var approximateU = solver.GetApproximateU(point);
-                uResults.Add(approximateU);
-                Console.WriteLine(i);
-            }
-            var averageU = uResults.Sum() / uResults.Count();
+            var approximateU = solver.GetApproximateU(point);
+
+            //var uResults = new List<double>();
+            //for (int i = 0; i < 5; i++)
+            //{
+            //    var approximateU = solver.GetApproximateU(point);
+            //    uResults.Add(approximateU);
+            //    Console.WriteLine(i);
+            //}
+            //var averageU = uResults.Sum() / uResults.Count();
             
 
             // Проверка работоспособности моего Волкера (что распределение генерится верно)
-             List<double> probabilities = new List<double>() { 0.5, 0.1, 0.1, 0.1, 0.1, 0.1};
+            List<double> probabilities = new List<double>() { 0.5, 0.1, 0.1, 0.1, 0.1, 0.1};
             Walker walker = new Walker(probabilities);
             Dictionary<int, double> distribution = new Dictionary<int, double>();
 

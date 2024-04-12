@@ -192,14 +192,14 @@ namespace ProjectionAlgorithm_diploma_
             //NoWalkerSolver solver = new NoWalkerSolver();
             //var solution = solver.Solve(this.AMatrix, this.PhiVector);
 
-            //WalkerSolver solver = new WalkerSolver();
-            //var solution = solver.Solve(this.AMatrix, this.PhiVector);
+            WalkerSolver solver = new WalkerSolver();
+            var solution = solver.Solve(this.AMatrix, this.PhiVector);
 
             //WalkerSolver solver = new WalkerSolver();
             //var solution = solver.SolveByIterativeRefinement(this.AMatrix, this.PhiVector, 10);
 
-            NoWalkerSolver solver = new NoWalkerSolver();
-            var solution = solver.SolveByIterativeRefinement(this.AMatrix, this.PhiVector, 10);
+            //NoWalkerSolver solver = new NoWalkerSolver();
+            //var solution = solver.SolveByIterativeRefinement(this.AMatrix, this.PhiVector, 10);
 
             // отладочные действия
             
