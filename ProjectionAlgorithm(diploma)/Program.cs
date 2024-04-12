@@ -35,8 +35,8 @@ namespace ProjectionAlgorithm_diploma_
             var result = noWalkerSolver.Solve(a, b);
 
 
-            LaplasEquationSolver solver = new LaplasEquationSolver(1, 1, 300, 300);
-            (double, double) point = (0.5, 0.5);
+            LaplasEquationSolver solver = new LaplasEquationSolver(1, 1, 10, 5);
+            (double, double) point = (0.5, 0.25);
             var trueU = U(point.Item1, point.Item2);
             var approximateU = solver.GetApproximateU(point);
 
