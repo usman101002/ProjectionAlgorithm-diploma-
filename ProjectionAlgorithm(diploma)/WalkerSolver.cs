@@ -58,6 +58,7 @@ namespace ProjectionAlgorithm_diploma_
                 WalkerSolver solver = new WalkerSolver();
                 var refinement = solver.Solve(aMatrix, d);
                 res += refinement;
+                Console.WriteLine(i);
             }
 
             return res;

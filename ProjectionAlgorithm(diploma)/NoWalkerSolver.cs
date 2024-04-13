@@ -61,6 +61,7 @@ namespace ProjectionAlgorithm_diploma_
                 NoWalkerSolver solver = new NoWalkerSolver();
                 var refinement = solver.Solve(aMatrix, d);
                 res += refinement;
+                Console.WriteLine(i);
             }
 
             return res;
