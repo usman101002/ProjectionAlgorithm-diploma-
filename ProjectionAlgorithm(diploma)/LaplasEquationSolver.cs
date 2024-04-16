@@ -189,8 +189,8 @@ namespace ProjectionAlgorithm_diploma_
         // Решение СЛАУ A*c=phi
         public Vector SolveSLAE()
         {
-            //NoWalkerSolver solver = new NoWalkerSolver();
-            //var solution = solver.Solve(this.AMatrix, this.PhiVector);
+            NoWalkerSolver solver = new NoWalkerSolver();
+            var solution = solver.Solve(this.AMatrix, this.PhiVector);
 
             //WalkerSolver solver = new WalkerSolver();
             //var solution = solver.Solve(this.AMatrix, this.PhiVector);
@@ -198,8 +198,8 @@ namespace ProjectionAlgorithm_diploma_
             //WalkerSolver solver = new WalkerSolver();
             //var solution = solver.SolveByIterativeRefinement(this.AMatrix, this.PhiVector, 10);
 
-            NoWalkerSolver solver = new NoWalkerSolver();
-            var solution = solver.SolveByIterativeRefinement(this.AMatrix, this.PhiVector, 20);
+            //NoWalkerSolver solver = new NoWalkerSolver();
+            //var solution = solver.SolveByIterativeRefinement(this.AMatrix, this.PhiVector, 20);
 
             // отладочные действия
             

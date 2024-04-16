@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -35,10 +36,15 @@ namespace ProjectionAlgorithm_diploma_
             var result = noWalkerSolver.Solve(a, b);
 
 
-            LaplasEquationSolver solver = new LaplasEquationSolver(1, 1, 100, 100);
-            (double, double) point = (0.5, 0.25);
+            LaplasEquationSolver solver = new LaplasEquationSolver(1, 1, 300, 300);
+            (double, double) point = (0.5, 0.5);
             var trueU = U(point.Item1, point.Item2);
+
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             var approximateU = solver.GetApproximateU(point);
+            stopwatch.Stop();
+            var timeInSeconds = stopwatch.ElapsedMilliseconds / (double)1000;
 
             //var uResults = new List<double>();
             //for (int i = 0; i < 5; i++)
