@@ -13,6 +13,8 @@ namespace ProjectionAlgorithm_diploma_
         private int rowCount;
         private int colCount;
 
+        public bool IsDiagonal { get; set; } = false;
+
         public Matrix(double[,] data)
         {
             this.data = data;
@@ -116,8 +118,36 @@ namespace ProjectionAlgorithm_diploma_
 
             double[,] resData = new double[matrix1.rowCount, matrix2.colCount];
             int m1RowCount = matrix1.rowCount;
+            int m1ColCount = matrix1.colCount;
             int m2ColCount = matrix2.colCount;
             int m2RowCount = matrix2.rowCount;
+
+            if (matrix1.IsDiagonal = true)
+            {
+                for (int i = 0; i < m2RowCount; i++)
+                {
+                    for (int j = 0; j < m2ColCount; j++)
+                    {
+                        resData[i, j] = matrix1[i, i] * matrix2[i, j];
+                    }
+                }
+                Matrix resLeftDiagCase = new Matrix(resData);
+                return resLeftDiagCase;
+            }
+
+            else if (matrix2.IsDiagonal = true)
+            {
+                for (int i = 0; i < m1RowCount; i++)
+                {
+                    for (int j = 0; j < m1ColCount; j++)
+                    {
+                        resData[i, j] = matrix1[i, j] * matrix2[j, j];
+                    }
+                }
+
+                Matrix resRightDiagCase = new Matrix(resData);
+                return resRightDiagCase;
+            }
 
             for (int i = 0; i < m1RowCount; i++)
             {
