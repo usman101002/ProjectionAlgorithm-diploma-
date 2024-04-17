@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +22,9 @@ namespace ProjectionAlgorithm_diploma_
         public Vector Solve(Matrix aMatrix, Vector bVector)
         {
             // получение распределения строк матрицы и создания Волкера.
+
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             var distribution = this.GetDistributionOfMatrixRows(aMatrix);
             this.walker = new Walker(distribution);
 
@@ -38,15 +42,21 @@ namespace ProjectionAlgorithm_diploma_
                 Vector xCur = xPrev + factor * row;
                 xPrev = xCur;
             }
+            stopwatch.Stop();
+            var timeInSeconds = stopwatch.ElapsedMilliseconds / (double)1000;
+            Console.WriteLine(timeInSeconds);
 
             return xPrev;
         }
 
         public Vector SolveByIterativeRefinement(Matrix aMatrix, Vector bVector, int numOfIterations = 1)
         {
+
             if (numOfIterations <= 0)
                 throw new Exception("numOfIterations должен быть не меньше 1");
 
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             Vector res = this.Solve(aMatrix, bVector);
             if (numOfIterations == 1)
                 return res;
@@ -60,7 +70,9 @@ namespace ProjectionAlgorithm_diploma_
                 res += refinement;
                 Console.WriteLine(i);
             }
-
+            stopwatch.Stop();
+            var timeInSeconds = stopwatch.ElapsedMilliseconds / (double)1000;
+            Console.WriteLine(timeInSeconds);
             return res;
         }
 

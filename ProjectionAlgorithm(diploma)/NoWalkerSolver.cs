@@ -2,6 +2,7 @@
 using MathNet.Numerics.LinearAlgebra.Double;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -25,6 +26,9 @@ namespace ProjectionAlgorithm_diploma_
         {
             // Переход к равномерно распределённой матрице путём домножения специальной диагональной матрицы на исходную.
             // Вектор правой части соответственно тоже домножается на эту диагональную матрицу. 
+
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             var diagProbMatrix = this.GetDiagProbMatrix(aMatrix);
             var uniformMatrix = diagProbMatrix * aMatrix;
             var newB = diagProbMatrix * bVector;
@@ -41,6 +45,9 @@ namespace ProjectionAlgorithm_diploma_
                 var xCur = xPrev + (numerator / denominator) * uniformMatrixRow;
                 xPrev = xCur;
             }
+            stopwatch.Stop();
+            var timeInSeconds = stopwatch.ElapsedMilliseconds / (double)1000;
+            Console.WriteLine(timeInSeconds);
 
             return xPrev;
         }
@@ -50,6 +57,8 @@ namespace ProjectionAlgorithm_diploma_
             if (numOfIterations <= 0)
                 throw new Exception("numOfIterations должен быть не меньше 1");
 
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             Vector res = this.Solve(aMatrix, bVector);
             if (numOfIterations == 1)
                 return res;
@@ -63,6 +72,9 @@ namespace ProjectionAlgorithm_diploma_
                 res += refinement;
                 Console.WriteLine(i);
             }
+            stopwatch.Stop();
+            var timeInSeconds = stopwatch.ElapsedMilliseconds / (double)1000;
+            Console.WriteLine(timeInSeconds);
 
             return res;
         }

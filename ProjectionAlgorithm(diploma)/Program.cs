@@ -21,30 +21,24 @@ namespace ProjectionAlgorithm_diploma_
         }
         static void Main(string[] args)
         {
-            double[,] aArr = 
-            {
-                { 2, 1, 4 },
-                { 1, 1, 3 },
-                {4, 3, 14}
-            };
-            double[] bArr = { 16, 12, 52 };
+            //double[,] aArr = 
+            //{
+            //    { 2, 1, 4 },
+            //    { 1, 1, 3 },
+            //    {4, 3, 14}
+            //};
+            //double[] bArr = { 16, 12, 52 };
 
-            Matrix a = new Matrix(aArr);
-            Vector b = new Vector(bArr);
+            //Matrix a = new Matrix(aArr);
+            //Vector b = new Vector(bArr);
 
-            NoWalkerSolver noWalkerSolver = new NoWalkerSolver();
-            var result = noWalkerSolver.Solve(a, b);
-
-
-            LaplasEquationSolver solver = new LaplasEquationSolver(1, 1, 300, 300);
-            (double, double) point = (0.5, 0.5);
+            LaplasEquationSolver solver = new LaplasEquationSolver(1, 1, 100, 100);
+            (double, double) point = (0.5, 0.25);
             var trueU = U(point.Item1, point.Item2);
 
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
+            
             var approximateU = solver.GetApproximateU(point);
-            stopwatch.Stop();
-            var timeInSeconds = stopwatch.ElapsedMilliseconds / (double)1000;
+            Console.WriteLine(approximateU);
 
             //var uResults = new List<double>();
             //for (int i = 0; i < 5; i++)
@@ -57,27 +51,27 @@ namespace ProjectionAlgorithm_diploma_
             
 
             // Проверка работоспособности моего Волкера (что распределение генерится верно)
-            List<double> probabilities = new List<double>() { 0.5, 0.1, 0.1, 0.1, 0.1, 0.1};
-            Walker walker = new Walker(probabilities);
-            Dictionary<int, double> distribution = new Dictionary<int, double>();
+            //List<double> probabilities = new List<double>() { 0.5, 0.1, 0.1, 0.1, 0.1, 0.1};
+            //Walker walker = new Walker(probabilities);
+            //Dictionary<int, double> distribution = new Dictionary<int, double>();
 
-            int N = 1000000;
-            for (int i = 0; i < N; i++)
-            {
-                int randomValue = walker.GetSelection();
-                if (!distribution.ContainsKey(randomValue))
-                {
-                    distribution.Add(randomValue, (double)1 / N);
-                }
-                else
-                {
-                    distribution[randomValue] += (double)1 / N;
-                }
-            }
+            //int N = 1000000;
+            //for (int i = 0; i < N; i++)
+            //{
+            //    int randomValue = walker.GetSelection();
+            //    if (!distribution.ContainsKey(randomValue))
+            //    {
+            //        distribution.Add(randomValue, (double)1 / N);
+            //    }
+            //    else
+            //    {
+            //        distribution[randomValue] += (double)1 / N;
+            //    }
+            //}
 
             // Конец проверки
 
-            int x = 1;
+            //int x = 1;
             //var pointsAtArea = new List<(double, double)>();
             //for (int i = 0; i < 10; i++)
             //{
