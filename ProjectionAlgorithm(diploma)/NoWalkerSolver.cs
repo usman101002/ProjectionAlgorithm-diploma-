@@ -27,21 +27,26 @@ namespace ProjectionAlgorithm_diploma_
             // Переход к равномерно распределённой матрице путём домножения специальной диагональной матрицы на исходную.
             // Вектор правой части соответственно тоже домножается на эту диагональную матрицу. 
 
+            
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             var diagProbMatrix = this.GetDiagProbMatrix(aMatrix);
+            diagProbMatrix.IsDiagonal = true;
+
             var uniformMatrix = diagProbMatrix * aMatrix;
             var newB = diagProbMatrix * bVector;
 
             int rowCount = uniformMatrix.GetRowCount();
             var xPrev = newB;
-            int numberOfIterations = 100000 ;
+            int numberOfIterations = 30000;
+            Console.WriteLine("БезУолкерный метод");
+            Console.WriteLine(numberOfIterations + " итераций");
             for (int i = 0; i < numberOfIterations; i++)
             {
                 int index = this.GetRandomIndex(rowCount);
                 var uniformMatrixRow = uniformMatrix.GetRowByIndex(index);
                 var numerator = newB[index] - (xPrev * uniformMatrixRow);
-                var denominator = this.GetRowNorm(uniformMatrixRow) * this.GetRowNorm(uniformMatrixRow);
+                var denominator = 1;
                 var xCur = xPrev + (numerator / denominator) * uniformMatrixRow;
                 xPrev = xCur;
             }

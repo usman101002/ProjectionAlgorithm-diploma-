@@ -27,8 +27,8 @@ namespace ProjectionAlgorithm_diploma_
         public Vector PhiVector;
         public Vector SLAESolution;
 
-        private double h1 = 0.5;
-        private double h2 = 0.2;
+        private double h1 = 0.01;
+        private double h2 = 1;
 
         public LaplasEquationSolver()
         {
@@ -63,7 +63,7 @@ namespace ProjectionAlgorithm_diploma_
             return res;
         }
 
-        private (double, double) GetRandomPointInArea(double h1 = 0.3, double h2 = 0.2)
+        private (double, double) GetRandomPointInArea(double h1, double h2)
         {
             double xCoord = this.GetRandomXInArea(h1, h2);
             double yCoord = this.GetRandomYInArea(h1, h2);
@@ -195,11 +195,14 @@ namespace ProjectionAlgorithm_diploma_
             //WalkerSolver solver = new WalkerSolver();
             //var solution = solver.Solve(this.AMatrix, this.PhiVector);
 
-            //WalkerSolver solver = new WalkerSolver();
-            //var solution = solver.SolveByIterativeRefinement(this.AMatrix, this.PhiVector, 10);
+            WalkerSolver solver = new WalkerSolver();
+            var solution = solver.SolveByMedians(this.AMatrix, this.PhiVector);
 
-            NoWalkerSolver solver = new NoWalkerSolver();
-            var solution = solver.SolveByIterativeRefinement(this.AMatrix, this.PhiVector, 10);
+            //WalkerSolver solver = new WalkerSolver();
+            //var solution = solver.SolveByIterativeRefinement(this.AMatrix, this.PhiVector, 5);
+
+            //NoWalkerSolver solver = new NoWalkerSolver();
+            //var solution = solver.SolveByIterativeRefinement(this.AMatrix, this.PhiVector, 10);
 
             // отладочные действия
             

@@ -6,8 +6,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Complex;
 using MonteKarloMatrixVectorProduct;
 
 namespace ProjectionAlgorithm_diploma_
@@ -21,7 +19,8 @@ namespace ProjectionAlgorithm_diploma_
         }
         static void Main(string[] args)
         {
-            //double[,] aArr = 
+            #region Микроматрица
+            //double[,] aArr =
             //{
             //    { 2, 1, 4 },
             //    { 1, 1, 3 },
@@ -31,14 +30,64 @@ namespace ProjectionAlgorithm_diploma_
 
             //Matrix a = new Matrix(aArr);
             //Vector b = new Vector(bArr);
+            //WalkerSolver solver = new WalkerSolver();
+            //var res = solver.SolveByMedians(a, b);
+            //int x = 1;
+            #endregion
 
-            LaplasEquationSolver solver = new LaplasEquationSolver(1, 1, 100, 100);
-            (double, double) point = (0.5, 0.25);
-            var trueU = U(point.Item1, point.Item2);
+            #region Решение квадратной СЛАУ Aij = 1/2 на i,i и 1 / (2*N + (i + j) / 10)
 
-            
-            var approximateU = solver.GetApproximateU(point);
-            Console.WriteLine(approximateU);
+            Random rnd = new Random(2024);
+            int size = 1000;
+            double[,] dataA = new double[size, size];
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    if (i == j)
+                    {
+                        dataA[i, i] = 0.5;
+                    }
+                    else
+                    {
+                        dataA[i, j] = (double)1 / (2 * size + (i + j) / 10);
+                    }
+                }
+            }
+            Matrix aMatrix = new Matrix(dataA);
+
+            double[] trueX = new double[size];
+            for (int i = 0; i < size; i++)
+            {
+                trueX[i] = 0.5;
+            }
+            Vector trueXVector= new Vector(trueX);
+
+            Vector bVector = aMatrix * trueXVector;
+
+            WalkerSolver solver = new WalkerSolver();
+            var solution = solver.Solve(aMatrix, bVector);
+            int x = 1;
+
+
+
+
+            #endregion
+
+            #region Решение задачи Дирихле
+
+            //LaplasEquationSolver solver = new LaplasEquationSolver(1, 1, 300, 300);
+            //(double, double) point = (0.5, 0.25);
+            //var trueU = U(point.Item1, point.Item2);
+
+            //var approximateU = solver.GetApproximateU(point);
+            //var relationalError = (Math.Abs(approximateU - trueU) / trueU) * 100;
+            //Console.WriteLine("Приближённо: " + approximateU);
+            //Console.WriteLine("Точно: " + trueU);
+            //Console.WriteLine("Относительная Погрешность: " + relationalError + "%");
+
+            #endregion
+
 
             //var uResults = new List<double>();
             //for (int i = 0; i < 5; i++)
@@ -48,10 +97,12 @@ namespace ProjectionAlgorithm_diploma_
             //    Console.WriteLine(i);
             //}
             //var averageU = uResults.Sum() / uResults.Count();
-            
 
-            // Проверка работоспособности моего Волкера (что распределение генерится верно)
-            //List<double> probabilities = new List<double>() { 0.5, 0.1, 0.1, 0.1, 0.1, 0.1};
+
+            #region Проверка работоспособности Уолкера
+
+            //Проверка работоспособности моего Волкера(что распределение генерится верно)
+            //List<double> probabilities = new List<double>() {0.2, 0.5, 0.3};
             //Walker walker = new Walker(probabilities);
             //Dictionary<int, double> distribution = new Dictionary<int, double>();
 
@@ -69,9 +120,12 @@ namespace ProjectionAlgorithm_diploma_
             //    }
             //}
 
-            // Конец проверки
+            //// Конец проверки
 
             //int x = 1;
+
+            #endregion
+
             //var pointsAtArea = new List<(double, double)>();
             //for (int i = 0; i < 10; i++)
             //{
