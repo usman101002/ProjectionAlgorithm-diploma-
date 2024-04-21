@@ -17,6 +17,19 @@ namespace ProjectionAlgorithm_diploma_
             double result = x * x - y * y;
             return result;
         }
+
+        static double GetRelError(Vector trueX, Vector approximateX)
+        {
+            double res = ((trueX - approximateX).GetEuclideanNorm() / (trueX).GetEuclideanNorm()) * 100;
+            return res;
+        }
+
+        static double Delta(int i, int j)
+        {
+            int res = (i == j) ? 1 : 0;
+            return res;
+        }
+
         static void Main(string[] args)
         {
             #region Микроматрица
@@ -35,7 +48,7 @@ namespace ProjectionAlgorithm_diploma_
             //int x = 1;
             #endregion
 
-            #region Решение квадратной СЛАУ Aij = 1/2 на i,i и 1 / (2*N + (i + j) / 10)
+            #region Решение квадратной СЛАУ Aij = 1/2 на i,i и 1 / (2*N + (i + j) / 10) либо с Кронекером
 
             Random rnd = new Random(2024);
             int size = 1000;
@@ -44,14 +57,16 @@ namespace ProjectionAlgorithm_diploma_
             {
                 for (int j = 0; j < size; j++)
                 {
-                    if (i == j)
-                    {
-                        dataA[i, i] = 0.5;
-                    }
-                    else
-                    {
-                        dataA[i, j] = (double)1 / (2 * size + (i + j) / 10);
-                    }
+                    dataA[i, j] = Delta(i, j) + (double)1 / (i + j * j + 1);
+
+                    //if (i == j)
+                    //{
+                    //    dataA[i, i] = 0.5;
+                    //}
+                    //else
+                    //{
+                    //    dataA[i, j] = (double)1 / (2 * size + (i + j) / 10);
+                    //}
                 }
             }
             Matrix aMatrix = new Matrix(dataA);
@@ -61,19 +76,26 @@ namespace ProjectionAlgorithm_diploma_
             {
                 trueX[i] = 0.5;
             }
-            Vector trueXVector= new Vector(trueX);
+
+            Vector trueXVector = new Vector(trueX);
 
             Vector bVector = aMatrix * trueXVector;
 
             WalkerSolver solver = new WalkerSolver();
-            var solution = solver.Solve(aMatrix, bVector);
-            int x = 1;
+            var simpleSolution = solver.Solve(aMatrix, bVector);
+            var mediansSolution = solver.SolveByMedians(aMatrix, bVector);
+            //var iterativeRefSimpleSol = solver.SolveByIterativeRefinement(aMatrix, bVector, 5);
 
+            var simpleError = GetRelError(trueXVector, simpleSolution);
+            var mediansError = GetRelError(trueXVector, mediansSolution);
+            //var iterativeRefSimpleError = GetRelError(trueXVector, iterativeRefSimpleSol);
 
-
-
+            Console.WriteLine(simpleError + " % -- ошибка простого решения");
+            Console.WriteLine(mediansError + " % -- ошибка медианного решения");
+            //Console.WriteLine(iterativeRefSimpleError + " % -- ошибка простого итерационного уточнения");
             #endregion
 
+            
             #region Решение задачи Дирихле
 
             //LaplasEquationSolver solver = new LaplasEquationSolver(1, 1, 300, 300);

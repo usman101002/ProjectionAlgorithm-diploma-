@@ -32,10 +32,11 @@ namespace ProjectionAlgorithm_diploma_
 
             var xPrevData = new double[rowCount];
             Vector xPrev = new Vector(xPrevData);
-            int numberOfIterations = 10000;
-            Console.WriteLine(numberOfIterations + " проекций");
+            int numberOfProjections = 7000;
 
-            for (int i = 0; i < numberOfIterations; i++)
+            Console.WriteLine(numberOfProjections + " проекций" + " метод Solve у Уолкера");
+
+            for (int i = 0; i < numberOfProjections; i++)
             {
                 int index = this.GetRandomIndex();
                 Vector row = aMatrix.GetRowByIndex(index);
@@ -47,7 +48,52 @@ namespace ProjectionAlgorithm_diploma_
             }
             stopwatch.Stop();
             var timeInSeconds = stopwatch.ElapsedMilliseconds / (double)1000;
-            Console.WriteLine(timeInSeconds);
+            Console.WriteLine(timeInSeconds + " --- время для Solve() у WalkerSolver");
+
+            return xPrev;
+        }
+
+        public Vector SolveByMedians(Matrix aMatrix, Vector bVector)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            var distribution = this.GetDistributionOfMatrixRows(aMatrix);
+            this.walker = new Walker(distribution);
+            int rowCount = aMatrix.GetRowCount();
+            var xPrevData = new double[rowCount];
+            Vector xPrev = new Vector(xPrevData);
+            int numberOfProjections = 7000;
+            Console.WriteLine(numberOfProjections + " проекций" + " метод SolveByMedians у Уолкерного решателя");
+
+            for (int i = 0; i < numberOfProjections; i++)
+            {
+                List<Vector> trianglePoints = new List<Vector>();
+                // в этом цикле идёт получение точек с разных гиперплоскостей для треугольника
+                while (trianglePoints.Count < 3)
+                {
+                    int index = this.GetRandomIndex();
+                    Vector row = aMatrix.GetRowByIndex(index);
+                    if (trianglePoints.Contains(row))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        double numerator = bVector[index] - (row * xPrev);
+                        double denominator = this.GetRowNorm(row) * this.GetRowNorm(row);
+                        double factor = numerator / denominator;
+                        Vector trianglePoint = xPrev + factor * row;
+                        trianglePoints.Add(trianglePoint);
+                    }
+                }
+
+                Vector intersectionPoint =
+                    this.GetIntersectionMediansPoint(trianglePoints[0], trianglePoints[1], trianglePoints[2]);
+                xPrev = intersectionPoint;
+            }
+            stopwatch.Stop();
+            var timeInSeconds = stopwatch.ElapsedMilliseconds / (double)1000;
+            Console.WriteLine(timeInSeconds + " --- время для SolveByMedians() у WalkerSolver");
 
             return xPrev;
         }
@@ -78,45 +124,7 @@ namespace ProjectionAlgorithm_diploma_
             return res;
         }
 
-        public Vector SolveByMedians(Matrix aMatrix, Vector bVector)
-        {
-            var distribution = this.GetDistributionOfMatrixRows(aMatrix);
-            this.walker = new Walker(distribution);
-            int rowCount = aMatrix.GetRowCount();
-            Vector xPrev = bVector;
-            int numberOfIterations = 10000;
-
-            for (int i = 0; i < numberOfIterations; i++)
-            {
-                List<Vector> trianglePoints = new List<Vector>();
-                // в этом цикле идёт получение точек с разных гиперплоскостей для треугольника
-                while (trianglePoints.Count < 3)
-                {
-                    int index = this.GetRandomIndex();
-                    Vector row = aMatrix.GetRowByIndex(index);
-                    if (trianglePoints.Contains(row))
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        double numerator = bVector[index] - (row * xPrev);
-                        double denominator = this.GetRowNorm(row) * this.GetRowNorm(row);
-                        double factor = numerator / denominator;
-                        Vector trianglePoint = xPrev + factor * row;
-                        trianglePoints.Add(trianglePoint);
-                    }
-                }
-
-                Vector intersectionPoint =
-                    this.GetIntersectionMediansPoint(trianglePoints[0], trianglePoints[1], trianglePoints[2]);
-                xPrev = intersectionPoint;
-            }
-
-            return xPrev;
-        }
-
-        public Vector GetIntersectionMediansPoint(Vector p1, Vector p2, Vector p3)
+        private Vector GetIntersectionMediansPoint(Vector p1, Vector p2, Vector p3)
         {
             double factor = (double)1 / 3;
             var res = factor * (p1 + p2 + p3);
