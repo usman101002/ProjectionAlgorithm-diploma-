@@ -81,13 +81,13 @@ namespace ProjectionAlgorithm_diploma_
 
             Vector bVector = aMatrix * trueXVector;
 
-            WalkerSolver solver = new WalkerSolver();
-            var simpleSolution = solver.Solve(aMatrix, bVector);
-            var mediansSolution = solver.SolveByMedians(aMatrix, bVector);
-
-            //NoWalkerSolver solver = new NoWalkerSolver();
+            //WalkerSolver solver = new WalkerSolver();
             //var simpleSolution = solver.Solve(aMatrix, bVector);
             //var mediansSolution = solver.SolveByMedians(aMatrix, bVector);
+
+            NoWalkerSolver solver = new NoWalkerSolver();
+            var simpleSolution = solver.Solve(aMatrix, bVector);
+            var mediansSolution = solver.SolveByMedians(aMatrix, bVector);
 
             var simpleError = GetRelError(trueXVector, simpleSolution);
             var mediansError = GetRelError(trueXVector, mediansSolution);

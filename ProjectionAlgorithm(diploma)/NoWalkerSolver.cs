@@ -40,7 +40,7 @@ namespace ProjectionAlgorithm_diploma_
             var xPrevData = new double[rowCount];
             Vector xPrev = new Vector(xPrevData);
 
-            int numberOfProjections = 5000;
+            int numberOfProjections = 2000;
             Console.WriteLine("БезУолкерный метод");
             Console.WriteLine(numberOfProjections + " итераций у метода Solve у NoWalker ");
             for (int i = 0; i < numberOfProjections; i++)
@@ -61,9 +61,6 @@ namespace ProjectionAlgorithm_diploma_
 
         public Vector SolveByMedians(Matrix aMatrix, Vector bVector)
         {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-
             var diagProbMatrix = this.GetDiagProbMatrix(aMatrix);
             diagProbMatrix.IsDiagonal = true;
             var uniformMatrix = diagProbMatrix * aMatrix;
@@ -72,9 +69,10 @@ namespace ProjectionAlgorithm_diploma_
             int rowCount = uniformMatrix.GetRowCount();
             var xPrevData = new double[rowCount];
             Vector xPrev = new Vector(xPrevData);
-            int numberOfProjections = 5000;
+            int numberOfProjections = 2000;
             Console.WriteLine(numberOfProjections + " проекций" + " метод SolveByMedians у НЕУолкерного решателя");
-
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             for (int i = 0; i < numberOfProjections; i++)
             {
                 //List<Vector> trianglePoints = new List<Vector>();
@@ -99,24 +97,30 @@ namespace ProjectionAlgorithm_diploma_
                 int index0 = this.GetRandomIndex(rowCount);
                 int index1 = this.GetRandomIndex(rowCount);
                 // точки треугольника должны различаться
-                while (index1 == index0)
-                {
-                    index1 = this.GetRandomIndex(rowCount);
-                }
                 int index2 = this.GetRandomIndex(rowCount);
-                while (index2 == index1 || index2 == index0)
+
+                if (index0 == index1 || index1 == index2 || index0 == index2)
                 {
-                    index2 = this.GetRandomIndex(rowCount);
+                    continue;
                 }
+                else
+                {
+                    Vector row0 = uniformMatrix.GetRowByIndex(index0);
+                    double numerator0 = newB[index0] - (row0 * xPrev);
+                    Vector p0 = xPrev + numerator0 * row0;
 
-                var p0 = uniformMatrix.GetRowByIndex(index0);
-                var p1 = uniformMatrix.GetRowByIndex(index1);
-                var p2 = uniformMatrix.GetRowByIndex(index2);
+                    Vector row1 = uniformMatrix.GetRowByIndex(index1);
+                    double numerator1 = newB[index1] - (row1 * xPrev);
+                    Vector p1 = xPrev + numerator1 * row1;
 
-                Vector intersectionPoint =
-                    this.GetIntersectionMediansPoint(p0, p1, p2);
-                xPrev = intersectionPoint;
+                    Vector row2 = uniformMatrix.GetRowByIndex(index2);
+                    double numerator2 = newB[index2] - (row2 * xPrev);
+                    Vector p2 = xPrev + numerator2 * row2;
 
+                    Vector intersectionPoint =
+                        this.GetIntersectionMediansPoint(p0, p1, p2);
+                    xPrev = intersectionPoint;
+                }
             }
             stopwatch.Stop();
             var timeInSeconds = stopwatch.ElapsedMilliseconds / (double)1000;

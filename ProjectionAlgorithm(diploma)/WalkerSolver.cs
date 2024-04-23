@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using MonteKarloMatrixVectorProduct;
@@ -100,9 +101,24 @@ namespace ProjectionAlgorithm_diploma_
                     index2 = this.GetRandomIndex();
                 }
 
-                Vector p0 = aMatrix.GetRowByIndex(index0);
-                Vector p1 = aMatrix.GetRowByIndex(index1);
-                Vector p2 = aMatrix.GetRowByIndex(index2);
+                Vector row0 = aMatrix.GetRowByIndex(index0);
+                double numerator0 = bVector[index0] - (row0 * xPrev);
+                double denominator0 = this.GetRowNorm(row0) * this.GetRowNorm(row0);
+                double factor0 = numerator0 / denominator0;
+                Vector p0 = xPrev + factor0 * row0;
+
+                Vector row1 = aMatrix.GetRowByIndex(index1);
+                double numerator1 = bVector[index1] - (row1 * xPrev);
+                double denominator1 = this.GetRowNorm(row1) * this.GetRowNorm(row1);
+                double factor1 = numerator1 / denominator1;
+                Vector p1 = xPrev + factor1 * row1;
+
+                Vector row2 = aMatrix.GetRowByIndex(index2);
+                double numerator2 = bVector[index2] - (row2 * xPrev);
+                double denominator2 = this.GetRowNorm(row2) * this.GetRowNorm(row2);
+                double factor2 = numerator2 / denominator2;
+                Vector p2 = xPrev + factor2 * row2;
+
                 Vector intersectionPoint =
                     this.GetIntersectionMediansPoint(p0, p1, p2);
                 xPrev = intersectionPoint;
