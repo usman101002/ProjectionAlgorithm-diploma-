@@ -1,6 +1,7 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -27,7 +28,6 @@ namespace ProjectionAlgorithm_diploma_
             // Переход к равномерно распределённой матрице путём домножения специальной диагональной матрицы на исходную.
             // Вектор правой части соответственно тоже домножается на эту диагональную матрицу. 
 
-            
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             var diagProbMatrix = this.GetDiagProbMatrix(aMatrix);
@@ -37,23 +37,90 @@ namespace ProjectionAlgorithm_diploma_
             var newB = diagProbMatrix * bVector;
 
             int rowCount = uniformMatrix.GetRowCount();
-            var xPrev = newB;
-            int numberOfIterations = 30000;
+            var xPrevData = new double[rowCount];
+            Vector xPrev = new Vector(xPrevData);
+
+            int numberOfProjections = 5000;
             Console.WriteLine("БезУолкерный метод");
-            Console.WriteLine(numberOfIterations + " итераций");
-            for (int i = 0; i < numberOfIterations; i++)
+            Console.WriteLine(numberOfProjections + " итераций у метода Solve у NoWalker ");
+            for (int i = 0; i < numberOfProjections; i++)
             {
                 int index = this.GetRandomIndex(rowCount);
                 var uniformMatrixRow = uniformMatrix.GetRowByIndex(index);
                 var numerator = newB[index] - (xPrev * uniformMatrixRow);
-                var denominator = 1;
-                var xCur = xPrev + (numerator / denominator) * uniformMatrixRow;
+                var factor = numerator;
+                var xCur = xPrev + factor * uniformMatrixRow;
                 xPrev = xCur;
             }
             stopwatch.Stop();
             var timeInSeconds = stopwatch.ElapsedMilliseconds / (double)1000;
-            Console.WriteLine(timeInSeconds);
+            Console.WriteLine(timeInSeconds + " --- время для Solve() у NoWalkerSolver");
 
+            return xPrev;
+        }
+
+        public Vector SolveByMedians(Matrix aMatrix, Vector bVector)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            var diagProbMatrix = this.GetDiagProbMatrix(aMatrix);
+            diagProbMatrix.IsDiagonal = true;
+            var uniformMatrix = diagProbMatrix * aMatrix;
+            var newB = diagProbMatrix * bVector;
+
+            int rowCount = uniformMatrix.GetRowCount();
+            var xPrevData = new double[rowCount];
+            Vector xPrev = new Vector(xPrevData);
+            int numberOfProjections = 5000;
+            Console.WriteLine(numberOfProjections + " проекций" + " метод SolveByMedians у НЕУолкерного решателя");
+
+            for (int i = 0; i < numberOfProjections; i++)
+            {
+                //List<Vector> trianglePoints = new List<Vector>();
+                //// в этом цикле идёт получение точек с разных гиперплоскостей для треугольника
+                //while (trianglePoints.Count < 3)
+                //{
+                //    int index = this.GetRandomIndex(rowCount);
+                //    Vector row = uniformMatrix.GetRowByIndex(index);
+                //    if (trianglePoints.Contains(row))
+                //    {
+                //        continue;
+                //    }
+                //    else
+                //    {
+                //        double numerator = newB[index] - (row * xPrev);
+                //        double factor = numerator;
+                //        Vector trianglePoint = xPrev + factor * row;
+                //        trianglePoints.Add(trianglePoint);
+                //    }
+                //}
+
+                int index0 = this.GetRandomIndex(rowCount);
+                int index1 = this.GetRandomIndex(rowCount);
+                // точки треугольника должны различаться
+                while (index1 == index0)
+                {
+                    index1 = this.GetRandomIndex(rowCount);
+                }
+                int index2 = this.GetRandomIndex(rowCount);
+                while (index2 == index1 || index2 == index0)
+                {
+                    index2 = this.GetRandomIndex(rowCount);
+                }
+
+                var p0 = uniformMatrix.GetRowByIndex(index0);
+                var p1 = uniformMatrix.GetRowByIndex(index1);
+                var p2 = uniformMatrix.GetRowByIndex(index2);
+
+                Vector intersectionPoint =
+                    this.GetIntersectionMediansPoint(p0, p1, p2);
+                xPrev = intersectionPoint;
+
+            }
+            stopwatch.Stop();
+            var timeInSeconds = stopwatch.ElapsedMilliseconds / (double)1000;
+            Console.WriteLine(timeInSeconds + " --- время для SolveByMedians() у NoWalkerSolver");
             return xPrev;
         }
 
@@ -81,6 +148,13 @@ namespace ProjectionAlgorithm_diploma_
             var timeInSeconds = stopwatch.ElapsedMilliseconds / (double)1000;
             Console.WriteLine(timeInSeconds);
 
+            return res;
+        }
+
+        private Vector GetIntersectionMediansPoint(Vector p1, Vector p2, Vector p3)
+        {
+            double factor = (double)1 / 3;
+            var res = factor * (p1 + p2 + p3);
             return res;
         }
 

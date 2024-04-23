@@ -50,8 +50,8 @@ namespace ProjectionAlgorithm_diploma_
 
             #region Решение квадратной СЛАУ Aij = 1/2 на i,i и 1 / (2*N + (i + j) / 10) либо с Кронекером
 
-            Random rnd = new Random(2024);
             int size = 1000;
+            Console.WriteLine(size + " --- размерность матрицы");
             double[,] dataA = new double[size, size];
             for (int i = 0; i < size; i++)
             {
@@ -84,12 +84,14 @@ namespace ProjectionAlgorithm_diploma_
             WalkerSolver solver = new WalkerSolver();
             var simpleSolution = solver.Solve(aMatrix, bVector);
             var mediansSolution = solver.SolveByMedians(aMatrix, bVector);
-            //var iterativeRefSimpleSol = solver.SolveByIterativeRefinement(aMatrix, bVector, 5);
+
+            //NoWalkerSolver solver = new NoWalkerSolver();
+            //var simpleSolution = solver.Solve(aMatrix, bVector);
+            //var mediansSolution = solver.SolveByMedians(aMatrix, bVector);
 
             var simpleError = GetRelError(trueXVector, simpleSolution);
             var mediansError = GetRelError(trueXVector, mediansSolution);
-            //var iterativeRefSimpleError = GetRelError(trueXVector, iterativeRefSimpleSol);
-
+            
             Console.WriteLine(simpleError + " % -- ошибка простого решения");
             Console.WriteLine(mediansError + " % -- ошибка медианного решения");
             //Console.WriteLine(iterativeRefSimpleError + " % -- ошибка простого итерационного уточнения");
