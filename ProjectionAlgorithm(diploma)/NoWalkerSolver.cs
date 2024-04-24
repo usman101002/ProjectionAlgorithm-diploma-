@@ -40,7 +40,7 @@ namespace ProjectionAlgorithm_diploma_
             var xPrevData = new double[rowCount];
             Vector xPrev = new Vector(xPrevData);
 
-            int numberOfProjections = 2000;
+            int numberOfProjections = 9200;
             Console.WriteLine("БезУолкерный метод");
             Console.WriteLine(numberOfProjections + " итераций у метода Solve у NoWalker ");
             for (int i = 0; i < numberOfProjections; i++)
@@ -69,7 +69,7 @@ namespace ProjectionAlgorithm_diploma_
             int rowCount = uniformMatrix.GetRowCount();
             var xPrevData = new double[rowCount];
             Vector xPrev = new Vector(xPrevData);
-            int numberOfProjections = 2000;
+            int numberOfProjections = 7500;
             Console.WriteLine(numberOfProjections + " проекций" + " метод SolveByMedians у НЕУолкерного решателя");
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -153,6 +153,20 @@ namespace ProjectionAlgorithm_diploma_
             Console.WriteLine(timeInSeconds);
 
             return res;
+        }
+
+        // Dx=y, D --- диагональная матрица
+        private Vector SolveDiagonalSLAE(Matrix d, Vector y)
+        {
+            int n = y.GetDimension();
+            double[] xData = new double[n];
+            for (int i = 0; i < n; i++)
+            {
+                xData[i] = (double)y[i] / d[i, i];
+            }
+
+            Vector x = new Vector(xData);
+            return x;
         }
 
         private Vector GetIntersectionMediansPoint(Vector p1, Vector p2, Vector p3)
