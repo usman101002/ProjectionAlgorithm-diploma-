@@ -88,16 +88,18 @@ namespace ProjectionAlgorithm_diploma_
             NoWalkerSolver solver = new NoWalkerSolver();
             var simpleSolution = solver.Solve(aMatrix, bVector);
             var mediansSolution = solver.SolveByMedians(aMatrix, bVector);
-            var balancedSolution = solver.SolveByBalancing(aMatrix, bVector, 1);
+            //var balancedSolution = solver.SolveByBalancing(aMatrix, bVector, 15);
+            var balancedIterRefSolution = solver.SolveByIterativeRefinement(aMatrix, bVector, 10);
 
             var simpleError = GetRelError(trueXVector, simpleSolution);
             var mediansError = GetRelError(trueXVector, mediansSolution);
-            var balancedError = GetRelError(trueXVector, balancedSolution); 
+            //var balancedError = GetRelError(trueXVector, balancedSolution); 
+            var iterRefBalancedError = GetRelError(trueXVector, balancedIterRefSolution);
             
             Console.WriteLine(simpleError + " % -- ошибка простого решения");
             Console.WriteLine(mediansError + " % -- ошибка медианного решения");
-            Console.WriteLine(balancedError + " % -- ошибка сбалансированного решения");
-            //Console.WriteLine(iterativeRefSimpleError + " % -- ошибка простого итерационного уточнения");
+            //Console.WriteLine(balancedError + " % -- ошибка сбалансированного решения");
+            Console.WriteLine(iterRefBalancedError + " % -- ошибка простого итерационного уточнения");
             #endregion
 
             
