@@ -242,6 +242,7 @@ namespace ProjectionAlgorithm_diploma_
             return res;
         }
 
+
         /// <summary>
         /// Данный метод актуален только для диагональных квадратных матриц!!!
         /// </summary>
@@ -256,7 +257,6 @@ namespace ProjectionAlgorithm_diploma_
             Matrix inverse = new Matrix(inverseData);
             return inverse;
         }
-
 
     }
 }

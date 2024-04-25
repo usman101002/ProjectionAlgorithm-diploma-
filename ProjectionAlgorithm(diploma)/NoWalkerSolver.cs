@@ -1,6 +1,4 @@
-﻿using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Double;
-using System;
+﻿using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -30,7 +28,7 @@ namespace ProjectionAlgorithm_diploma_
 
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            var diagProbMatrix = this.GetLeftDiagProbMatrix(aMatrix);
+            var diagProbMatrix = this.GetLeftDiag(aMatrix);
             diagProbMatrix.IsDiagonal = true;
 
             var uniformMatrix = diagProbMatrix * aMatrix;
@@ -61,7 +59,7 @@ namespace ProjectionAlgorithm_diploma_
 
         public Vector SolveByMedians(Matrix aMatrix, Vector bVector)
         {
-            var diagProbMatrix = this.GetLeftDiagProbMatrix(aMatrix);
+            var diagProbMatrix = this.GetLeftDiag(aMatrix);
             diagProbMatrix.IsDiagonal = true;
             var uniformMatrix = diagProbMatrix * aMatrix;
             var newB = diagProbMatrix * bVector;
@@ -80,16 +78,16 @@ namespace ProjectionAlgorithm_diploma_
                 //while (trianglePoints.Count < 3)
                 //{
                 //    int index = this.GetRandomIndex(rowCount);
-                //    Vector row = uniformMatrix.GetRowByIndex(index);
-                //    if (trianglePoints.Contains(row))
+                //    Vector vector = uniformMatrix.GetRowByIndex(index);
+                //    if (trianglePoints.Contains(vector))
                 //    {
                 //        continue;
                 //    }
                 //    else
                 //    {
-                //        double numerator = newB[index] - (row * xPrev);
+                //        double numerator = newB[index] - (vector * xPrev);
                 //        double factor = numerator;
-                //        Vector trianglePoint = xPrev + factor * row;
+                //        Vector trianglePoint = xPrev + factor * vector;
                 //        trianglePoints.Add(trianglePoint);
                 //    }
                 //}
@@ -126,6 +124,47 @@ namespace ProjectionAlgorithm_diploma_
             var timeInSeconds = stopwatch.ElapsedMilliseconds / (double)1000;
             Console.WriteLine(timeInSeconds + " --- время для SolveByMedians() у NoWalkerSolver");
             return xPrev;
+        }
+
+        public Vector StupidProjectionsSolve(Matrix aMatrix, Vector bVector)
+        {
+            int dim = bVector.GetDimension();
+            double[] xPrevData = new double[dim];
+            Vector xPrev = new Vector(xPrevData);
+
+            int numProjections = 5000;
+            for (int i = 0; i < numProjections; i++)
+            {
+                int index = this.GetRandomIndex(dim);
+                Vector row = aMatrix.GetRowByIndex(index);
+                double numerator = bVector[index] - (row * xPrev);
+                double factor = numerator;
+                Vector xCur = xPrev + factor * row;
+                xPrev = xCur;
+            }
+
+            return xPrev;
+        }
+
+        public Vector SolveByBalancing(Matrix aMatrix, Vector bVector, int numBalances)
+        {
+            Matrix newA = aMatrix;
+            Vector newB = bVector;
+
+            double[,] diagonalRightData = new double[bVector.GetDimension(), bVector.GetDimension()];
+            Matrix diagonalRight = new Matrix(diagonalRightData);
+            for (int i = 0; i < numBalances; i++)
+            {
+                Matrix diagonalLeft = this.GetLeftDiag(aMatrix);
+                newA = diagonalLeft * newA;
+                newB = diagonalLeft * newB;
+                diagonalRight = this.GetRightDiag(aMatrix);
+                newA = newA * diagonalRight;
+            }
+            Vector y = this.StupidProjectionsSolve(newA, newB);
+            Matrix diagonalRightInversed = diagonalRight.Inverse();
+            Vector x = this.SolveDiagonalSLAE(diagonalRightInversed, y);
+            return x;
         }
 
         public Vector SolveByIterativeRefinement(Matrix aMatrix, Vector bVector, int numOfIterations = 1)
@@ -176,7 +215,7 @@ namespace ProjectionAlgorithm_diploma_
             return res;
         }
 
-        private Matrix GetLeftDiagProbMatrix(Matrix matrix)
+        private Matrix GetLeftDiag(Matrix matrix)
         {
             int rowCount = matrix.GetRowCount();
             int colCount = matrix.GetColCount();
@@ -184,46 +223,67 @@ namespace ProjectionAlgorithm_diploma_
             for (int i = 0; i < rowCount; i++)
             {
                 var row = matrix.GetRowByIndex(i);
-                var norm = GetRowNorm(row);
-                matrixArr[i, i] = 1 / norm;
+                var norm = GetNorm(row);
+                matrixArr[i, i] = (double)1 / norm;
             }
 
             var result = new Matrix(matrixArr);
             return result;
         }
 
-        private List<double> GetDistributionOfMatrixRows(Matrix matrix)
+        private Matrix GetRightDiag(Matrix matrix)
         {
-            var probabilities = new List<double>();
-            var matrixRows = new List<List<double>>();
-
-            for (int i = 0; i < matrix.GetRowCount(); i++)
+            int rowCount = matrix.GetRowCount();
+            int colCount = matrix.GetColCount();
+            double[,] matrixArr = new double[rowCount, colCount];
+            for (int i = 0; i < colCount; i++)
             {
-                var matrixRow = matrix.GetRowByIndex(i).ToList();
-                matrixRows.Add(matrixRow);
+                var col = matrix.GetColByIndex(i);
+                var norm = GetNorm(col);
+                matrixArr[i, i] = (double)1 / norm;
             }
 
-            double frobeniusNormSquared = 0;
-            for (int i = 0; i < matrixRows.Count; i++)
-            {
-                for (int j = 0; j < matrixRows.Count; j++)
-                {
-                    frobeniusNormSquared += matrixRows[i][j] * matrixRows[i][j];
-                }
-            }
-
-            for (int i = 0; i < matrixRows.Count; i++)
-            {
-                var rowNorm = GetRowNorm(matrixRows[i]);
-                probabilities.Add(rowNorm * rowNorm / frobeniusNormSquared);
-            }
-            //var sum = probabilities.Sum(); нужно для проверки того, что получившийся набор действительно является распределением.
-            return probabilities;
+            var result = new Matrix(matrixArr);
+            return result;
         }
 
-        private double GetRowNorm(IEnumerable<double> row)
+        #region GetDistributionOfMatrixRows --- не используется
+        //private List<double> GetDistributionOfMatrixRows(Matrix matrix)
+        //{
+        //    var probabilities = new List<double>();
+        //    var matrixRows = new List<List<double>>();
+
+        //    for (int i = 0; i < matrix.GetRowCount(); i++)
+        //    {
+        //        var matrixRow = matrix.GetRowByIndex(i).ToList();
+        //        matrixRows.Add(matrixRow);
+        //    }
+
+        //    double frobeniusNormSquared = 0;
+        //    for (int i = 0; i < matrixRows.Count; i++)
+        //    {
+        //        for (int j = 0; j < matrixRows.Count; j++)
+        //        {
+        //            frobeniusNormSquared += matrixRows[i][j] * matrixRows[i][j];
+        //        }
+        //    }
+
+        //    for (int i = 0; i < matrixRows.Count; i++)
+        //    {
+        //        var rowNorm = GetNorm(matrixRows[i]);
+        //        probabilities.Add(rowNorm * rowNorm / frobeniusNormSquared);
+        //    }
+        //    //var sum = probabilities.Sum(); нужно для проверки того, что получившийся набор действительно является распределением.
+        //    return probabilities;
+        //}
+
+
+        #endregion
+
+
+        private double GetNorm(IEnumerable<double> vector)
         {
-            var result = row.Select(x => x * x).Sum();
+            var result = vector.Select(x => x * x).Sum();
             result = Math.Sqrt(result);
             return result;
         }
