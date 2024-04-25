@@ -13,8 +13,6 @@ namespace ProjectionAlgorithm_diploma_
         private int rowCount;
         private int colCount;
 
-        public bool IsDiagonal { get; set; } = false;
-
         public Matrix(double[,] data)
         {
             this.data = data;
@@ -256,6 +254,46 @@ namespace ProjectionAlgorithm_diploma_
             }
             Matrix inverse = new Matrix(inverseData);
             return inverse;
+        }
+
+        /// <summary>
+        /// Костыльный метод --- работает только для проекционных методов, когда слева или справа
+        /// диагональная матрица.
+        /// </summary>
+        /// <param name="matrix"></param>
+        /// <param name="DiagFromLeft"></param>
+        /// <returns></returns>
+        public Matrix Multiply(Matrix matrix, bool DiagFromLeft)
+        {
+            int rowCount = matrix.rowCount;
+            int colCount = matrix.colCount;
+            double[,] resData = new double[matrix.rowCount, matrix.colCount];
+            // подразумевается, что либо слева, либо левый, либо правый множитель будет диагональной матрицей
+            if (DiagFromLeft == true)
+            {
+                for (int i = 0; i < rowCount; i++)
+                {
+                    for (int j = 0; j < colCount; j++)
+                    {
+                        resData[i, j] = this[i, i] * matrix[i, j];
+                    }
+                }
+                Matrix resLeftDiagCase = new Matrix(resData);
+                return resLeftDiagCase;
+            }
+            else
+            {
+                for (int i = 0; i < rowCount; i++)
+                {
+                    for (int j = 0; j < colCount; j++)
+                    {
+                        resData[i, j] = this[i, j] * matrix[j, j];
+                    }
+                }
+
+                Matrix resRightDiagCase = new Matrix(resData);
+                return resRightDiagCase;
+            }
         }
 
     }

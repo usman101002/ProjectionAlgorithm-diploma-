@@ -29,9 +29,9 @@ namespace ProjectionAlgorithm_diploma_
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             var diagProbMatrix = this.GetLeftDiag(aMatrix);
-            diagProbMatrix.IsDiagonal = true;
+            
 
-            var uniformMatrix = diagProbMatrix * aMatrix;
+            var uniformMatrix = diagProbMatrix.Multiply(aMatrix, true);
             var newB = diagProbMatrix * bVector;
 
             int rowCount = uniformMatrix.GetRowCount();
@@ -60,8 +60,8 @@ namespace ProjectionAlgorithm_diploma_
         public Vector SolveByMedians(Matrix aMatrix, Vector bVector)
         {
             var diagProbMatrix = this.GetLeftDiag(aMatrix);
-            diagProbMatrix.IsDiagonal = true;
-            var uniformMatrix = diagProbMatrix * aMatrix;
+            
+            var uniformMatrix = diagProbMatrix.Multiply(aMatrix, true);
             var newB = diagProbMatrix * bVector;
 
             int rowCount = uniformMatrix.GetRowCount();
@@ -155,11 +155,15 @@ namespace ProjectionAlgorithm_diploma_
             Matrix diagonalRight = new Matrix(diagonalRightData);
             for (int i = 0; i < numBalances; i++)
             {
-                Matrix diagonalLeft = this.GetLeftDiag(aMatrix);
-                newA = diagonalLeft * newA;
+                Matrix diagonalLeft = this.GetLeftDiag(newA);
+                
+
+                newA = diagonalLeft.Multiply(newA, true);
+
                 newB = diagonalLeft * newB;
-                diagonalRight = this.GetRightDiag(aMatrix);
-                newA = newA * diagonalRight;
+
+                diagonalRight = this.GetRightDiag(newA);
+                newA = newA.Multiply(diagonalRight, false);
             }
             Vector y = this.StupidProjectionsSolve(newA, newB);
             Matrix diagonalRightInversed = diagonalRight.Inverse();
