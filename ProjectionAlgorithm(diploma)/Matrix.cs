@@ -107,60 +107,60 @@ namespace ProjectionAlgorithm_diploma_
             return result;
         }
 
-        public static Matrix operator *(Matrix matrix1, Matrix matrix2)
-        {
-            if (matrix1.colCount != matrix2.rowCount)
-            {
-                throw new Exception("Число столбцов первой матрицы должно быть равно числу строк второй матрицы!");
-            }
+        //public static Matrix operator *(Matrix matrix1, Matrix matrix2)
+        //{
+        //    if (matrix1.colCount != matrix2.rowCount)
+        //    {
+        //        throw new Exception("Число столбцов первой матрицы должно быть равно числу строк второй матрицы!");
+        //    }
 
-            double[,] resData = new double[matrix1.rowCount, matrix2.colCount];
-            int m1RowCount = matrix1.rowCount;
-            int m1ColCount = matrix1.colCount;
-            int m2ColCount = matrix2.colCount;
-            int m2RowCount = matrix2.rowCount;
+        //    double[,] resData = new double[matrix1.rowCount, matrix2.colCount];
+        //    int m1RowCount = matrix1.rowCount;
+        //    int m1ColCount = matrix1.colCount;
+        //    int m2ColCount = matrix2.colCount;
+        //    int m2RowCount = matrix2.rowCount;
 
-            if (matrix1.IsDiagonal = true)
-            {
-                for (int i = 0; i < m2RowCount; i++)
-                {
-                    for (int j = 0; j < m2ColCount; j++)
-                    {
-                        resData[i, j] = matrix1[i, i] * matrix2[i, j];
-                    }
-                }
-                Matrix resLeftDiagCase = new Matrix(resData);
-                return resLeftDiagCase;
-            }
+        //    if (matrix1.IsDiagonal = true)
+        //    {
+        //        for (int i = 0; i < m2RowCount; i++)
+        //        {
+        //            for (int j = 0; j < m2ColCount; j++)
+        //            {
+        //                resData[i, j] = matrix1[i, i] * matrix2[i, j];
+        //            }
+        //        }
+        //        Matrix resLeftDiagCase = new Matrix(resData);
+        //        return resLeftDiagCase;
+        //    }
 
-            else if (matrix2.IsDiagonal = true)
-            {
-                for (int i = 0; i < m1RowCount; i++)
-                {
-                    for (int j = 0; j < m1ColCount; j++)
-                    {
-                        resData[i, j] = matrix1[i, j] * matrix2[j, j];
-                    }
-                }
+        //    else if (matrix2.IsDiagonal = true)
+        //    {
+        //        for (int i = 0; i < m1RowCount; i++)
+        //        {
+        //            for (int j = 0; j < m1ColCount; j++)
+        //            {
+        //                resData[i, j] = matrix1[i, j] * matrix2[j, j];
+        //            }
+        //        }
 
-                Matrix resRightDiagCase = new Matrix(resData);
-                return resRightDiagCase;
-            }
+        //        Matrix resRightDiagCase = new Matrix(resData);
+        //        return resRightDiagCase;
+        //    }
 
-            for (int i = 0; i < m1RowCount; i++)
-            {
-                for (int j = 0; j < m2ColCount; j++)
-                {
-                    for (int k = 0; k < m2RowCount; k++)
-                    {
-                        resData[i, j] += matrix1[i, k] * matrix2[k, j];
-                    }
-                }
-            }
+        //    for (int i = 0; i < m1RowCount; i++)
+        //    {
+        //        for (int j = 0; j < m2ColCount; j++)
+        //        {
+        //            for (int k = 0; k < m2RowCount; k++)
+        //            {
+        //                resData[i, j] += matrix1[i, k] * matrix2[k, j];
+        //            }
+        //        }
+        //    }
 
-            Matrix res = new Matrix(resData);
-            return res;
-        }
+        //    Matrix res = new Matrix(resData);
+        //    return res;
+        //}
 
         public static Matrix operator +(Matrix matrix1, Matrix matrix2)
         {

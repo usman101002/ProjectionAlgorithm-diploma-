@@ -132,7 +132,7 @@ namespace ProjectionAlgorithm_diploma_
             double[] xPrevData = new double[dim];
             Vector xPrev = new Vector(xPrevData);
 
-            int numProjections = 5000;
+            int numProjections = 7000;
             for (int i = 0; i < numProjections; i++)
             {
                 int index = this.GetRandomIndex(dim);
