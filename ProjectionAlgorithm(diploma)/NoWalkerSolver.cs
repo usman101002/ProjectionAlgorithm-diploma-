@@ -38,7 +38,7 @@ namespace ProjectionAlgorithm_diploma_
             var xPrevData = new double[rowCount];
             Vector xPrev = new Vector(xPrevData);
 
-            int numberOfProjections = 9200;
+            int numberOfProjections = 15000;
             Console.WriteLine("БезУолкерный метод");
             Console.WriteLine(numberOfProjections + " итераций у метода Solve у NoWalker ");
             for (int i = 0; i < numberOfProjections; i++)
@@ -67,7 +67,7 @@ namespace ProjectionAlgorithm_diploma_
             int rowCount = uniformMatrix.GetRowCount();
             var xPrevData = new double[rowCount];
             Vector xPrev = new Vector(xPrevData);
-            int numberOfProjections = 7500;
+            int numberOfProjections = 15000;
             Console.WriteLine(numberOfProjections + " проекций" + " метод SolveByMedians у НЕУолкерного решателя");
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -126,13 +126,12 @@ namespace ProjectionAlgorithm_diploma_
             return xPrev;
         }
 
-        public Vector StupidProjectionsSolve(Matrix aMatrix, Vector bVector)
+        public Vector StupidProjectionsSolve(Matrix aMatrix, Vector bVector, int numProjections)
         {
             int dim = bVector.GetDimension();
             double[] xPrevData = new double[dim];
             Vector xPrev = new Vector(xPrevData);
 
-            int numProjections = 7000;
             for (int i = 0; i < numProjections; i++)
             {
                 int index = this.GetRandomIndex(dim);
@@ -150,9 +149,14 @@ namespace ProjectionAlgorithm_diploma_
         {
             Matrix newA = aMatrix;
             Vector newB = bVector;
+            int numProjections = 15000;
 
             double[,] diagonalRightData = new double[bVector.GetDimension(), bVector.GetDimension()];
             Matrix diagonalRight = new Matrix(diagonalRightData);
+
+            Console.WriteLine(numProjections + " проекций" + " метод SolveByBalancing" + $", {numBalances} --- число балансирований");
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             for (int i = 0; i < numBalances; i++)
             {
                 Matrix diagonalLeft = this.GetLeftDiag(newA);
@@ -165,9 +169,13 @@ namespace ProjectionAlgorithm_diploma_
                 diagonalRight = this.GetRightDiag(newA);
                 newA = newA.Multiply(diagonalRight, false);
             }
-            Vector y = this.StupidProjectionsSolve(newA, newB);
+            Vector y = this.StupidProjectionsSolve(newA, newB, numProjections);
             Matrix diagonalRightInversed = diagonalRight.Inverse();
             Vector x = this.SolveDiagonalSLAE(diagonalRightInversed, y);
+            stopwatch.Stop();
+            var timeInSeconds = stopwatch.ElapsedMilliseconds / (double)1000;
+            Console.WriteLine(timeInSeconds + " --- время для SolveByBalancing");
+
             return x;
         }
 
