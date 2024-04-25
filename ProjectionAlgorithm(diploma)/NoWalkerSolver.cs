@@ -30,7 +30,7 @@ namespace ProjectionAlgorithm_diploma_
 
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            var diagProbMatrix = this.GetDiagProbMatrix(aMatrix);
+            var diagProbMatrix = this.GetLeftDiagProbMatrix(aMatrix);
             diagProbMatrix.IsDiagonal = true;
 
             var uniformMatrix = diagProbMatrix * aMatrix;
@@ -61,7 +61,7 @@ namespace ProjectionAlgorithm_diploma_
 
         public Vector SolveByMedians(Matrix aMatrix, Vector bVector)
         {
-            var diagProbMatrix = this.GetDiagProbMatrix(aMatrix);
+            var diagProbMatrix = this.GetLeftDiagProbMatrix(aMatrix);
             diagProbMatrix.IsDiagonal = true;
             var uniformMatrix = diagProbMatrix * aMatrix;
             var newB = diagProbMatrix * bVector;
@@ -176,7 +176,7 @@ namespace ProjectionAlgorithm_diploma_
             return res;
         }
 
-        private Matrix GetDiagProbMatrix(Matrix matrix)
+        private Matrix GetLeftDiagProbMatrix(Matrix matrix)
         {
             int rowCount = matrix.GetRowCount();
             int colCount = matrix.GetColCount();

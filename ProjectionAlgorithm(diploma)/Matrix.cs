@@ -241,5 +241,22 @@ namespace ProjectionAlgorithm_diploma_
             Matrix res = new Matrix(resData);
             return res;
         }
+
+        /// <summary>
+        /// Данный метод актуален только для диагональных квадратных матриц!!!
+        /// </summary>
+        /// <returns></returns>
+        public Matrix Inverse()
+        {
+            double[,] inverseData = new double[this.rowCount, this.colCount];
+            for (int i = 0; i < this.rowCount; i++)
+            {
+                inverseData[i, i] = (double)1 / this.data[i, i];
+            }
+            Matrix inverse = new Matrix(inverseData);
+            return inverse;
+        }
+
+
     }
 }
