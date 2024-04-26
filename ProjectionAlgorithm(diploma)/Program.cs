@@ -114,33 +114,50 @@ namespace ProjectionAlgorithm_diploma_
 
             // Решение простым итерационным уточнением
             Stopwatch stopwatchIterRefSimple = new Stopwatch();
-            stopwatchMediansSimple.Start();
+            stopwatchIterRefSimple.Start();
             var iterRefSimpleSolution = solver.SolveBySimpleIterativeRefinement(aMatrix, bVector, 5);
             stopwatchIterRefSimple.Stop();
             timeInSeconds = stopwatchIterRefSimple.ElapsedMilliseconds / (double)1000;
+            Console.WriteLine(timeInSeconds + " --- время для SolveBySimpleIterativeRefinement  у NoWalkerSolver");
             Console.WriteLine();
 
             // Решение балансированным итерационным уточнением
+            Stopwatch stopwatchIterRefBalanced = new Stopwatch();
+            stopwatchIterRefBalanced.Start();
+            var iterRefBalancedSolution = solver.SolveByBalancingIterativeRefinement(aMatrix, bVector, 5, 1);
+            stopwatchIterRefBalanced.Stop();
+            timeInSeconds = stopwatchIterRefBalanced.ElapsedMilliseconds / (double)1000;
+            Console.WriteLine(timeInSeconds + " --- время для SolveByBalancingIterativeRefinement у NoWalkerSolver");
+            Console.WriteLine();
 
-
-
-
-            var mediansSolution = solver.SolveByMedians(aMatrix, bVector);
-            //var balancedSolution = solver.SolveByBalancing(aMatrix, bVector, 15);
-            
-
+            // Подсчёт погрешностей
             var simpleError = GetRelError(trueXVector, simpleSolution);
-            var mediansError = GetRelError(trueXVector, mediansSolution);
-            var balancedError = GetRelError(trueXVector, balancedSimpleSolution); 
-            //var iterRefBalancedError = GetRelError(trueXVector, balancedIterRefSolution);
+            var balancedError = GetRelError(trueXVector, balancedSimpleSolution);
+            var mediansError = GetRelError(trueXVector, mediansSimpleSolution);
+            var iterRefSimpleError = GetRelError(trueXVector, iterRefSimpleSolution);
+            var iterRefBalancedError = GetRelError(trueXVector, iterRefBalancedSolution);
             
+            
+            // Вывод погрешностей
             Console.WriteLine(simpleError + " % -- ошибка простого решения");
-            Console.WriteLine(mediansError + " % -- ошибка медианного решения");
+            Console.WriteLine();
+
             Console.WriteLine(balancedError + " % -- ошибка сбалансированного решения");
-            //Console.WriteLine(iterRefBalancedError + " % -- ошибка простого итерационного уточнения");
+            Console.WriteLine();
+
+            Console.WriteLine(mediansError + " % -- ошибка медианного решения");
+            Console.WriteLine();
+
+            Console.WriteLine(iterRefSimpleError + " % -- ошибка решения ПРОСТЫМ итерационным уточнением");
+            Console.WriteLine();
+
+            Console.WriteLine(iterRefBalancedError + " % -- ошибка решения БАЛАНСИРОВАННЫМ итерационным уточнением");
+            Console.WriteLine();
+
+
             #endregion
 
-            
+
             #region Решение задачи Дирихле
 
             //LaplasEquationSolver solver = new LaplasEquationSolver(1, 1, 300, 300);

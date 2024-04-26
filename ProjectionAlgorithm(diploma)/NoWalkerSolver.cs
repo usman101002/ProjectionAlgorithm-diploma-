@@ -186,12 +186,12 @@ namespace ProjectionAlgorithm_diploma_
             return res;
         }
 
-        public Vector SolveByBalancingIterativeRefinement(Matrix aMatrix, Vector bVector, int numOfIterations = 1)
+        public Vector SolveByBalancingIterativeRefinement(Matrix aMatrix, Vector bVector, int numOfIterations, int numbBalances)
         {
             if (numOfIterations <= 0)
                 throw new Exception("numOfIterations должен быть не меньше 1");
 
-            Vector res = this.SolveByBalancing(aMatrix, bVector, 1);
+            Vector res = this.SolveByBalancing(aMatrix, bVector, numbBalances);
             if (numOfIterations == 1)
                 return res;
 
