@@ -78,18 +78,49 @@ namespace ProjectionAlgorithm_diploma_
             }
 
             Vector trueXVector = new Vector(trueX);
-
             Vector bVector = aMatrix * trueXVector;
 
             //WalkerSolver solver = new WalkerSolver();
             //var simpleSolution = solver.Solve(aMatrix, bVector);
             //var mediansSolution = solver.SolveByMedians(aMatrix, bVector);
 
+            // Простое решение NoWalkerSolver
             NoWalkerSolver solver = new NoWalkerSolver();
+            Stopwatch stopwatchSimple = new Stopwatch();
+            stopwatchSimple.Start();
             var simpleSolution = solver.Solve(aMatrix, bVector);
+            stopwatchSimple.Stop();
+            var timeInSeconds = stopwatchSimple.ElapsedMilliseconds / (double)1000;
+            Console.WriteLine(timeInSeconds + " --- время для Solve() у NoWalkerSolver");
+            Console.WriteLine();
+
+            // Решение простым балансированием
+            Stopwatch stopwatchBalancedSimple = new Stopwatch();
+            stopwatchBalancedSimple.Start();
+            var balancedSimpleSolution = solver.SolveByBalancing(aMatrix, bVector, 1);
+            stopwatchBalancedSimple.Stop();
+            timeInSeconds = stopwatchBalancedSimple.ElapsedMilliseconds / (double)1000;
+            Console.WriteLine(timeInSeconds + " --- время для SolveByBalancing() (простого балансирования) у NoWalkerSolver");
+            Console.WriteLine();
+
+            // Решение простым медианным способом
+            Stopwatch stopwatchMediansSimple = new Stopwatch();
+            stopwatchMediansSimple.Start();
+            var mediansSimpleSolution = solver.SolveByMedians(aMatrix, bVector);
+            stopwatchMediansSimple.Stop();
+            timeInSeconds = stopwatchMediansSimple.ElapsedMilliseconds / (double)1000;
+            Console.WriteLine(timeInSeconds + " --- время для SolveByMedians()  у NoWalkerSolver");
+            Console.WriteLine();
+
+            // Решение простым итерационным уточнением
+
+
+            // Решение балансированным итерационным уточнением
+
+
             var mediansSolution = solver.SolveByMedians(aMatrix, bVector);
             //var balancedSolution = solver.SolveByBalancing(aMatrix, bVector, 15);
-            var balancedIterRefSolution = solver.SolveByIterativeRefinement(aMatrix, bVector, 10);
+            var balancedIterRefSolution = solver.SolveByIterativeRefinement(aMatrix, bVector, 5);
 
             var simpleError = GetRelError(trueXVector, simpleSolution);
             var mediansError = GetRelError(trueXVector, mediansSolution);
