@@ -12,6 +12,6 @@ namespace ProjectionAlgorithm_diploma_
 {
     public interface IProjectionSolver
     {
-        Vector Solve(Matrix aMatrix, Vector bVector);
+        Vector Solve(Matrix aMatrix, Vector bVector, int numProjections);
     }
 }

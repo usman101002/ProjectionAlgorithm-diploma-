@@ -21,7 +21,7 @@ namespace ProjectionAlgorithm_diploma_
             this.rnd = new Random();
         }
 
-        public Vector Solve(Matrix aMatrix, Vector bVector)
+        public Vector Solve(Matrix aMatrix, Vector bVector, int numProjections)
         {
             // Переход к равномерно распределённой матрице путём домножения специальной диагональной матрицы на исходную.
             // Вектор правой части соответственно тоже домножается на эту диагональную матрицу. 
@@ -35,10 +35,10 @@ namespace ProjectionAlgorithm_diploma_
             var xPrevData = new double[rowCount];
             Vector xPrev = new Vector(xPrevData);
 
-            int numberOfProjections = 5000;
-            Console.WriteLine(numberOfProjections + " проекций у метода Solve у NoWalkerSolver ");
+            
+            Console.WriteLine(numProjections + " проекций у метода Solve у NoWalkerSolver ");
 
-            for (int i = 0; i < numberOfProjections; i++)
+            for (int i = 0; i < numProjections; i++)
             {
                 int index = this.GetRandomIndex(rowCount);
                 var uniformMatrixRow = uniformMatrix.GetRowByIndex(index);
@@ -50,7 +50,7 @@ namespace ProjectionAlgorithm_diploma_
             return xPrev;
         }
 
-        public Vector SolveByMedians(Matrix aMatrix, Vector bVector)
+        public Vector SolveByMedians(Matrix aMatrix, Vector bVector, int numProjections)
         {
             var diagProbMatrix = this.GetLeftDiag(aMatrix);
             
@@ -60,10 +60,10 @@ namespace ProjectionAlgorithm_diploma_
             int rowCount = uniformMatrix.GetRowCount();
             var xPrevData = new double[rowCount];
             Vector xPrev = new Vector(xPrevData);
-            int numberOfProjections = 5000;
-            Console.WriteLine(numberOfProjections + " проекций" + " метод SolveByMedians у NoWalkerSolver");
             
-            for (int i = 0; i < numberOfProjections; i++)
+            Console.WriteLine(numProjections + " проекций" + " метод SolveByMedians у NoWalkerSolver");
+            
+            for (int i = 0; i < numProjections; i++)
             {
                 #region
                 //List<Vector> trianglePoints = new List<Vector>();
@@ -136,12 +136,11 @@ namespace ProjectionAlgorithm_diploma_
             return xPrev;
         }
 
-        public Vector SolveByBalancing(Matrix aMatrix, Vector bVector, int numBalances)
+        public Vector SolveByBalancing(Matrix aMatrix, Vector bVector, int numProjections, int numBalances)
         {
             Matrix newA = aMatrix;
             Vector newB = bVector;
-            int numProjections = 5000;
-
+            
             double[,] diagonalRightData = new double[bVector.GetDimension(), bVector.GetDimension()];
             Matrix diagonalRight = new Matrix(diagonalRightData);
 
@@ -165,33 +164,33 @@ namespace ProjectionAlgorithm_diploma_
             return x;
         }
 
-        public Vector SolveBySimpleIterativeRefinement(Matrix aMatrix, Vector bVector, int numOfIterations = 1)
+        public Vector SolveBySimpleIterativeRefinement(Matrix aMatrix, Vector bVector, int numProjections, int numOfIterations = 1)
         {
             if (numOfIterations <= 0)
                 throw new Exception("numOfIterations должен быть не меньше 1");
 
-            Vector res = this.Solve(aMatrix, bVector);
+            Vector res = this.Solve(aMatrix, bVector, numProjections);
             if (numOfIterations == 1)
                 return res;
 
             Console.WriteLine($"{numOfIterations} итераций ПРОСТОГО итерационного уточнения");
-            for (int i = 0; i < numOfIterations; i++)
+            for (int i = 0; i < numOfIterations - 1; i++)
             {
                 var pseudoB = aMatrix * res;
                 var d = bVector - pseudoB;
                 NoWalkerSolver solver = new NoWalkerSolver();
-                var refinement = solver.Solve(aMatrix, d);
+                var refinement = solver.Solve(aMatrix, d, numProjections);
                 res += refinement;
             }
             return res;
         }
 
-        public Vector SolveByBalancingIterativeRefinement(Matrix aMatrix, Vector bVector, int numOfIterations, int numbBalances)
+        public Vector SolveByBalancingIterativeRefinement(Matrix aMatrix, Vector bVector, int numProjections, int numOfIterations, int numbBalances)
         {
             if (numOfIterations <= 0)
                 throw new Exception("numOfIterations должен быть не меньше 1");
 
-            Vector res = this.SolveByBalancing(aMatrix, bVector, numbBalances);
+            Vector res = this.SolveByBalancing(aMatrix, bVector, numProjections, numbBalances);
             if (numOfIterations == 1)
                 return res;
 
@@ -201,7 +200,7 @@ namespace ProjectionAlgorithm_diploma_
                 var pseudoB = aMatrix * res;
                 var d = bVector - pseudoB;
                 NoWalkerSolver solver = new NoWalkerSolver();
-                var refinement = solver.SolveByBalancing(aMatrix, d, 1);
+                var refinement = solver.SolveByBalancing(aMatrix, d,numProjections, numbBalances);
                 res += refinement;
             }
             return res;

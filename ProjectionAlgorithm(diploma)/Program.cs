@@ -88,7 +88,7 @@ namespace ProjectionAlgorithm_diploma_
             NoWalkerSolver solver = new NoWalkerSolver();
             Stopwatch stopwatchSimple = new Stopwatch();
             stopwatchSimple.Start();
-            var simpleSolution = solver.Solve(aMatrix, bVector);
+            var simpleSolution = solver.Solve(aMatrix, bVector, 5000);
             stopwatchSimple.Stop();
             var timeInSeconds = stopwatchSimple.ElapsedMilliseconds / (double)1000;
             Console.WriteLine(timeInSeconds + " --- время для Solve() у NoWalkerSolver");
@@ -97,7 +97,7 @@ namespace ProjectionAlgorithm_diploma_
             // Решение простым балансированием
             Stopwatch stopwatchBalancedSimple = new Stopwatch();
             stopwatchBalancedSimple.Start();
-            var balancedSimpleSolution = solver.SolveByBalancing(aMatrix, bVector, 1);
+            var balancedSimpleSolution = solver.SolveByBalancing(aMatrix, bVector, 5000, 5);
             stopwatchBalancedSimple.Stop();
             timeInSeconds = stopwatchBalancedSimple.ElapsedMilliseconds / (double)1000;
             Console.WriteLine(timeInSeconds + " --- время для SolveByBalancing() (простого балансирования) у NoWalkerSolver");
@@ -106,7 +106,7 @@ namespace ProjectionAlgorithm_diploma_
             // Решение простым медианным способом
             Stopwatch stopwatchMediansSimple = new Stopwatch();
             stopwatchMediansSimple.Start();
-            var mediansSimpleSolution = solver.SolveByMedians(aMatrix, bVector);
+            var mediansSimpleSolution = solver.SolveByMedians(aMatrix, bVector, 5000);
             stopwatchMediansSimple.Stop();
             timeInSeconds = stopwatchMediansSimple.ElapsedMilliseconds / (double)1000;
             Console.WriteLine(timeInSeconds + " --- время для SolveByMedians()  у NoWalkerSolver");
@@ -115,7 +115,7 @@ namespace ProjectionAlgorithm_diploma_
             // Решение простым итерационным уточнением
             Stopwatch stopwatchIterRefSimple = new Stopwatch();
             stopwatchIterRefSimple.Start();
-            var iterRefSimpleSolution = solver.SolveBySimpleIterativeRefinement(aMatrix, bVector, 5);
+            var iterRefSimpleSolution = solver.SolveBySimpleIterativeRefinement(aMatrix, bVector, 5000, 2);
             stopwatchIterRefSimple.Stop();
             timeInSeconds = stopwatchIterRefSimple.ElapsedMilliseconds / (double)1000;
             Console.WriteLine(timeInSeconds + " --- время для SolveBySimpleIterativeRefinement  у NoWalkerSolver");
@@ -124,7 +124,7 @@ namespace ProjectionAlgorithm_diploma_
             // Решение балансированным итерационным уточнением
             Stopwatch stopwatchIterRefBalanced = new Stopwatch();
             stopwatchIterRefBalanced.Start();
-            var iterRefBalancedSolution = solver.SolveByBalancingIterativeRefinement(aMatrix, bVector, 5, 1);
+            var iterRefBalancedSolution = solver.SolveByBalancingIterativeRefinement(aMatrix, bVector, 5000, 2, 5);
             stopwatchIterRefBalanced.Stop();
             timeInSeconds = stopwatchIterRefBalanced.ElapsedMilliseconds / (double)1000;
             Console.WriteLine(timeInSeconds + " --- время для SolveByBalancingIterativeRefinement у NoWalkerSolver");
