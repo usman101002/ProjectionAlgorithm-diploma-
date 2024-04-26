@@ -113,24 +113,31 @@ namespace ProjectionAlgorithm_diploma_
             Console.WriteLine();
 
             // Решение простым итерационным уточнением
-
+            Stopwatch stopwatchIterRefSimple = new Stopwatch();
+            stopwatchMediansSimple.Start();
+            var iterRefSimpleSolution = solver.SolveBySimpleIterativeRefinement(aMatrix, bVector, 5);
+            stopwatchIterRefSimple.Stop();
+            timeInSeconds = stopwatchIterRefSimple.ElapsedMilliseconds / (double)1000;
+            Console.WriteLine();
 
             // Решение балансированным итерационным уточнением
 
 
+
+
             var mediansSolution = solver.SolveByMedians(aMatrix, bVector);
             //var balancedSolution = solver.SolveByBalancing(aMatrix, bVector, 15);
-            var balancedIterRefSolution = solver.SolveByIterativeRefinement(aMatrix, bVector, 5);
+            
 
             var simpleError = GetRelError(trueXVector, simpleSolution);
             var mediansError = GetRelError(trueXVector, mediansSolution);
-            //var balancedError = GetRelError(trueXVector, balancedSolution); 
-            var iterRefBalancedError = GetRelError(trueXVector, balancedIterRefSolution);
+            var balancedError = GetRelError(trueXVector, balancedSimpleSolution); 
+            //var iterRefBalancedError = GetRelError(trueXVector, balancedIterRefSolution);
             
             Console.WriteLine(simpleError + " % -- ошибка простого решения");
             Console.WriteLine(mediansError + " % -- ошибка медианного решения");
-            //Console.WriteLine(balancedError + " % -- ошибка сбалансированного решения");
-            Console.WriteLine(iterRefBalancedError + " % -- ошибка простого итерационного уточнения");
+            Console.WriteLine(balancedError + " % -- ошибка сбалансированного решения");
+            //Console.WriteLine(iterRefBalancedError + " % -- ошибка простого итерационного уточнения");
             #endregion
 
             

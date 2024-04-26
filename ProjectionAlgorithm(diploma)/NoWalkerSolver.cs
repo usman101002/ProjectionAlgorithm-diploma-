@@ -26,11 +26,8 @@ namespace ProjectionAlgorithm_diploma_
             // Переход к равномерно распределённой матрице путём домножения специальной диагональной матрицы на исходную.
             // Вектор правой части соответственно тоже домножается на эту диагональную матрицу. 
 
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
             var diagProbMatrix = this.GetLeftDiag(aMatrix);
             
-
             var uniformMatrix = diagProbMatrix.Multiply(aMatrix, true);
             var newB = diagProbMatrix * bVector;
 
@@ -39,8 +36,8 @@ namespace ProjectionAlgorithm_diploma_
             Vector xPrev = new Vector(xPrevData);
 
             int numberOfProjections = 5000;
-            Console.WriteLine("БезУолкерный метод");
-            Console.WriteLine(numberOfProjections + " итераций у метода Solve у NoWalker ");
+            Console.WriteLine(numberOfProjections + " проекций у метода Solve у NoWalkerSolver ");
+
             for (int i = 0; i < numberOfProjections; i++)
             {
                 int index = this.GetRandomIndex(rowCount);
@@ -50,10 +47,6 @@ namespace ProjectionAlgorithm_diploma_
                 var xCur = xPrev + factor * uniformMatrixRow;
                 xPrev = xCur;
             }
-            stopwatch.Stop();
-            var timeInSeconds = stopwatch.ElapsedMilliseconds / (double)1000;
-            Console.WriteLine(timeInSeconds + " --- время для Solve() у NoWalkerSolver");
-
             return xPrev;
         }
 
@@ -68,11 +61,11 @@ namespace ProjectionAlgorithm_diploma_
             var xPrevData = new double[rowCount];
             Vector xPrev = new Vector(xPrevData);
             int numberOfProjections = 5000;
-            Console.WriteLine(numberOfProjections + " проекций" + " метод SolveByMedians у НЕУолкерного решателя");
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
+            Console.WriteLine(numberOfProjections + " проекций" + " метод SolveByMedians у NoWalkerSolver");
+            
             for (int i = 0; i < numberOfProjections; i++)
             {
+                #region
                 //List<Vector> trianglePoints = new List<Vector>();
                 //// в этом цикле идёт получение точек с разных гиперплоскостей для треугольника
                 //while (trianglePoints.Count < 3)
@@ -91,6 +84,7 @@ namespace ProjectionAlgorithm_diploma_
                 //        trianglePoints.Add(trianglePoint);
                 //    }
                 //}
+                #endregion
 
                 int index0 = this.GetRandomIndex(rowCount);
                 int index1 = this.GetRandomIndex(rowCount);
@@ -120,9 +114,6 @@ namespace ProjectionAlgorithm_diploma_
                     xPrev = intersectionPoint;
                 }
             }
-            stopwatch.Stop();
-            var timeInSeconds = stopwatch.ElapsedMilliseconds / (double)1000;
-            Console.WriteLine(timeInSeconds + " --- время для SolveByMedians() у NoWalkerSolver");
             return xPrev;
         }
 
@@ -155,8 +146,6 @@ namespace ProjectionAlgorithm_diploma_
             Matrix diagonalRight = new Matrix(diagonalRightData);
 
             Console.WriteLine(numProjections + " проекций" + " метод SolveByBalancing" + $", {numBalances} --- число балансирований");
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
             for (int i = 0; i < numBalances; i++)
             {
                 Matrix diagonalLeft = this.GetLeftDiag(newA);
@@ -172,25 +161,41 @@ namespace ProjectionAlgorithm_diploma_
             Vector y = this.StupidProjectionsSolve(newA, newB, numProjections);
             Matrix diagonalRightInversed = diagonalRight.Inverse();
             Vector x = this.SolveDiagonalSLAE(diagonalRightInversed, y);
-            stopwatch.Stop();
-            var timeInSeconds = stopwatch.ElapsedMilliseconds / (double)1000;
-            Console.WriteLine(timeInSeconds + " --- время для SolveByBalancing");
-
+            
             return x;
         }
 
-        public Vector SolveByIterativeRefinement(Matrix aMatrix, Vector bVector, int numOfIterations = 1)
+        public Vector SolveBySimpleIterativeRefinement(Matrix aMatrix, Vector bVector, int numOfIterations = 1)
         {
             if (numOfIterations <= 0)
                 throw new Exception("numOfIterations должен быть не меньше 1");
 
-            
             Vector res = this.Solve(aMatrix, bVector);
             if (numOfIterations == 1)
                 return res;
 
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
+            Console.WriteLine($"{numOfIterations} итераций ПРОСТОГО итерационного уточнения");
+            for (int i = 0; i < numOfIterations; i++)
+            {
+                var pseudoB = aMatrix * res;
+                var d = bVector - pseudoB;
+                NoWalkerSolver solver = new NoWalkerSolver();
+                var refinement = solver.Solve(aMatrix, d);
+                res += refinement;
+            }
+            return res;
+        }
+
+        public Vector SolveByBalancingIterativeRefinement(Matrix aMatrix, Vector bVector, int numOfIterations = 1)
+        {
+            if (numOfIterations <= 0)
+                throw new Exception("numOfIterations должен быть не меньше 1");
+
+            Vector res = this.SolveByBalancing(aMatrix, bVector, 1);
+            if (numOfIterations == 1)
+                return res;
+
+            Console.WriteLine($"{numOfIterations} итераций БАЛАНСИРОВАННОГО итерационного уточнения");
             for (int i = 0; i < numOfIterations - 1; i++)
             {
                 var pseudoB = aMatrix * res;
@@ -198,12 +203,7 @@ namespace ProjectionAlgorithm_diploma_
                 NoWalkerSolver solver = new NoWalkerSolver();
                 var refinement = solver.SolveByBalancing(aMatrix, d, 1);
                 res += refinement;
-                Console.WriteLine(i);
             }
-            stopwatch.Stop();
-            var timeInSeconds = stopwatch.ElapsedMilliseconds / (double)1000;
-            Console.WriteLine(timeInSeconds + " --- Время работы балансированного итерационного уточнения");
-
             return res;
         }
 
