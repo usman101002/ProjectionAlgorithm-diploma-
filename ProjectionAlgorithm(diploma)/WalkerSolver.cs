@@ -20,12 +20,10 @@ namespace ProjectionAlgorithm_diploma_
             /// 
         }
 
-        public Vector Solve(Matrix aMatrix, Vector bVector)
+        public Vector Solve(Matrix aMatrix, Vector bVector, int numProjections)
         {
             // получение распределения строк матрицы и создания Волкера.
 
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
             var distribution = this.GetDistributionOfMatrixRows(aMatrix);
             this.walker = new Walker(distribution);
 
@@ -33,11 +31,10 @@ namespace ProjectionAlgorithm_diploma_
 
             var xPrevData = new double[rowCount];
             Vector xPrev = new Vector(xPrevData);
-            int numberOfProjections = 5000;
+            
+            Console.WriteLine(numProjections + " проекций" + " метод Solve у Уолкера");
 
-            Console.WriteLine(numberOfProjections + " проекций" + " метод Solve у Уолкера");
-
-            for (int i = 0; i < numberOfProjections; i++)
+            for (int i = 0; i < numProjections; i++)
             {
                 int index = this.GetRandomIndex();
                 Vector row = aMatrix.GetRowByIndex(index);
@@ -47,10 +44,7 @@ namespace ProjectionAlgorithm_diploma_
                 Vector xCur = xPrev + factor * row;
                 xPrev = xCur;
             }
-            stopwatch.Stop();
-            var timeInSeconds = stopwatch.ElapsedMilliseconds / (double)1000;
-            Console.WriteLine(timeInSeconds + " --- время для Solve() у WalkerSolver");
-
+            
             return xPrev;
         }
 
@@ -129,31 +123,31 @@ namespace ProjectionAlgorithm_diploma_
             return xPrev;
         }
 
-        public Vector SolveByIterativeRefinement(Matrix aMatrix, Vector bVector, int numOfIterations = 1)
-        {
-            if (numOfIterations <= 0)
-                throw new Exception("numOfIterations должен быть не меньше 1");
-            Console.WriteLine($"{numOfIterations} итераций итерационного уточнения");
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            Vector res = this.Solve(aMatrix, bVector);
-            if (numOfIterations == 1)
-                return res;
+        //public Vector SolveByIterativeRefinement(Matrix aMatrix, Vector bVector, int numOfIterations = 1)
+        //{
+        //    if (numOfIterations <= 0)
+        //        throw new Exception("numOfIterations должен быть не меньше 1");
+        //    Console.WriteLine($"{numOfIterations} итераций итерационного уточнения");
+        //    Stopwatch stopwatch = new Stopwatch();
+        //    stopwatch.Start();
+        //    Vector res = this.Solve(aMatrix, bVector);
+        //    if (numOfIterations == 1)
+        //        return res;
 
-            for (int i = 0; i < numOfIterations - 1; i++)
-            {
-                var pseudoB = aMatrix * res;
-                var d = bVector - pseudoB;
-                WalkerSolver solver = new WalkerSolver();
-                var refinement = solver.Solve(aMatrix, d);
-                res += refinement;
-                Console.WriteLine(i);
-            }
-            stopwatch.Stop();
-            var timeInSeconds = stopwatch.ElapsedMilliseconds / (double)1000;
-            Console.WriteLine(timeInSeconds);
-            return res;
-        }
+        //    for (int i = 0; i < numOfIterations - 1; i++)
+        //    {
+        //        var pseudoB = aMatrix * res;
+        //        var d = bVector - pseudoB;
+        //        WalkerSolver solver = new WalkerSolver();
+        //        var refinement = solver.Solve(aMatrix, d);
+        //        res += refinement;
+        //        Console.WriteLine(i);
+        //    }
+        //    stopwatch.Stop();
+        //    var timeInSeconds = stopwatch.ElapsedMilliseconds / (double)1000;
+        //    Console.WriteLine(timeInSeconds);
+        //    return res;
+        //}
 
         private Vector GetIntersectionMediansPoint(Vector p1, Vector p2, Vector p3)
         {

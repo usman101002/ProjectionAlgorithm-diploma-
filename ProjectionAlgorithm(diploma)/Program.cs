@@ -57,16 +57,16 @@ namespace ProjectionAlgorithm_diploma_
             {
                 for (int j = 0; j < size; j++)
                 {
-                    dataA[i, j] = Delta(i, j) + (double)1 / (i + j * j + 1);
+                    //dataA[i, j] = Delta(i, j) + (double)1 / (i + j * j + 1);
 
-                    //if (i == j)
-                    //{
-                    //    dataA[i, i] = 0.5;
-                    //}
-                    //else
-                    //{
-                    //    dataA[i, j] = (double)1 / (2 * size + (i + j) / 10);
-                    //}
+                    if (i == j)
+                    {
+                        dataA[i, i] = 0.5;
+                    }
+                    else
+                    {
+                        dataA[i, j] = (double)1 / (2 * size + (i + j) / 10);
+                    }
                 }
             }
             Matrix aMatrix = new Matrix(dataA);
@@ -84,11 +84,21 @@ namespace ProjectionAlgorithm_diploma_
             //var simpleSolution = solver.Solve(aMatrix, bVector);
             //var mediansSolution = solver.SolveByMedians(aMatrix, bVector);
 
+            // Простое решение WalkerSolver
+            //WalkerSolver walkerSolver = new WalkerSolver();
+            //Stopwatch stopwatchSimpleWalker = new Stopwatch();
+            //stopwatchSimpleWalker.Start();
+            //var simpleWalkerSolverSolution = walkerSolver.Solve(aMatrix, bVector, 10000);
+            //stopwatchSimpleWalker.Stop();
+            //var timeInSeconds = stopwatchSimpleWalker.ElapsedMilliseconds/ (double)1000;
+            //Console.WriteLine(timeInSeconds + " --- время для Solve() у WalkerSolver");
+            //Console.WriteLine();
+
             // Простое решение NoWalkerSolver
             NoWalkerSolver solver = new NoWalkerSolver();
             Stopwatch stopwatchSimple = new Stopwatch();
             stopwatchSimple.Start();
-            var simpleSolution = solver.Solve(aMatrix, bVector, 5000);
+            var simpleNoWalkerSolution = solver.Solve(aMatrix, bVector, 30000);
             stopwatchSimple.Stop();
             var timeInSeconds = stopwatchSimple.ElapsedMilliseconds / (double)1000;
             Console.WriteLine(timeInSeconds + " --- время для Solve() у NoWalkerSolver");
@@ -97,63 +107,67 @@ namespace ProjectionAlgorithm_diploma_
             // Решение простым балансированием
             Stopwatch stopwatchBalancedSimple = new Stopwatch();
             stopwatchBalancedSimple.Start();
-            var balancedSimpleSolution = solver.SolveByBalancing(aMatrix, bVector, 5000, 5);
+            var balancedSimpleSolution = solver.SolveByBalancing(aMatrix, bVector, 30000, 1);
             stopwatchBalancedSimple.Stop();
             timeInSeconds = stopwatchBalancedSimple.ElapsedMilliseconds / (double)1000;
             Console.WriteLine(timeInSeconds + " --- время для SolveByBalancing() (простого балансирования) у NoWalkerSolver");
             Console.WriteLine();
 
-            // Решение простым медианным способом
-            Stopwatch stopwatchMediansSimple = new Stopwatch();
-            stopwatchMediansSimple.Start();
-            var mediansSimpleSolution = solver.SolveByMedians(aMatrix, bVector, 5000);
-            stopwatchMediansSimple.Stop();
-            timeInSeconds = stopwatchMediansSimple.ElapsedMilliseconds / (double)1000;
-            Console.WriteLine(timeInSeconds + " --- время для SolveByMedians()  у NoWalkerSolver");
-            Console.WriteLine();
+            //// Решение простым медианным способом
+            //Stopwatch stopwatchMediansSimple = new Stopwatch();
+            //stopwatchMediansSimple.Start();
+            //var mediansSimpleSolution = solver.SolveByMedians(aMatrix, bVector, 6500);
+            //stopwatchMediansSimple.Stop();
+            //timeInSeconds = stopwatchMediansSimple.ElapsedMilliseconds / (double)1000;
+            //Console.WriteLine(timeInSeconds + " --- время для SolveByMedians()  у NoWalkerSolver");
+            //Console.WriteLine();
 
-            // Решение простым итерационным уточнением
-            Stopwatch stopwatchIterRefSimple = new Stopwatch();
-            stopwatchIterRefSimple.Start();
-            var iterRefSimpleSolution = solver.SolveBySimpleIterativeRefinement(aMatrix, bVector, 5000, 2);
-            stopwatchIterRefSimple.Stop();
-            timeInSeconds = stopwatchIterRefSimple.ElapsedMilliseconds / (double)1000;
-            Console.WriteLine(timeInSeconds + " --- время для SolveBySimpleIterativeRefinement  у NoWalkerSolver");
-            Console.WriteLine();
+            //// Решение простым итерационным уточнением
+            //Stopwatch stopwatchIterRefSimple = new Stopwatch();
+            //stopwatchIterRefSimple.Start();
+            //var iterRefSimpleSolution = solver.SolveBySimpleIterativeRefinement(aMatrix, bVector, 5000, 2);
+            //stopwatchIterRefSimple.Stop();
+            //timeInSeconds = stopwatchIterRefSimple.ElapsedMilliseconds / (double)1000;
+            //Console.WriteLine(timeInSeconds + " --- время для SolveBySimpleIterativeRefinement  у NoWalkerSolver");
+            //Console.WriteLine();
 
-            // Решение балансированным итерационным уточнением
-            Stopwatch stopwatchIterRefBalanced = new Stopwatch();
-            stopwatchIterRefBalanced.Start();
-            var iterRefBalancedSolution = solver.SolveByBalancingIterativeRefinement(aMatrix, bVector, 5000, 2, 5);
-            stopwatchIterRefBalanced.Stop();
-            timeInSeconds = stopwatchIterRefBalanced.ElapsedMilliseconds / (double)1000;
-            Console.WriteLine(timeInSeconds + " --- время для SolveByBalancingIterativeRefinement у NoWalkerSolver");
-            Console.WriteLine();
+            //// Решение балансированным итерационным уточнением
+            //Stopwatch stopwatchIterRefBalanced = new Stopwatch();
+            //stopwatchIterRefBalanced.Start();
+            //var iterRefBalancedSolution = solver.SolveByBalancingIterativeRefinement(aMatrix, bVector, 5000, 2, 5);
+            //stopwatchIterRefBalanced.Stop();
+            //timeInSeconds = stopwatchIterRefBalanced.ElapsedMilliseconds / (double)1000;
+            //Console.WriteLine(timeInSeconds + " --- время для SolveByBalancingIterativeRefinement у NoWalkerSolver");
+            //Console.WriteLine();
 
-            // Подсчёт погрешностей
-            var simpleError = GetRelError(trueXVector, simpleSolution);
+            //// Подсчёт погрешностей
+            //var simpleWalkerError = GetRelError(trueXVector, simpleWalkerSolverSolution);
+            var simpleError = GetRelError(trueXVector, simpleNoWalkerSolution);
+
             var balancedError = GetRelError(trueXVector, balancedSimpleSolution);
-            var mediansError = GetRelError(trueXVector, mediansSimpleSolution);
-            var iterRefSimpleError = GetRelError(trueXVector, iterRefSimpleSolution);
-            var iterRefBalancedError = GetRelError(trueXVector, iterRefBalancedSolution);
+            //var mediansError = GetRelError(trueXVector, mediansSimpleSolution);
+            //var iterRefSimpleError = GetRelError(trueXVector, iterRefSimpleSolution);
+            //var iterRefBalancedError = GetRelError(trueXVector, iterRefBalancedSolution);
             
             
             // Вывод погрешностей
-            Console.WriteLine(simpleError + " % -- ошибка простого решения");
+            //Console.WriteLine(simpleWalkerError + " % -- ошибка простого решения с Уолкером");
+            Console.WriteLine();
+
+            Console.WriteLine(simpleError + " % -- ошибка простого решения без Уолкера");
             Console.WriteLine();
 
             Console.WriteLine(balancedError + " % -- ошибка сбалансированного решения");
             Console.WriteLine();
 
-            Console.WriteLine(mediansError + " % -- ошибка медианного решения");
-            Console.WriteLine();
+            //Console.WriteLine(mediansError + " % -- ошибка медианного решения");
+            //Console.WriteLine();
 
-            Console.WriteLine(iterRefSimpleError + " % -- ошибка решения ПРОСТЫМ итерационным уточнением");
-            Console.WriteLine();
+            //Console.WriteLine(iterRefSimpleError + " % -- ошибка решения ПРОСТЫМ итерационным уточнением");
+            //Console.WriteLine();
 
-            Console.WriteLine(iterRefBalancedError + " % -- ошибка решения БАЛАНСИРОВАННЫМ итерационным уточнением");
-            Console.WriteLine();
-
+            //Console.WriteLine(iterRefBalancedError + " % -- ошибка решения БАЛАНСИРОВАННЫМ итерационным уточнением");
+            //Console.WriteLine();
 
             #endregion
 

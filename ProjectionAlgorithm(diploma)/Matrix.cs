@@ -296,5 +296,20 @@ namespace ProjectionAlgorithm_diploma_
             }
         }
 
+        public Matrix DiagonalMultiply(Matrix matrix)
+        {
+            int rowCount = matrix.rowCount;
+            int colCount = matrix.colCount;
+            double[,] resData = new double[matrix.rowCount, matrix.colCount];
+
+            for (int i = 0; i < rowCount; i++)
+            {
+                resData[i, i] = this[i, i] * matrix[i, i];
+            }
+
+            Matrix result = new Matrix(resData);
+            return result;
+        }
+
     }
 }

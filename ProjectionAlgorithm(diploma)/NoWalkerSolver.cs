@@ -144,22 +144,32 @@ namespace ProjectionAlgorithm_diploma_
             double[,] diagonalRightData = new double[bVector.GetDimension(), bVector.GetDimension()];
             Matrix diagonalRight = new Matrix(diagonalRightData);
 
+            double[,] diagonalLeftData = new double[bVector.GetDimension(), bVector.GetDimension()];
+            Matrix diagonalLeft = new Matrix(diagonalLeftData);
+
+            double[,] restData = new double[bVector.GetDimension(), bVector.GetDimension()];
+            Matrix rest = new Matrix(restData);
+
             Console.WriteLine(numProjections + " проекций" + " метод SolveByBalancing" + $", {numBalances} --- число балансирований");
             for (int i = 0; i < numBalances; i++)
             {
-                Matrix diagonalLeft = this.GetLeftDiag(newA);
-                
-
+                diagonalLeft = this.GetLeftDiag(newA);
                 newA = diagonalLeft.Multiply(newA, true);
-
                 newB = diagonalLeft * newB;
-
                 diagonalRight = this.GetRightDiag(newA);
                 newA = newA.Multiply(diagonalRight, false);
+                if (i == 0)
+                {
+                    rest = diagonalRight.Inverse();
+                }
+                else
+                {
+                    rest = diagonalRight.Inverse().DiagonalMultiply(rest);
+                }
             }
             Vector y = this.StupidProjectionsSolve(newA, newB, numProjections);
-            Matrix diagonalRightInversed = diagonalRight.Inverse();
-            Vector x = this.SolveDiagonalSLAE(diagonalRightInversed, y);
+            
+            Vector x = this.SolveDiagonalSLAE(rest, y);
             
             return x;
         }
