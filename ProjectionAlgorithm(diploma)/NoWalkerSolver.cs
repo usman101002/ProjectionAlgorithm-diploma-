@@ -174,7 +174,7 @@ namespace ProjectionAlgorithm_diploma_
             return x;
         }
 
-        public Vector SolveBySimpleIterativeRefinement(Matrix aMatrix, Vector bVector, int numProjections, int numOfIterations = 1)
+        public Vector SolveBySimpleIterativeRefinement(Matrix aMatrix, Vector bVector, int numProjections, int numOfIterations)
         {
             if (numOfIterations <= 0)
                 throw new Exception("numOfIterations должен быть не меньше 1");
@@ -184,6 +184,8 @@ namespace ProjectionAlgorithm_diploma_
                 return res;
 
             Console.WriteLine($"{numOfIterations} итераций ПРОСТОГО итерационного уточнения");
+            //var stopwatch = new Stopwatch();
+            //stopwatch.Start();
             for (int i = 0; i < numOfIterations - 1; i++)
             {
                 var pseudoB = aMatrix * res;
@@ -191,7 +193,16 @@ namespace ProjectionAlgorithm_diploma_
                 NoWalkerSolver solver = new NoWalkerSolver();
                 var refinement = solver.Solve(aMatrix, d, numProjections);
                 res += refinement;
+                //var timeInSeconds = stopwatch.ElapsedMilliseconds / (double)1000;
+
+                //var relError = this.GetRelError(trueX, res);
+                //Console.WriteLine($"{relError} --- относительная погрешность: {i + 1} итерация Простого итер. уточнения");
+                //Console.WriteLine($"{timeInSeconds} --- время");
+                //Console.WriteLine();
             }
+
+            Console.WriteLine("КОНЕЦ МЕТОДА");
+            Console.WriteLine();
             return res;
         }
 
@@ -205,6 +216,8 @@ namespace ProjectionAlgorithm_diploma_
                 return res;
 
             Console.WriteLine($"{numOfIterations} итераций БАЛАНСИРОВАННОГО итерационного уточнения");
+            //var stopwatch = new Stopwatch();
+            //stopwatch.Start();
             for (int i = 0; i < numOfIterations - 1; i++)
             {
                 var pseudoB = aMatrix * res;
@@ -212,7 +225,15 @@ namespace ProjectionAlgorithm_diploma_
                 NoWalkerSolver solver = new NoWalkerSolver();
                 var refinement = solver.SolveByBalancing(aMatrix, d,numProjections, numbBalances);
                 res += refinement;
+                //var timeInSeconds = stopwatch.ElapsedMilliseconds / (double)1000;
+
+                //var relError = this.GetRelError(trueX, res);
+                //Console.WriteLine($"{relError} --- относительная погрешность: {i + 1} итерация Баланс. итер. уточнения");
+                //Console.WriteLine($"{timeInSeconds} --- время");
+                //Console.WriteLine();
             }
+
+            Console.WriteLine("КОНЕЦ МЕТОДА");
             return res;
         }
 
@@ -320,6 +341,12 @@ namespace ProjectionAlgorithm_diploma_
             double betweenZeroOne = this.rnd.NextDouble();
             double result = Math.Floor(betweenZeroOne * n);
             return (int)result;
+        }
+
+        private double GetRelError(Vector trueX, Vector approximateX)
+        {
+            double res = ((trueX - approximateX).GetEuclideanNorm() / (trueX).GetEuclideanNorm()) * 100;
+            return res;
         }
     }
 }
