@@ -25,7 +25,7 @@ namespace ProjectionAlgorithm_diploma_
         {
             // Переход к равномерно распределённой матрице путём домножения специальной диагональной матрицы на исходную.
             // Вектор правой части соответственно тоже домножается на эту диагональную матрицу. 
-
+            this.rnd = new Random(0);
             var diagProbMatrix = this.GetLeftDiag(aMatrix);
             
             var uniformMatrix = diagProbMatrix.Multiply(aMatrix, true);
@@ -98,16 +98,16 @@ namespace ProjectionAlgorithm_diploma_
                 else
                 {
                     Vector row0 = uniformMatrix.GetRowByIndex(index0);
-                    double numerator0 = newB[index0] - (row0 * xPrev);
-                    Vector p0 = xPrev + numerator0 * row0;
+                    //double numerator0 = newB[index0] - (row0 * xPrev);
+                    Vector p0 = xPrev + (newB[index0] - (row0 * xPrev)) * row0;
 
                     Vector row1 = uniformMatrix.GetRowByIndex(index1);
-                    double numerator1 = newB[index1] - (row1 * xPrev);
-                    Vector p1 = xPrev + numerator1 * row1;
+                    //double numerator1 = newB[index1] - (row1 * xPrev);
+                    Vector p1 = xPrev + (newB[index1] - (row1 * xPrev)) * row1;
 
                     Vector row2 = uniformMatrix.GetRowByIndex(index2);
-                    double numerator2 = newB[index2] - (row2 * xPrev);
-                    Vector p2 = xPrev + numerator2 * row2;
+                    //double numerator2 = newB[index2] - (row2 * xPrev);
+                    Vector p2 = xPrev + (newB[index2] - (row2 * xPrev)) * row2;
 
                     Vector intersectionPoint =
                         this.GetIntersectionMediansPoint(p0, p1, p2);
@@ -115,6 +115,32 @@ namespace ProjectionAlgorithm_diploma_
                 }
             }
             return xPrev;
+        }
+
+        public Vector SolveByMediansIterativeRefinement(Matrix aMatrix, Vector bVector, int numProjections, int numOfIterations)
+        {
+            if (numOfIterations <= 0)
+                throw new Exception("numOfIterations должен быть не меньше 1");
+
+            Vector res = this.SolveByMedians(aMatrix, bVector, numProjections);
+
+            if (numOfIterations == 1)
+                return res;
+
+            Console.WriteLine($"{numOfIterations} итераций МЕДИАННОГО итерационного уточнения");
+
+            for (int i = 0; i < numOfIterations - 1; i++)
+            {
+                var pseudoB = aMatrix * res;
+                var d = bVector - pseudoB;
+                NoWalkerSolver solver = new NoWalkerSolver();
+                var refinement = solver.SolveByMedians(aMatrix, d, numProjections);
+                res += refinement;
+            }
+
+            Console.WriteLine("КОНЕЦ МЕТОДА");
+            Console.WriteLine();
+            return res;
         }
 
         public Vector StupidProjectionsSolve(Matrix aMatrix, Vector bVector, int numProjections)
@@ -138,6 +164,7 @@ namespace ProjectionAlgorithm_diploma_
 
         public Vector SolveByBalancing(Matrix aMatrix, Vector bVector, int numProjections, int numBalances)
         {
+            this.rnd = new Random(1);
             Matrix newA = aMatrix;
             Vector newB = bVector;
             
@@ -167,7 +194,7 @@ namespace ProjectionAlgorithm_diploma_
                     rest = diagonalRight.Inverse().DiagonalMultiply(rest);
                 }
             }
-            Vector y = this.StupidProjectionsSolve(newA, newB, numProjections);
+            Vector y = this.Solve(newA, newB, numProjections);
             
             Vector x = this.SolveDiagonalSLAE(rest, y);
             
