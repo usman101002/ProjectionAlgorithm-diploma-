@@ -126,7 +126,7 @@ namespace ProjectionAlgorithm_diploma_
             //// Решение простым итерационным уточнением
             Stopwatch stopwatchIterRefSimple = new Stopwatch();
             stopwatchIterRefSimple.Start();
-            var iterRefSimpleSolution = solver.SolveBySimpleIterativeRefinement(aMatrix, bVector, 1500, 6);
+            var iterRefSimpleSolution = solver.SolveBySimpleIterativeRefinement(aMatrix, bVector, 3000, 8);
             stopwatchIterRefSimple.Stop();
             var timeInSeconds = stopwatchIterRefSimple.ElapsedMilliseconds / (double)1000;
             Console.WriteLine(timeInSeconds + " --- время для SolveBySimpleIterativeRefinement  у NoWalkerSolver");
@@ -144,7 +144,7 @@ namespace ProjectionAlgorithm_diploma_
             // Решение медианным итерационным уточнением 
             Stopwatch stopwatchIterRefMedians = new Stopwatch();
             stopwatchIterRefMedians.Start();
-            var iterRefMediansSolution = solver.SolveByMediansIterativeRefinement(aMatrix, bVector, 3200, 2);
+            var iterRefMediansSolution = solver.SolveByMediansIterativeRefinement(aMatrix, bVector, 2500, 4);
             stopwatchIterRefMedians.Stop();
             timeInSeconds = stopwatchIterRefMedians.ElapsedMilliseconds / (double)1000;
             Console.WriteLine(timeInSeconds + " --- время для SolveByMediansIterativeRefinement у NoWalkerSolver");
