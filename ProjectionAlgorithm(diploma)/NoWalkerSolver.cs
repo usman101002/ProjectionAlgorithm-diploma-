@@ -21,11 +21,16 @@ namespace ProjectionAlgorithm_diploma_
             this.rnd = new Random();
         }
 
+        public NoWalkerSolver(Random rnd)
+        {
+            this.rnd = rnd;
+        }
+
         public Vector Solve(Matrix aMatrix, Vector bVector, int numProjections)
         {
             // Переход к равномерно распределённой матрице путём домножения специальной диагональной матрицы на исходную.
             // Вектор правой части соответственно тоже домножается на эту диагональную матрицу. 
-            this.rnd = new Random(0);
+            
             var diagProbMatrix = this.GetLeftDiag(aMatrix);
             
             var uniformMatrix = diagProbMatrix.Multiply(aMatrix, true);
@@ -133,7 +138,7 @@ namespace ProjectionAlgorithm_diploma_
             {
                 var pseudoB = aMatrix * res;
                 var d = bVector - pseudoB;
-                NoWalkerSolver solver = new NoWalkerSolver();
+                NoWalkerSolver solver = new NoWalkerSolver(new Random(2 * (i + 1)));
                 var refinement = solver.SolveByMedians(aMatrix, d, numProjections);
                 res += refinement;
             }
@@ -217,7 +222,7 @@ namespace ProjectionAlgorithm_diploma_
             {
                 var pseudoB = aMatrix * res;
                 var d = bVector - pseudoB;
-                NoWalkerSolver solver = new NoWalkerSolver();
+                NoWalkerSolver solver = new NoWalkerSolver(new Random(1 * (i + 1)));
                 var refinement = solver.Solve(aMatrix, d, numProjections);
                 res += refinement;
                 //var timeInSeconds = stopwatch.ElapsedMilliseconds / (double)1000;
@@ -249,7 +254,7 @@ namespace ProjectionAlgorithm_diploma_
             {
                 var pseudoB = aMatrix * res;
                 var d = bVector - pseudoB;
-                NoWalkerSolver solver = new NoWalkerSolver();
+                NoWalkerSolver solver = new NoWalkerSolver(new Random(3 * (i + 1)));
                 var refinement = solver.SolveByBalancing(aMatrix, d,numProjections, numbBalances);
                 res += refinement;
                 //var timeInSeconds = stopwatch.ElapsedMilliseconds / (double)1000;
