@@ -26,6 +26,26 @@ namespace ProjectionAlgorithm_diploma_
             this.rnd = rnd;
         }
 
+        // Детерминированный метод
+        public Vector SolveConsistently(Matrix aMatrix, Vector bVector)
+        {
+            int numProjections = aMatrix.GetRowCount();
+            var xPrevData = new double[aMatrix.GetRowCount()];
+            Vector xPrev = new Vector(xPrevData);
+
+            for (int index = 0; index < numProjections; index++)
+            {
+                var row = aMatrix.GetRowByIndex(index);
+                double numerator = bVector[index] - (row * xPrev);
+                double denominator = this.GetNorm(row) * this.GetNorm(row);
+                double factor = numerator / denominator;
+                Vector xCur = xPrev + factor * row;
+                xPrev = xCur;
+            }
+
+            return xPrev;
+        }
+
         public Vector Solve(Matrix aMatrix, Vector bVector, int numProjections)
         {
             // Переход к равномерно распределённой матрице путём домножения специальной диагональной матрицы на исходную.
@@ -169,17 +189,17 @@ namespace ProjectionAlgorithm_diploma_
 
         public Vector SolveByBalancing(Matrix aMatrix, Vector bVector, int numProjections, int numBalances)
         {
-            this.rnd = new Random(1);
             Matrix newA = aMatrix;
             Vector newB = bVector;
+            int dim = bVector.GetDimension();
             
-            double[,] diagonalRightData = new double[bVector.GetDimension(), bVector.GetDimension()];
+            double[,] diagonalRightData = new double[dim, dim];
             Matrix diagonalRight = new Matrix(diagonalRightData);
 
-            double[,] diagonalLeftData = new double[bVector.GetDimension(), bVector.GetDimension()];
+            double[,] diagonalLeftData = new double[dim, dim];
             Matrix diagonalLeft = new Matrix(diagonalLeftData);
 
-            double[,] restData = new double[bVector.GetDimension(), bVector.GetDimension()];
+            double[,] restData = new double[dim, dim];
             Matrix rest = new Matrix(restData);
 
             Console.WriteLine(numProjections + " проекций" + " метод SolveByBalancing" + $", {numBalances} --- число балансирований");
@@ -199,10 +219,13 @@ namespace ProjectionAlgorithm_diploma_
                     rest = diagonalRight.Inverse().DiagonalMultiply(rest);
                 }
             }
-            Vector y = this.Solve(newA, newB, numProjections);
             
+            //Vector y = this.Solve(newA, newB, numProjections
+            Matrix leftDiag = this.GetLeftDiag(newA);
+            newA = leftDiag.Multiply(newA, true);
+            newB = leftDiag * newB;
+            Vector y = this.StupidProjectionsSolve(newA, newB, numProjections);
             Vector x = this.SolveDiagonalSLAE(rest, y);
-            
             return x;
         }
 
@@ -222,7 +245,7 @@ namespace ProjectionAlgorithm_diploma_
             {
                 var pseudoB = aMatrix * res;
                 var d = bVector - pseudoB;
-                NoWalkerSolver solver = new NoWalkerSolver(new Random(1 * (i + 1)));
+                NoWalkerSolver solver = new NoWalkerSolver(new Random(5 * (i + 1)));
                 var refinement = solver.Solve(aMatrix, d, numProjections);
                 res += refinement;
                 //var timeInSeconds = stopwatch.ElapsedMilliseconds / (double)1000;
@@ -255,7 +278,8 @@ namespace ProjectionAlgorithm_diploma_
                 var pseudoB = aMatrix * res;
                 var d = bVector - pseudoB;
                 NoWalkerSolver solver = new NoWalkerSolver(new Random(3 * (i + 1)));
-                var refinement = solver.SolveByBalancing(aMatrix, d,numProjections, numbBalances);
+                //var refinement = solver.SolveByBalancing(aMatrix, d,numProjections, numbBalances);
+                var refinement = solver.SolveByBalancing(aMatrix, d, numProjections, numbBalances);
                 res += refinement;
                 //var timeInSeconds = stopwatch.ElapsedMilliseconds / (double)1000;
 
