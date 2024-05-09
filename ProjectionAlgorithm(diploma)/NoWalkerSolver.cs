@@ -27,14 +27,16 @@ namespace ProjectionAlgorithm_diploma_
         }
 
         // Детерминированный метод
-        public Vector SolveConsistently(Matrix aMatrix, Vector bVector)
+        public Vector SolveConsistently(Matrix aMatrix, Vector bVector, int numProjections)
         {
-            int numProjections = aMatrix.GetRowCount();
-            var xPrevData = new double[aMatrix.GetRowCount()];
+            int rowCount = aMatrix.GetRowCount();
+            var xPrevData = new double[rowCount];
             Vector xPrev = new Vector(xPrevData);
 
-            for (int index = 0; index < numProjections; index++)
+            Console.WriteLine(numProjections + " проекций у метода DeterministicSolve ");
+            for (int i = 0; i < numProjections; i++)
             {
+                int index = (i % rowCount);
                 var row = aMatrix.GetRowByIndex(index);
                 double numerator = bVector[index] - (row * xPrev);
                 double denominator = this.GetNorm(row) * this.GetNorm(row);
