@@ -79,7 +79,42 @@ namespace ProjectionAlgorithm_diploma_
 
         public Vector SolveByPseudoOrthogonalization(Matrix aMatrix, Vector bVector, int numProjections)
         {
-            return null;
+            var diagProbMatrix = this.GetLeftDiag(aMatrix);
+
+            var uniformMatrix = diagProbMatrix.Multiply(aMatrix, true);
+            var newB = diagProbMatrix * bVector;
+
+            int rowCount = uniformMatrix.GetRowCount();
+            var xPrevData = new double[rowCount];
+            Vector xPrev = new Vector(xPrevData);
+
+            Console.WriteLine(numProjections + " проекций" + " метод SolveByPseudoOrthogonalization у NoWalkerSolver");
+
+            for (int i = 0; i < numProjections; i++)
+            {
+                int index0 = this.GetRandomIndex(rowCount);
+                int index1 = this.GetRandomIndex(rowCount);
+                int index2 = this.GetRandomIndex(rowCount);
+
+                int[] indexes = new int[] { index0, index1, index2 };
+
+                Vector a0 = uniformMatrix.GetRowByIndex(index0);
+                Vector a1 = uniformMatrix.GetRowByIndex(index1);
+                Vector a2 = uniformMatrix.GetRowByIndex(index2);
+
+                (Vector b0, Vector b1, Vector b2) = GramSchmidt.Orthogonalize(a0, a1, a2);
+                Vector[] b = new Vector[] { b0, b1, b2 };
+
+                for (int j = 0; j < 3; j++)
+                {
+                    var numerator = newB[indexes[j]] - (xPrev * b[j]);
+                    var factor = numerator;
+                    var xCur = xPrev + factor * b[j];
+                    xPrev = xCur;
+                }
+            }
+
+            return xPrev;
         }
 
         public Vector SolveByMedians(Matrix aMatrix, Vector bVector, int numProjections)
