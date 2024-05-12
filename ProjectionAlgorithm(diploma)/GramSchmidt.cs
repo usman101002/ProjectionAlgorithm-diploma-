@@ -11,23 +11,23 @@ namespace ProjectionAlgorithm_diploma_
     /// </summary>
     public static class GramSchmidt
     {
-        //public static Matrix Orthogonalize(Matrix aMatrix)
-        //{
-        //    int n = aMatrix.GetRowCount();
-        //    Matrix b = new Matrix(new double[n, n]);
+        /// <summary>
+        /// Прокатывает только для процесса ортогонализации 3 векторов (потому что надо так). 
+        /// </summary>
+        /// <param name="a1"></param>
+        /// <param name="a2"></param>
+        /// <param name="a3"></param>
+        /// <returns></returns>
+        public static (Vector, Vector, Vector) Orthogonalize(Vector a0, Vector a1, Vector a2)
+        {
+            Vector b0 = a0;
 
-        //    // b[0] = a[0]
-        //    for (int i = 0; i < n; i++)
-        //    {
-        //        b[0, i] = aMatrix[0, i];
-        //    }
+            Vector b1 = a1 - ((a1 * b0) / (b0 * b0)) * b0;
 
-        //    for (int i = 1; i < n; i++)
-        //    {
+            Vector b2 = a2 - ((a2 * b0) / (b0 * b0)) * b0 - ((a2 * b1) / (b1 * b1)) * b1;
 
-        //    }
+            return (b0, b1, b2);
 
-
-        //}
+        }
     }
 }

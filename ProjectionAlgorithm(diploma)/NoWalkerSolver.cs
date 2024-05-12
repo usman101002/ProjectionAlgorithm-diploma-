@@ -77,6 +77,11 @@ namespace ProjectionAlgorithm_diploma_
             return xPrev;
         }
 
+        public Vector SolveByPseudoOrthogonalization(Matrix aMatrix, Vector bVector, int numProjections)
+        {
+            return null;
+        }
+
         public Vector SolveByMedians(Matrix aMatrix, Vector bVector, int numProjections)
         {
             var diagProbMatrix = this.GetLeftDiag(aMatrix);

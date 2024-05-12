@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.SymbolStore;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -49,6 +50,7 @@ namespace ProjectionAlgorithm_diploma_
             //int x = 1;
             #endregion
 
+
             #region Решение квадратной СЛАУ Aij = 1/2 на i,i и 1 / (2*N + (i + j) / 10) либо с Кронекером
             Random rnd = new Random(1000);
             int size = 1000;
@@ -78,9 +80,8 @@ namespace ProjectionAlgorithm_diploma_
                 }
             }
             Matrix aMatrix = new Matrix(dataA);
-            GramSchmidtOrthogonalization gramSchmidt = new GramSchmidtOrthogonalization(dataA);
-            aMatrix = new Matrix(gramSchmidt.OrthogonalFactor);
-
+            //GramSchmidtOrthogonalization gramSchmidt = new GramSchmidtOrthogonalization(dataA);
+            //aMatrix = new Matrix(gramSchmidt.OrthogonalFactor);
 
             double[] trueX = new double[size];
             for (int i = 0; i < size; i++)
@@ -109,7 +110,7 @@ namespace ProjectionAlgorithm_diploma_
             WalkerSolver walkerSolver = new WalkerSolver();
             Stopwatch stopwatchSimpleWalker = new Stopwatch();
             stopwatchSimpleWalker.Start();
-            var simpleWalkerSolverSolution = walkerSolver.Solve(aMatrix, bVector, 500);
+            var simpleWalkerSolverSolution = walkerSolver.Solve(aMatrix, bVector, 2800);
             stopwatchSimpleWalker.Stop();
             var timeInSeconds = stopwatchSimpleWalker.ElapsedMilliseconds / (double)1000;
             Console.WriteLine(timeInSeconds + " --- время для Solve() у WalkerSolver");
@@ -119,7 +120,7 @@ namespace ProjectionAlgorithm_diploma_
             NoWalkerSolver simpleSolver = new NoWalkerSolver(new Random(24445658));
             Stopwatch stopwatchSimple = new Stopwatch();
             stopwatchSimple.Start();
-            var simpleNoWalkerSolution = simpleSolver.Solve(aMatrix, bVector, 800);
+            var simpleNoWalkerSolution = simpleSolver.Solve(aMatrix, bVector, 7000);
             stopwatchSimple.Stop();
             timeInSeconds = stopwatchSimple.ElapsedMilliseconds / (double)1000;
             Console.WriteLine(timeInSeconds + " --- время для Solve() у NoWalkerSolver");
@@ -188,6 +189,8 @@ namespace ProjectionAlgorithm_diploma_
 
             // Вывод погрешностей
             Console.WriteLine(deterministicError + " % -- ошибка детерминированного решения");
+            Console.WriteLine();
+
             Console.WriteLine(simpleWalkerError + " % -- ошибка простого решения с Уолкером");
             Console.WriteLine();
 
