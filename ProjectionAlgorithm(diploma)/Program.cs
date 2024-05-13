@@ -126,6 +126,17 @@ namespace ProjectionAlgorithm_diploma_
             Console.WriteLine(timeInSeconds + " --- время для Solve() у NoWalkerSolver");
             Console.WriteLine();
 
+            // Решение простой псевдоортогонализацией
+            NoWalkerSolver pseudoOrthogonalizationSolver = new NoWalkerSolver();
+            Stopwatch stopwatchPseudoOrthogonalization = new Stopwatch();
+            stopwatchPseudoOrthogonalization.Start();
+            var pseudoOrthogonalizationSolution =
+                pseudoOrthogonalizationSolver.SolveByPseudoOrthogonalization(aMatrix, bVector, 612);
+            stopwatchPseudoOrthogonalization.Stop();
+            timeInSeconds = stopwatchPseudoOrthogonalization.ElapsedMilliseconds / (double)1000;
+            Console.WriteLine(timeInSeconds + " --- время для SolveByPseudoOrthogonalization() у NoWalkerSolver");
+            Console.WriteLine();
+
             // Решение простым балансированием
             NoWalkerSolver balansedSolver = new NoWalkerSolver(new Random(14424582));
             Stopwatch stopwatchBalancedSimple = new Stopwatch();
@@ -180,6 +191,7 @@ namespace ProjectionAlgorithm_diploma_
             var deterministicError = GetRelError(trueXVector, simpleDeterministicSolution);
             var simpleWalkerError = GetRelError(trueXVector, simpleWalkerSolverSolution);
             var simpleError = GetRelError(trueXVector, simpleNoWalkerSolution);
+            var pseudoOrthogonalizationError = GetRelError(trueXVector, pseudoOrthogonalizationSolution);
 
             var balancedError = GetRelError(trueXVector, balancedSimpleSolution);
             //var mediansError = GetRelError(trueXVector, mediansSimpleSolution);
@@ -192,6 +204,9 @@ namespace ProjectionAlgorithm_diploma_
             Console.WriteLine();
 
             Console.WriteLine(simpleWalkerError + " % -- ошибка простого решения с Уолкером");
+            Console.WriteLine();
+
+            Console.WriteLine(pseudoOrthogonalizationError + " % -- ошибка псевдоортогонального решения");
             Console.WriteLine();
 
             Console.WriteLine(simpleError + " % -- ошибка простого решения без Уолкера");
