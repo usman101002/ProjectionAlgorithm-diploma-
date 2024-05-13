@@ -131,7 +131,7 @@ namespace ProjectionAlgorithm_diploma_
             Stopwatch stopwatchPseudoOrthogonalization = new Stopwatch();
             stopwatchPseudoOrthogonalization.Start();
             var pseudoOrthogonalizationSolution =
-                pseudoOrthogonalizationSolver.SolveByPseudoOrthogonalization(aMatrix, bVector, 612);
+                pseudoOrthogonalizationSolver.SolveByPseudoOrthogonalization(aMatrix, bVector, 2000);
             stopwatchPseudoOrthogonalization.Stop();
             timeInSeconds = stopwatchPseudoOrthogonalization.ElapsedMilliseconds / (double)1000;
             Console.WriteLine(timeInSeconds + " --- время для SolveByPseudoOrthogonalization() у NoWalkerSolver");
