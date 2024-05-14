@@ -127,11 +127,11 @@ namespace ProjectionAlgorithm_diploma_
             Console.WriteLine();
 
             // Решение простой псевдоортогонализацией
-            NoWalkerSolver pseudoOrthogonalizationSolver = new NoWalkerSolver();
+            NoWalkerSolver pseudoOrthogonalizationSolver = new NoWalkerSolver(new Random(100));
             Stopwatch stopwatchPseudoOrthogonalization = new Stopwatch();
             stopwatchPseudoOrthogonalization.Start();
             var pseudoOrthogonalizationSolution =
-                pseudoOrthogonalizationSolver.SolveByPseudoOrthogonalization(aMatrix, bVector, 2000);
+                pseudoOrthogonalizationSolver.SolveByPseudoOrthogonalization(aMatrix, bVector, 5000);
             stopwatchPseudoOrthogonalization.Stop();
             timeInSeconds = stopwatchPseudoOrthogonalization.ElapsedMilliseconds / (double)1000;
             Console.WriteLine(timeInSeconds + " --- время для SolveByPseudoOrthogonalization() у NoWalkerSolver");

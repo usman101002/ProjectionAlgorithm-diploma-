@@ -90,11 +90,24 @@ namespace ProjectionAlgorithm_diploma_
 
             Console.WriteLine(numProjections + " проекций" + " метод SolveByPseudoOrthogonalization у NoWalkerSolver");
 
+            List<int> visitedIndexes = new List<int>();
             for (int i = 0; i < numProjections; i++)
             {
+                if (i == 1117)
+                {
+
+                }
                 int index0 = this.GetRandomIndex(rowCount);
                 int index1 = this.GetRandomIndex(rowCount);
                 int index2 = this.GetRandomIndex(rowCount);
+
+                while (index0 == index1 || index0 == index2 || index1 == index2)
+                {
+                    index0 = this.GetRandomIndex(rowCount);
+                    index1 = this.GetRandomIndex(rowCount);
+                    index2 = this.GetRandomIndex(rowCount);
+                }
+
 
                 int[] indexes = new int[] { index0, index1, index2 };
 
