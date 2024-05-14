@@ -60,19 +60,19 @@ namespace ProjectionAlgorithm_diploma_
             {
                 for (int j = 0; j < size; j++)
                 {
-                    dataA[i, j] = Delta(i, j) + (double)1 / (i + j * j + 1);
+                    //dataA[i, j] = Delta(i, j) + (double)1 / (i + j * j + 1);
                     //dataA[i, j] = rnd.NextDouble() / size;
 
-                    //if (i == j)
-                    //{
-                    //    dataA[i, i] = 0.5;
-                    //}
-                    //else
-                    //{
-                    //    dataA[i, j] = (double)1 / (2 * size + (i + j) / 10);
-                    //}
+                    if (i == j)
+                    {
+                        dataA[i, i] = 1;
+                    }
+                    else
+                    {
+                        dataA[i, j] = (double)1 / (size + 0.1 * (i + j) );
+                    }
 
-                    // Тестирование на ортогональной матрице (для простоты, она единичная)
+                    //Тестирование на ортогональной матрице(для простоты, она единичная)
                     //if (i == j)
                     //{
                     //    dataA[i, j] = 1;
@@ -117,21 +117,21 @@ namespace ProjectionAlgorithm_diploma_
             //Console.WriteLine();
 
             // Простое решение NoWalkerSolver
-            NoWalkerSolver simpleSolver = new NoWalkerSolver(new Random(2444558));
+            NoWalkerSolver simpleSolver = new NoWalkerSolver(new Random(5008));
             Stopwatch stopwatchSimple = new Stopwatch();
             stopwatchSimple.Start();
-            var simpleNoWalkerSolution = simpleSolver.Solve(aMatrix, bVector, 8000);
+            var simpleNoWalkerSolution = simpleSolver.Solve(aMatrix, bVector, 11200);
             stopwatchSimple.Stop();
             var timeInSeconds = stopwatchSimple.ElapsedMilliseconds / (double)1000;
             Console.WriteLine(timeInSeconds + " --- время для Solve() у NoWalkerSolver");
             Console.WriteLine();
 
             // Решение простой псевдоортогонализацией
-            NoWalkerSolver pseudoOrthogonalizationSolver = new NoWalkerSolver(new Random(100));
+            NoWalkerSolver pseudoOrthogonalizationSolver = new NoWalkerSolver(new Random(129));
             Stopwatch stopwatchPseudoOrthogonalization = new Stopwatch();
             stopwatchPseudoOrthogonalization.Start();
             var pseudoOrthogonalizationSolution =
-                pseudoOrthogonalizationSolver.SolveByPseudoOrthogonalization(aMatrix, bVector, 3000);
+                pseudoOrthogonalizationSolver.SolveByPseudoOrthogonalization(aMatrix, bVector, 4000);
             stopwatchPseudoOrthogonalization.Stop();
             timeInSeconds = stopwatchPseudoOrthogonalization.ElapsedMilliseconds / (double)1000;
             Console.WriteLine(timeInSeconds + " --- время для SolveByPseudoOrthogonalization() у NoWalkerSolver");
@@ -206,10 +206,10 @@ namespace ProjectionAlgorithm_diploma_
             //Console.WriteLine(simpleWalkerError + " % -- ошибка простого решения с Уолкером");
             //Console.WriteLine();
 
-            Console.WriteLine(pseudoOrthogonalizationError + " % -- ошибка псевдоортогонального решения");
+            Console.WriteLine(simpleError + " % -- ошибка простого решения без Уолкера");
             Console.WriteLine();
 
-            Console.WriteLine(simpleError + " % -- ошибка простого решения без Уолкера");
+            Console.WriteLine(pseudoOrthogonalizationError + " % -- ошибка псевдоортогонального решения");
             Console.WriteLine();
 
             //Console.WriteLine(balancedError + " % -- ошибка сбалансированного решения");
