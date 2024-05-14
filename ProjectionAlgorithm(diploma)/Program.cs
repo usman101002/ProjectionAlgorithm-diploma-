@@ -97,32 +97,32 @@ namespace ProjectionAlgorithm_diploma_
             //var mediansSolution = solver.SolveByMedians(aMatrix, bVector);
 
             // Простое решение (детерминироанное, последовательное проектирование)
-            NoWalkerSolver deterministicSolver = new NoWalkerSolver();
-            Stopwatch stopwatchDeterministic = new Stopwatch();
-            stopwatchDeterministic.Start();
-            var simpleDeterministicSolution = deterministicSolver.SolveConsistently(aMatrix, bVector, 1000);
-            stopwatchDeterministic.Stop();
-            var time = stopwatchDeterministic.ElapsedMilliseconds / (double)1000;
-            Console.WriteLine(time + " --- время для детерминированного метода");
-            Console.WriteLine();
+            //NoWalkerSolver deterministicSolver = new NoWalkerSolver();
+            //Stopwatch stopwatchDeterministic = new Stopwatch();
+            //stopwatchDeterministic.Start();
+            //var simpleDeterministicSolution = deterministicSolver.SolveConsistently(aMatrix, bVector, 1000);
+            //stopwatchDeterministic.Stop();
+            //var time = stopwatchDeterministic.ElapsedMilliseconds / (double)1000;
+            //Console.WriteLine(time + " --- время для детерминированного метода");
+            //Console.WriteLine();
 
             // Простое решение WalkerSolver
-            WalkerSolver walkerSolver = new WalkerSolver();
-            Stopwatch stopwatchSimpleWalker = new Stopwatch();
-            stopwatchSimpleWalker.Start();
-            var simpleWalkerSolverSolution = walkerSolver.Solve(aMatrix, bVector, 2800);
-            stopwatchSimpleWalker.Stop();
-            var timeInSeconds = stopwatchSimpleWalker.ElapsedMilliseconds / (double)1000;
-            Console.WriteLine(timeInSeconds + " --- время для Solve() у WalkerSolver");
-            Console.WriteLine();
+            //WalkerSolver walkerSolver = new WalkerSolver();
+            //Stopwatch stopwatchSimpleWalker = new Stopwatch();
+            //stopwatchSimpleWalker.Start();
+            //var simpleWalkerSolverSolution = walkerSolver.Solve(aMatrix, bVector, 2800);
+            //stopwatchSimpleWalker.Stop();
+            //var timeInSeconds = stopwatchSimpleWalker.ElapsedMilliseconds / (double)1000;
+            //Console.WriteLine(timeInSeconds + " --- время для Solve() у WalkerSolver");
+            //Console.WriteLine();
 
             // Простое решение NoWalkerSolver
-            NoWalkerSolver simpleSolver = new NoWalkerSolver(new Random(24445658));
+            NoWalkerSolver simpleSolver = new NoWalkerSolver(new Random(2444558));
             Stopwatch stopwatchSimple = new Stopwatch();
             stopwatchSimple.Start();
-            var simpleNoWalkerSolution = simpleSolver.Solve(aMatrix, bVector, 7000);
+            var simpleNoWalkerSolution = simpleSolver.Solve(aMatrix, bVector, 8000);
             stopwatchSimple.Stop();
-            timeInSeconds = stopwatchSimple.ElapsedMilliseconds / (double)1000;
+            var timeInSeconds = stopwatchSimple.ElapsedMilliseconds / (double)1000;
             Console.WriteLine(timeInSeconds + " --- время для Solve() у NoWalkerSolver");
             Console.WriteLine();
 
@@ -131,21 +131,21 @@ namespace ProjectionAlgorithm_diploma_
             Stopwatch stopwatchPseudoOrthogonalization = new Stopwatch();
             stopwatchPseudoOrthogonalization.Start();
             var pseudoOrthogonalizationSolution =
-                pseudoOrthogonalizationSolver.SolveByPseudoOrthogonalization(aMatrix, bVector, 5000);
+                pseudoOrthogonalizationSolver.SolveByPseudoOrthogonalization(aMatrix, bVector, 3000);
             stopwatchPseudoOrthogonalization.Stop();
             timeInSeconds = stopwatchPseudoOrthogonalization.ElapsedMilliseconds / (double)1000;
             Console.WriteLine(timeInSeconds + " --- время для SolveByPseudoOrthogonalization() у NoWalkerSolver");
             Console.WriteLine();
 
             // Решение простым балансированием
-            NoWalkerSolver balansedSolver = new NoWalkerSolver(new Random(14424582));
-            Stopwatch stopwatchBalancedSimple = new Stopwatch();
-            stopwatchBalancedSimple.Start();
-            var balancedSimpleSolution = balansedSolver.SolveByBalancing(aMatrix, bVector, 900, 5);
-            stopwatchBalancedSimple.Stop();
-            timeInSeconds = stopwatchBalancedSimple.ElapsedMilliseconds / (double)1000;
-            Console.WriteLine(timeInSeconds + " --- время для SolveByBalancing() (простого балансирования) у NoWalkerSolver");
-            Console.WriteLine();
+            //NoWalkerSolver balansedSolver = new NoWalkerSolver(new Random(14424582));
+            //Stopwatch stopwatchBalancedSimple = new Stopwatch();
+            //stopwatchBalancedSimple.Start();
+            //var balancedSimpleSolution = balansedSolver.SolveByBalancing(aMatrix, bVector, 900, 5);
+            //stopwatchBalancedSimple.Stop();
+            //timeInSeconds = stopwatchBalancedSimple.ElapsedMilliseconds / (double)1000;
+            //Console.WriteLine(timeInSeconds + " --- время для SolveByBalancing() (простого балансирования) у NoWalkerSolver");
+            //Console.WriteLine();
 
             //// Решение простым медианным способом
             //NoWalkerSolver mediansSimpleSolver = new NoWalkerSolver(new Random(650680));
@@ -188,23 +188,23 @@ namespace ProjectionAlgorithm_diploma_
             //Console.WriteLine();
 
             //// Подсчёт погрешностей
-            var deterministicError = GetRelError(trueXVector, simpleDeterministicSolution);
-            var simpleWalkerError = GetRelError(trueXVector, simpleWalkerSolverSolution);
+            //var deterministicError = GetRelError(trueXVector, simpleDeterministicSolution);
+            //var simpleWalkerError = GetRelError(trueXVector, simpleWalkerSolverSolution);
             var simpleError = GetRelError(trueXVector, simpleNoWalkerSolution);
             var pseudoOrthogonalizationError = GetRelError(trueXVector, pseudoOrthogonalizationSolution);
 
-            var balancedError = GetRelError(trueXVector, balancedSimpleSolution);
+            //var balancedError = GetRelError(trueXVector, balancedSimpleSolution);
             //var mediansError = GetRelError(trueXVector, mediansSimpleSolution);
             //var iterRefSimpleError = GetRelError(trueXVector, iterRefSimpleSolution);
             //var iterRefBalancedError = GetRelError(trueXVector, iterRefBalancedSolution);
             //var iterRefMediansError = GetRelError(trueXVector, iterRefMediansSolution);
 
             // Вывод погрешностей
-            Console.WriteLine(deterministicError + " % -- ошибка детерминированного решения");
-            Console.WriteLine();
+            //Console.WriteLine(deterministicError + " % -- ошибка детерминированного решения");
+            //Console.WriteLine();
 
-            Console.WriteLine(simpleWalkerError + " % -- ошибка простого решения с Уолкером");
-            Console.WriteLine();
+            //Console.WriteLine(simpleWalkerError + " % -- ошибка простого решения с Уолкером");
+            //Console.WriteLine();
 
             Console.WriteLine(pseudoOrthogonalizationError + " % -- ошибка псевдоортогонального решения");
             Console.WriteLine();
@@ -212,8 +212,8 @@ namespace ProjectionAlgorithm_diploma_
             Console.WriteLine(simpleError + " % -- ошибка простого решения без Уолкера");
             Console.WriteLine();
 
-            Console.WriteLine(balancedError + " % -- ошибка сбалансированного решения");
-            Console.WriteLine();
+            //Console.WriteLine(balancedError + " % -- ошибка сбалансированного решения");
+            //Console.WriteLine();
 
             //Console.WriteLine(mediansError + " % -- ошибка медианного решения");
             //Console.WriteLine();
