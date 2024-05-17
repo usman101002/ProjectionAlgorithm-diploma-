@@ -130,6 +130,33 @@ namespace ProjectionAlgorithm_diploma_
             return xPrev;
         }
 
+        public Vector SolveByPseudoOrthogonalizationIterativeRefinement(Matrix aMatrix, Vector bVector,
+            int numProjections, int numOfIterations)
+        {
+            if (numOfIterations <= 0)
+                throw new Exception("numOfIterations должен быть не меньше 1");
+
+            Vector res = this.SolveByPseudoOrthogonalization(aMatrix, bVector, numProjections);
+
+            if (numOfIterations == 1)
+                return res;
+
+            Console.WriteLine($"{numOfIterations} итераций ЧАСТЧНО-ОРТОГОНАЛЬНОГО итерационного уточнения");
+
+            for (int i = 0; i < numOfIterations - 1; i++)
+            {
+                var pseudoB = aMatrix * res;
+                var d = bVector - pseudoB;
+                NoWalkerSolver solver = new NoWalkerSolver(new Random(10 * (i + 1)));
+                var refinement = solver.SolveByPseudoOrthogonalization(aMatrix, d, numProjections);
+                res += refinement;
+            }
+
+            Console.WriteLine("КОНЕЦ МЕТОДА");
+            Console.WriteLine();
+            return res;
+        }
+
         public Vector SolveByMedians(Matrix aMatrix, Vector bVector, int numProjections)
         {
             var diagProbMatrix = this.GetLeftDiag(aMatrix);

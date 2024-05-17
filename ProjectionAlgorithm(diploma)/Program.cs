@@ -60,17 +60,17 @@ namespace ProjectionAlgorithm_diploma_
             {
                 for (int j = 0; j < size; j++)
                 {
-                    //dataA[i, j] = Delta(i, j) + (double)1 / (i + j * j + 1);
+                    dataA[i, j] = Delta(i, j) + (double)1 / (i + j * j + 1);
                     //dataA[i, j] = rnd.NextDouble() / size;
 
-                    if (i == j)
-                    {
-                        dataA[i, i] = 1;
-                    }
-                    else
-                    {
-                        dataA[i, j] = (double)1 / (size + 0.1 * (i + j) );
-                    }
+                    //if (i == j)
+                    //{
+                    //    dataA[i, i] = 1;
+                    //}
+                    //else
+                    //{
+                    //    dataA[i, j] = (double)1 / (size + 0.1 * (i + j) );
+                    //}
 
                     //Тестирование на ортогональной матрице(для простоты, она единичная)
                     //if (i == j)
@@ -117,10 +117,10 @@ namespace ProjectionAlgorithm_diploma_
             //Console.WriteLine();
 
             // Простое решение NoWalkerSolver
-            NoWalkerSolver simpleSolver = new NoWalkerSolver(new Random(5008));
+            NoWalkerSolver simpleSolver = new NoWalkerSolver(new Random(123));
             Stopwatch stopwatchSimple = new Stopwatch();
             stopwatchSimple.Start();
-            var simpleNoWalkerSolution = simpleSolver.Solve(aMatrix, bVector, 11200);
+            var simpleNoWalkerSolution = simpleSolver.Solve(aMatrix, bVector, 7500);
             stopwatchSimple.Stop();
             var timeInSeconds = stopwatchSimple.ElapsedMilliseconds / (double)1000;
             Console.WriteLine(timeInSeconds + " --- время для Solve() у NoWalkerSolver");
@@ -131,7 +131,7 @@ namespace ProjectionAlgorithm_diploma_
             Stopwatch stopwatchPseudoOrthogonalization = new Stopwatch();
             stopwatchPseudoOrthogonalization.Start();
             var pseudoOrthogonalizationSolution =
-                pseudoOrthogonalizationSolver.SolveByPseudoOrthogonalization(aMatrix, bVector, 4000);
+                pseudoOrthogonalizationSolver.SolveByPseudoOrthogonalization(aMatrix, bVector, 2700);
             stopwatchPseudoOrthogonalization.Stop();
             timeInSeconds = stopwatchPseudoOrthogonalization.ElapsedMilliseconds / (double)1000;
             Console.WriteLine(timeInSeconds + " --- время для SolveByPseudoOrthogonalization() у NoWalkerSolver");
